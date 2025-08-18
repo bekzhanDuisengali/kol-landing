@@ -4,12 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Korea Orient Line — Море возможностей</title>
+
+  <!-- SEO & Sharing -->
+  <meta name="description" content="Korea Orient Line — международные перевозки из Кореи во Владивосток. Еженедельные погрузки, фото‑видео отчёты, контроль на каждом этапе.">
+  <meta property="og:title" content="Korea Orient Line — Море возможностей">
+  <meta property="og:description" content="Перевозки, фото‑видео отчёты, связь на каждом этапе.">
+  <meta property="og:image" content="assets/og-cover.jpg">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0b5cff">
+  <link rel="icon" href="assets/favicon.png">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Интро -->
   <div id="intro">
-    <video id="introVideo" autoplay muted playsinline>
+    <video id="introVideo" autoplay muted playsinline preload="metadata" poster="assets/intro-poster.jpg">
       <source src="assets/intro.mp4" type="video/mp4">
     </video>
     <div class="intro-overlay">
@@ -20,33 +30,33 @@
 
   <!-- Шапка -->
   <header class="hero hidden"> <!-- скрыто до окончания интро -->
-    <video autoplay muted loop playsinline class="hero-video">
+    <video autoplay muted loop playsinline class="hero-video" preload="metadata" poster="assets/hero-poster.jpg">
       <source src="assets/video.mp4" type="video/mp4">
     </video>
     <div class="hero-overlay fade-element">
       <img src="assets/logo.png" alt="KOL Logo" class="logo">
       <h1>Добро пожаловать в Korea Orient Line</h1>
       <div class="hero-buttons">
-        <a href="#" class="btn primary">Быстрая консультация</a>
-        <a href="#" class="btn secondary">Букировка</a>
+        <a href="https://wa.me/821073099001" target="_blank" class="btn primary" rel="noopener">Быстрая консультация</a>
+        <a href="https://t.me/notredame_on_flame" target="_blank" class="btn secondary" rel="noopener">Букировка</a>
       </div>
-    </div>
-    <a href="#" class="side-contact">Связь с менеджером</a>
+    </div> <!-- закрыли .hero-overlay -->
+    <a href="tel:+821073099001" class="side-contact">Связь с менеджером</a>
   </header>
 
   <!-- Связь -->
-  <section class="contact-info">
+  <section class="contact-info reveal">
     <h2>Связь</h2>
     <ul>
-      <li>Телефон: <a href="tel:+78001234567">+7 (800) 123-45-67</a></li>
-      <li>WhatsApp: <a href="#">Написать</a></li>
-      <li>Telegram: <a href="#">Написать</a></li>
+      <li>Телефон: <a href="tel:+821073099001">+821073099001</a></li>
+      <li>WhatsApp: <a href="https://wa.me/821073099001" target="_blank" rel="noopener">Написать</a></li>
+      <li>Telegram: <a href="https://t.me/notredame_on_flame" target="_blank" rel="noopener">Написать</a></li>
       <li>Email: <a href="mailto:info@kol.com">info@kol.com</a></li>
     </ul>
   </section>
 
   <!-- Преимущества -->
-  <section class="advantages">
+  <section class="advantages reveal">
     <h2>Наши преимущества</h2>
     <div class="adv-grid">
       <div class="adv-item">1000+ успешных операций</div>
@@ -57,65 +67,168 @@
   </section>
 
   <!-- О нас -->
-  <section class="about">
-    <h2>О нас</h2>
-    <p>Korea Orient Line — международная судоходная компания. Офис: г. Владивосток, ул. Примерная, 10.</p>
+  <section class="about reveal">
+    <div class="about-card">
+      <div class="about-media">
+        <img src="assets/about-ship.jpg" alt="KOL" loading="lazy">
+      </div>
+      <div class="about-content">
+        <h2>О компании Korea Orient Line</h2>
+        <p class="lead">С 1999 года помогаем бизнесу доставлять грузы из Кореи во Владивосток — быстро, прозрачно и в срок.</p>
+
+        <div class="about-stats">
+          <div class="stat"><strong>1000+</strong><span>успешных операций</span></div>
+          <div class="stat"><strong>3–7&nbsp;дней</strong><span>средний срок</span></div>
+          <div class="stat"><strong>24/7</strong><span>поддержка менеджера</span></div>
+        </div>
+
+        <ul class="about-timeline">
+          <li><span>1999</span> Основание и первые рейсы в Японском море</li>
+          <li><span>2010</span> Партнёрства с производителями Кореи</li>
+          <li><span>2024</span> Еженедельные погрузки и видео‑отчёты</li>
+        </ul>
+
+        <div class="about-cta">
+          <a href="https://wa.me/821073099001" target="_blank" class="btn primary" rel="noopener">Получить консультацию</a>
+          <a href="mailto:info@kol.com" class="btn secondary">Запросить расчёт</a>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Услуги -->
-  <section class="services">
+  <section class="services reveal">
     <h2>Наши услуги</h2>
     <div class="service-grid">
-        <div class="service-card">
+      <div class="service-card">
         <h3>Перевозки грузов</h3>
         <p>Подробная схема будет размещена здесь.</p>
         <div class="service-image-placeholder">[Место под схему]</div>
-        </div>
-        <div class="service-card">
+      </div>
+      <div class="service-card">
         <h3>Фото-Видео отчёт погрузок</h3>
         <p>Отчёты с места погрузки для вашего спокойствия.</p>
-        </div>
-        <div class="service-card">
+      </div>
+      <div class="service-card">
         <h3>Обратная связь на каждом этапе</h3>
         <p>Менеджер всегда на связи — от начала до разгрузки.</p>
-        </div>
+      </div>
     </div>
-    </section>
+  </section>
 
   <!-- Погрузки -->
-  <section class="shipments">
+  <section class="shipments reveal">
     <h2>Наши еженедельные погрузки</h2>
     <div class="video-list">
-      <video controls src="assets/loading1.mp4"></video>
-      <video controls src="assets/loading2.mp4"></video>
+      <video controls src="assets/loading1.mp4" preload="metadata"></video>
+      <video controls src="assets/loading2.mp4" preload="metadata"></video>
+    </div>
+  </section>
+
+  <!-- Отзывы -->
+  <section class="testimonials reveal">
+    <h2>Отзывы клиентов</h2>
+    <div class="ts-grid">
+      <article class="ts-card">
+        <div class="ts-head">
+          <img src="assets/avatars/client1.jpg" alt="Клиент 1" class="ts-avatar">
+          <div>
+            <strong>Алексей П.</strong>
+            <div class="ts-meta">Логистика, Владивосток</div>
+          </div>
+        </div>
+        <p>Оперативная букировка, точные сроки. Получили фото‑видео отчёт с погрузки — всё прозрачно.</p>
+      </article>
+      <article class="ts-card">
+        <div class="ts-head">
+          <img src="assets/avatars/client2.jpg" alt="Клиент 2" class="ts-avatar">
+          <div>
+            <strong>Kim S.</strong>
+            <div class="ts-meta">Busan, KR</div>
+          </div>
+        </div>
+        <p>Надёжный партнёр по направлению Корея → Владивосток. Груз шёл по плану, без задержек.</p>
+      </article>
+      <article class="ts-card">
+        <div class="ts-head">
+          <img src="assets/avatars/client3.jpg" alt="Клиент 3" class="ts-avatar">
+          <div>
+            <strong>Ирина К.</strong>
+            <div class="ts-meta">Производство, Москва</div>
+          </div>
+        </div>
+        <p>Менеджер всегда на связи. Быстрая обратная связь и аккуратная обработка документов.</p>
+      </article>
     </div>
   </section>
 
   <!-- Партнёры -->
-  <section class="partners">
+  <section class="partners reveal">
     <h2>Наши партнёры</h2>
-    <div class="partner-logos">
-      <img src="assets/Costco_Wholesale_Logo.png" alt="Partner 1" class="partner-logo">
-      <img src="assets/Hansol_logo.svg.png" alt="Partner 2" class="partner-logo">
-      <img src="assets/LG_Chem_logo_(english).svg.png" alt="Partner 3" class="partner-logo">
-      <img src="assets/lotte chemical.png" alt="Partner 4" class="partner-logo">
-      <img src="assets/ottogi logo.png" alt="Partner 5" class="partner-logo">
-      <img src="assets/S-OIL_Logo.svg.png" alt="Partner 6" class="partner-logo">
+    <div class="logos-marquee">
+      <div class="track">
+        <!-- Дублируем список для бесшовной прокрутки -->
+        <img src="assets/Costco_Wholesale_Logo.png" alt="Costco" class="partner-logo">
+        <img src="assets/Hansol_logo.svg.png" alt="Hansol" class="partner-logo">
+        <img src="assets/LG_Chem_logo_(english).svg.png" alt="LG Chem" class="partner-logo">
+        <img src="assets/lotte-chemical.png" alt="Lotte Chemical" class="partner-logo">
+        <img src="assets/ottogi logo.png" alt="Ottogi" class="partner-logo">
+        <img src="assets/S-OIL_Logo.svg.png" alt="S-OIL" class="partner-logo">
+
+        <img src="assets/Costco_Wholesale_Logo.png" alt="" class="partner-logo">
+        <img src="assets/Hansol_logo.svg.png" alt="" class="partner-logo">
+        <img src="assets/LG_Chem_logo_(english).svg.png" alt="" class="partner-logo">
+        <img src="assets/lottechemical.png" alt="" class="partner-logo">
+        <img src="assets/ottogi logo.png" alt="" class="partner-logo">
+        <img src="assets/S-OIL_Logo.svg.png" alt="" class="partner-logo">
+      </div>
     </div>
   </section>
 
   <!-- 3D карта -->
-  <section class="map">
+  <section class="map reveal">
     <h2>Порты: Корея — Владивосток</h2>
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3264.765977217568!2d129.00115038560844!3d35.08757959219829!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e835cae48ff3%3A0x468a17a382ab698e!2zNDY1LTMgR2FtY2hlb24tZG9uZywgU2FoYS1ndSwgQnVzYW4sINCu0LbQvdCw0Y8g0JrQvtGA0LXRjw!5e0!3m2!1sru!2skz!4v1755430420585!5m2!1sru!2skz" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3264.765977217568!2d129.00115038560844!3d35.08757959219829!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e835cae48ff3%3A0x468a17a382ab698e!2zNDY1LTMgR2FtY2hlb24tZG9uZywgU2FoYS1ndSwgQnVzYW4sINCu0LbQvdCw0Y8g0JrQvtGA0LXRjw!5e0!3m2!1sru!2skz!4v1755430420585!5m2!1sru!2skz"
+      width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq reveal">
+    <h2>Частые вопросы</h2>
+    <div class="faq-list">
+      <details>
+        <summary>Как быстро оформить букинг?</summary>
+        <p>Обычно в течение 1 рабочего дня. Напишите маршрут и параметры груза — мы закрепим место на ближайшем рейсе.</p>
+      </details>
+      <details>
+        <summary>Какие документы нужны?</summary>
+        <p>Инвойс, упаковочный лист, данные отправителя/получателя. Поможем подготовить полный комплект.</p>
+      </details>
+      <details>
+        <summary>Сроки доставки Корея → Владивосток?</summary>
+        <p>В среднем 3–7 дней в зависимости от расписания и очереди на терминале.</p>
+      </details>
+      <details>
+        <summary>Можно ли получить фото‑видео отчёт погрузки?</summary>
+        <p>Да, отправляем отчёты в день погрузки в WhatsApp/Telegram.</p>
+      </details>
+    </div>
   </section>
 
   <!-- Консультация -->
   <footer class="footer">
     <h2>Нужна консультация?</h2>
-    <a href="#" class="btn primary">Связаться с менеджером</a>
-    <p>Тел: +7 (800) 123-45-67 | Email: info@kol.com</p>
+    <a href="mailto:info@kol.com" class="btn primary">Связаться с менеджером</a>
+    <p>Тел: <a href="tel:+821073099001">+821073099001</a> | Email: <a href="mailto:info@kol.com">info@kol.com</a></p>
   </footer>
+
+  <!-- Crisp Chat -->
+  <script type="text/javascript">
+    window.$crisp = []; window.CRISP_WEBSITE_ID = "0146419c-dc34-4831-97ad-2647694df4c1";
+    (function () { d = document; s = d.createElement("script"); s.src = "https://client.crisp.chat/l.js"; s.async = 1; d.getElementsByTagName("head")[0].appendChild(s); })();
+  </script>
 
   <script src="script.js"></script>
 </body>
