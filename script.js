@@ -1,29 +1,29 @@
-window.addEventListener("DOMContentLoaded", () => {
-  const intro = document.getElementById("intro");
-  const introVideo = document.getElementById("introVideo");
-  const hero = document.querySelector(".hero");
+// window.addEventListener("DOMContentLoaded", () => {
+//   const intro = document.getElementById("intro");
+//   const introVideo = document.getElementById("introVideo");
+//   const hero = document.querySelector(".hero");
 
-  // Показать интро-оверлей после задержки
-  setTimeout(() => {
-    document.querySelector(".intro-overlay").classList.add("visible");
-  }, 600);
+//   // Показать интро-оверлей после задержки
+//   setTimeout(() => {
+//     document.querySelector(".intro-overlay").classList.add("visible");
+//   }, 600);
 
-  // Обработка конца интро-видео
-  introVideo.addEventListener("ended", () => {
-    intro.classList.add("fade-out");
+//   // Обработка конца интро-видео
+//   introVideo.addEventListener("ended", () => {
+//     intro.classList.add("fade-out");
     
-    setTimeout(() => {
-      intro.style.display = "none";
-      hero.classList.remove("hidden");
-      hero.style.opacity = 1;
-      hero.style.pointerEvents = "auto";
+//     setTimeout(() => {
+//       intro.style.display = "none";
+//       hero.classList.remove("hidden");
+//       hero.style.opacity = 1;
+//       hero.style.pointerEvents = "auto";
 
-      // Добавим появление текста в .hero-overlay
-      const heroOverlay = document.querySelector(".hero-overlay");
-      heroOverlay.classList.add("fade-element", "visible");
-    }, 1200);
-  });
-});
+//       // Добавим появление текста в .hero-overlay
+//       const heroOverlay = document.querySelector(".hero-overlay");
+//       heroOverlay.classList.add("fade-element", "visible");
+//     }, 1200);
+//   });
+// });
 const io = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
     if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
@@ -42,34 +42,34 @@ document.addEventListener('click',e=>{
     });
   }
 });
-(function(){
-  const html = document.documentElement;
-  const intro = document.getElementById('intro');
-  const introVideo = document.getElementById('introVideo');
-  const hero = document.querySelector('header.hero');
-  const heroReveal = document.querySelector('.hero-reveal');
+// (function(){
+//   const html = document.documentElement;
+//   const intro = document.getElementById('intro');
+//   const introVideo = document.getElementById('introVideo');
+//   const hero = document.querySelector('header.hero');
+//   const heroReveal = document.querySelector('.hero-reveal');
 
-  html.classList.add('is-intro-lock');
-  let done = false;
+//   html.classList.add('is-intro-lock');
+//   let done = false;
 
-  function go(){
-    if (done) return; done = true;
-    intro.classList.add('is-fading-out');
-    hero.classList.add('is-visible');
-    requestAnimationFrame(()=> requestAnimationFrame(()=>{
-      heroReveal?.classList.add('is-open');
-    }));
-    setTimeout(()=>{ intro.style.display='none'; html.classList.remove('is-intro-lock'); }, 1100);
-  }
+//   function go(){
+//     if (done) return; done = true;
+//     intro.classList.add('is-fading-out');
+//     hero.classList.add('is-visible');
+//     requestAnimationFrame(()=> requestAnimationFrame(()=>{
+//       heroReveal?.classList.add('is-open');
+//     }));
+//     setTimeout(()=>{ intro.style.display='none'; html.classList.remove('is-intro-lock'); }, 1100);
+//   }
 
-  introVideo?.addEventListener('canplaythrough', ()=>{
-    intro.querySelector('.intro-overlay')?.classList.add('visible');
-    setTimeout(go, 5500); // авто-переход, если видео длинное/пауза
-  }, { once:true });
+//   introVideo?.addEventListener('canplaythrough', ()=>{
+//     intro.querySelector('.intro-overlay')?.classList.add('visible');
+//     setTimeout(go, 5500); // авто-переход, если видео длинное/пауза
+//   }, { once:true });
 
-  introVideo?.addEventListener('ended', go, { once:true });
-  setTimeout(()=>{ if(!done && (introVideo?.paused || introVideo?.readyState < 2)) go(); }, 3000); // фолбэк
-})();
+//   introVideo?.addEventListener('ended', go, { once:true });
+//   setTimeout(()=>{ if(!done && (introVideo?.paused || introVideo?.readyState < 2)) go(); }, 3000); // фолбэк
+// })();
 (function(){
     const burger = document.querySelector('.burger');
     const menu = document.querySelector('.menu');
