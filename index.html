@@ -28,46 +28,117 @@
     </div>
   </div>
 
-  <!-- Шапка -->
-  <header class="hero hidden"> <!-- скрыто до окончания интро -->
-    <video autoplay muted loop playsinline class="hero-video" preload="metadata" poster="assets/hero-poster.jpg">
-      <source src="assets/video.mp4" type="video/mp4">
-    </video>
-    <div class="hero-overlay fade-element">
-      <img src="assets/logo.png" alt="KOL Logo" class="logo">
-      <h1>Добро пожаловать в Korea Orient Line</h1>
-      <div class="hero-buttons">
-        <a href="https://wa.me/821073099001" target="_blank" class="btn primary" rel="noopener">Быстрая консультация</a>
-        <a href="https://t.me/notredame_on_flame" target="_blank" class="btn secondary" rel="noopener">Букировка</a>
-      </div>
-    </div> <!-- закрыли .hero-overlay -->
-    <a href="tel:+821073099001" class="side-contact">Связь с менеджером</a>
-  </header>
 
-  <!-- Связь -->
-  <section class="contact-info reveal">
-    <h2>Связь</h2>
-    <ul>
-      <li>Телефон: <a href="tel:+821073099001">+821073099001</a></li>
-      <li>WhatsApp: <a href="https://wa.me/821073099001" target="_blank" rel="noopener">Написать</a></li>
-      <li>Telegram: <a href="https://t.me/notredame_on_flame" target="_blank" rel="noopener">Написать</a></li>
-      <li>Email: <a href="mailto:info@kol.com">info@kol.com</a></li>
-    </ul>
-  </section>
+<!-- ===== HERO (динамичное интро без видео) ===== -->
+    <header class="hero hidden">
+    <!-- NAV (оставь свой) -->
+    <nav class="topnav">
+        <a href="/" class="brand">
+        <img src="assets/logo.png" alt="KOL" class="brand-logo" />
+        <span class="brand-name">Korea Orient Line</span>
+        </a>
+        <button class="burger" aria-label="Открыть меню" aria-expanded="false">
+        <span></span><span></span><span></span>
+        </button>
+        <ul class="menu">
+        <li><a href="#services">Услуги</a></li>
+        <li><a href="#about">О нас</a></li>
+        <li><a href="#partners">Партнёры</a></li>
+        <li><a href="#contacts">Контакты</a></li>
+        <li class="divider" aria-hidden="true"></li>
+        <li><a class="btn tiny ghost" href="https://t.me/notredame_on_flame" target="_blank" rel="noopener">Букировка</a></li>
+        <li><a class="btn tiny solid" href="https://wa.me/821073099001" target="_blank" rel="noopener">Консультация</a></li>
+        </ul>
+    </nav>
 
-  <!-- Преимущества -->
-  <section class="advantages reveal">
-    <h2>Наши преимущества</h2>
-    <div class="adv-grid">
-      <div class="adv-item">1000+ успешных операций</div>
-      <div class="adv-item">Точные сроки доставки</div>
-      <div class="adv-item">Партнёрство с крупнейшими корпорациями</div>
-      <div class="adv-item">Высокий уровень сервиса</div>
+    <!-- DYNAMIC BACKGROUND -->
+    <div class="hero-bg" aria-hidden="true">
+        <!-- animated gradient “glow” layers -->
+        <div class="glow g1"></div>
+        <div class="glow g2"></div>
+        <div class="grain"></div>
+
+        <!-- subtle waves at bottom -->
+        <svg class="waves" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path class="w w1" d="M0,160 C240,220 480,100 720,160 C960,220 1200,140 1440,180 L1440,320 L0,320 Z"></path>
+        <path class="w w2" d="M0,200 C240,260 480,140 720,200 C960,260 1200,180 1440,220 L1440,320 L0,320 Z"></path>
+        <path class="w w3" d="M0,240 C240,300 480,180 720,240 C960,300 1200,220 1440,260 L1440,320 L0,320 Z"></path>
+        </svg>
     </div>
-  </section>
+
+    <!-- CONTENT -->
+    <div class="hero-overlay fade-element">
+        <div class="hero-grid">
+        <div class="hero-lead">
+            <img src="assets/logo.png" alt="KOL Logo" class="logo">
+            <h1>Международная логистика под ключ</h1>
+            <p class="hero-sub">Море — ЖД — Авто. От корейских портов до двери клиента: быстро, надёжно, прозрачно.</p>
+            <div class="hero-actions">
+            <a href="https://wa.me/821073099001" target="_blank" class="btn primary" rel="noopener">Быстрая консультация</a>
+            <a href="https://t.me/notredame_on_flame" target="_blank" class="btn secondary" rel="noopener">Букировка</a>
+            </div>
+        </div>
+
+        <aside class="hero-stats card" role="group" aria-label="Ключевые показатели">
+            <div class="stat"><div class="num">20+</div><div class="label">лет опыта</div></div>
+            <div class="stat"><div class="num">3000+</div><div class="label">контейнеров в месяц</div></div>
+            <div class="stat"><div class="num">5</div><div class="label">стран присутствия</div></div>
+            <div class="stat"><div class="num">24/7</div><div class="label">поддержка клиентов</div></div>
+        </aside>
+        </div>
+    </div>
+
+    <a href="tel:+821073099001" class="side-contact">Связь с менеджером</a>
+    </header>
+    <div class="hero-reveal" aria-hidden="true"></div>
+  <!-- Преимущества -->
+  <section class="advantages neon" id="advantages">
+  <div class="adv-head">
+    <h2>Наши преимущества</h2>
+    <p>Цифры и факты, за которыми стоит реальная операционная мощность</p>
+  </div>
+
+  <div class="adv-grid neon-grid">
+    <article class="adv-card" data-tilt>
+      <div class="adv-border"></div>
+      <div class="adv-inner">
+        <svg class="adv-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v2H4zm0 7h16v2H4zm0 7h16v2H4z"/></svg>
+        <div class="adv-num"><span data-count="1000">0</span>+</div>
+        <div class="adv-text">успешных операций</div>
+      </div>
+    </article>
+
+    <article class="adv-card" data-tilt>
+      <div class="adv-border"></div>
+      <div class="adv-inner">
+        <svg class="adv-ic" viewBox="0 0 24 24"><path d="M12 8V4l8 8-8 8v-4H4V8z"/></svg>
+        <div class="adv-num"><span data-count="98">0</span>%</div>
+        <div class="adv-text">точность сроков</div>
+      </div>
+    </article>
+
+    <article class="adv-card" data-tilt>
+      <div class="adv-border"></div>
+      <div class="adv-inner">
+        <svg class="adv-ic" viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm4 0h14v-2H7v2zM3 19h2v-2H3v2zm4 0h14v-2H7v2zM3 7h2V5H3v2zm4 0h14V5H7v2z"/></svg>
+        <div class="adv-num"><span data-count="30">0</span>+</div>
+        <div class="adv-text">корпоративных партнёров</div>
+      </div>
+    </article>
+
+    <article class="adv-card" data-tilt>
+      <div class="adv-border"></div>
+      <div class="adv-inner">
+        <svg class="adv-ic" viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 10h5v2h-7V6h2v6z"/></svg>
+        <div class="adv-num"><span data-count="24">0</span>/7</div>
+        <div class="adv-text">поддержка клиентов</div>
+      </div>
+    </article>
+  </div>
+</section>
 
   <!-- О нас -->
-  <section class="about reveal">
+  <section class="about reveal" id="about">
     <div class="about-card">
       <div class="about-media">
         <img src="assets/about-ship.jpg" alt="KOL" loading="lazy">
@@ -97,7 +168,7 @@
   </section>
 
   <!-- Услуги -->
-  <section class="services reveal">
+  <section class="services reveal" id="services">
     <h2>Наши услуги</h2>
     <div class="service-grid">
       <div class="service-card">
@@ -117,7 +188,7 @@
   </section>
 
   <!-- Погрузки -->
-  <section class="shipments reveal">
+  <section class="shipments reveal" id="shipments">
     <h2>Наши еженедельные погрузки</h2>
     <div class="video-list">
       <video controls src="assets/loading1.mp4" preload="metadata"></video>
@@ -126,7 +197,7 @@
   </section>
 
   <!-- Отзывы -->
-  <section class="testimonials reveal">
+  <section class="testimonials reveal" id="testimonials">
     <h2>Отзывы клиентов</h2>
     <div class="ts-grid">
       <article class="ts-card">
@@ -163,7 +234,7 @@
   </section>
 
   <!-- Партнёры -->
-  <section class="partners reveal">
+  <section class="partners reveal" id="partners">
     <h2>Наши партнёры</h2>
     <div class="logos-marquee">
       <div class="track">
@@ -184,9 +255,55 @@
       </div>
     </div>
   </section>
+  <!-- Связь -->
+<section class="contact reveal" id="contact">
+  <div class="container">
+    <h2>Связь</h2>
+    <p class="contact-sub">Ответим быстро в рабочее время. Выберите удобный канал:</p>
 
+    <ul class="contact-grid">
+      <li>
+        <a class="contact-chip" href="tel:+821073099001" aria-label="Позвонить">
+          <span class="ico" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v2a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 3.16 2 2 0 0 1 4.11 1h2a2 2 0 0 1 2 1.72c.12.9.31 1.77.57 2.61a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.47-1.47a2 2 0 0 1 2.11-.45c.84.26 1.71.45 2.61.57A2 2 0 0 1 22 16.92Z" stroke="currentColor" stroke-width="1.6"/></svg>
+          </span>
+          <span class="txt"><b>+82 10 7309 9001</b><em>Позвонить</em></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="contact-chip" href="https://wa.me/821073099001" target="_blank" rel="noopener" aria-label="Написать в WhatsApp">
+          <span class="ico" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20.5 12a8.5 8.5 0 1 1-3.2-6.63L18 5.5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/></svg>
+          </span>
+          <span class="txt"><b>WhatsApp</b><em>Ответ быстро</em></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="contact-chip" href="https://t.me/notredame_on_flame" target="_blank" rel="noopener" aria-label="Написать в Telegram">
+          <span class="ico" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 4 10 13" stroke="currentColor" stroke-width="1.6"/><path d="M21 4 15.5 20a1 1 0 0 1-1.8.2l-3.5-5L4 13a1 1 0 0 1-.2-2L20 3a1 1 0 0 1 1 1Z" stroke="currentColor" stroke-width="1.6"/></svg>
+          </span>
+          <span class="txt"><b>Telegram</b><em>Онлайн</em></span>
+        </a>
+      </li>
+
+      <li>
+        <button class="contact-chip copy" data-copy="info@kol.com" aria-label="Скопировать email">
+          <span class="ico" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6h16v12H4zM4 6l8 6 8-6" stroke="currentColor" stroke-width="1.6"/></svg>
+          </span>
+          <span class="txt"><b>info@kol.com</b><em>Скопировать</em></span>
+        </button>
+      </li>
+    </ul>
+
+    <p class="contact-note">Офис: Владивосток, ул. Станюковича, 13, офис 42</p>
+  </div>
+</section>
   <!-- 3D карта -->
-  <section class="map reveal">
+  <section class="map reveal" id="map">
     <h2>Порты: Корея — Владивосток</h2>
     <iframe
       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3264.765977217568!2d129.00115038560844!3d35.08757959219829!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e835cae48ff3%3A0x468a17a382ab698e!2zNDY1LTMgR2FtY2hlb24tZG9uZywgU2FoYS1ndSwgQnVzYW4sINCu0LbQvdCw0Y8g0JrQvtGA0LXRjw!5e0!3m2!1sru!2skz!4v1755430420585!5m2!1sru!2skz"
@@ -195,7 +312,7 @@
   </section>
 
   <!-- FAQ -->
-  <section class="faq reveal">
+  <section class="faq reveal" id="faq">
     <h2>Частые вопросы</h2>
     <div class="faq-list">
       <details>
