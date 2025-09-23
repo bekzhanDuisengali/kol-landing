@@ -1,29 +1,4 @@
-// window.addEventListener("DOMContentLoaded", () => {
-//   const intro = document.getElementById("intro");
-//   const introVideo = document.getElementById("introVideo");
-//   const hero = document.querySelector(".hero");
 
-//   // Показать интро-оверлей после задержки
-//   setTimeout(() => {
-//     document.querySelector(".intro-overlay").classList.add("visible");
-//   }, 600);
-
-//   // Обработка конца интро-видео
-//   introVideo.addEventListener("ended", () => {
-//     intro.classList.add("fade-out");
-    
-//     setTimeout(() => {
-//       intro.style.display = "none";
-//       hero.classList.remove("hidden");
-//       hero.style.opacity = 1;
-//       hero.style.pointerEvents = "auto";
-
-//       // Добавим появление текста в .hero-overlay
-//       const heroOverlay = document.querySelector(".hero-overlay");
-//       heroOverlay.classList.add("fade-element", "visible");
-//     }, 1200);
-//   });
-// });
 const io = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
     if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
@@ -42,34 +17,6 @@ document.addEventListener('click',e=>{
     });
   }
 });
-// (function(){
-//   const html = document.documentElement;
-//   const intro = document.getElementById('intro');
-//   const introVideo = document.getElementById('introVideo');
-//   const hero = document.querySelector('header.hero');
-//   const heroReveal = document.querySelector('.hero-reveal');
-
-//   html.classList.add('is-intro-lock');
-//   let done = false;
-
-//   function go(){
-//     if (done) return; done = true;
-//     intro.classList.add('is-fading-out');
-//     hero.classList.add('is-visible');
-//     requestAnimationFrame(()=> requestAnimationFrame(()=>{
-//       heroReveal?.classList.add('is-open');
-//     }));
-//     setTimeout(()=>{ intro.style.display='none'; html.classList.remove('is-intro-lock'); }, 1100);
-//   }
-
-//   introVideo?.addEventListener('canplaythrough', ()=>{
-//     intro.querySelector('.intro-overlay')?.classList.add('visible');
-//     setTimeout(go, 5500); // авто-переход, если видео длинное/пауза
-//   }, { once:true });
-
-//   introVideo?.addEventListener('ended', go, { once:true });
-//   setTimeout(()=>{ if(!done && (introVideo?.paused || introVideo?.readyState < 2)) go(); }, 3000); // фолбэк
-// })();
 (function(){
     const burger = document.querySelector('.burger');
     const menu = document.querySelector('.menu');
@@ -140,3 +87,115 @@ document.addEventListener('click',e=>{
       card.addEventListener('mouseleave', reset);
     });
   })();
+(function(){
+  const sb=document.querySelector('.scrollbar');
+  if(!sb) return;
+  const onScroll=()=> {
+    const p=(scrollY)/(document.documentElement.scrollHeight - innerHeight);
+    sb.style.width=(Math.max(0,Math.min(1,p))*100)+'%';
+  };
+  addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+(function(){
+  const waves = document.querySelector('.waves');
+  const layers = document.querySelectorAll('.waves .w');
+  if(!waves || !layers.length) return;
+
+  // шов автоматически подкрашиваем под следующую секцию
+  const seam = document.querySelector('.seam--hero .seam-fill');
+  const next = document.querySelector('header.hero + section'); // advantages
+  if(seam && next){
+    // если у секции есть «тон» — используем его, иначе белый
+    const nextTone =
+      getComputedStyle(next).getPropertyValue('--surface-bg').trim() ||
+      getComputedStyle(next).getPropertyValue('--sep-color').trim() ||
+      '#fff';
+    seam.style.fill = nextTone || '#fff';
+  }
+
+  // параллакс на rAF (без «рывков»), отключаем если reduce motion
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce) return;
+
+  let raf = 0, curr = 0, target = 0;
+  const io = new IntersectionObserver(([e])=>{
+    if(!e.isIntersecting){ cancelAnimationFrame(raf); raf = 0; return; }
+    const loop = ()=>{
+      target = scrollY * 0.05;
+      curr += (target - curr) * 0.12; // сглаживание
+      // один translate для контейнера + небольшие для слоёв
+      waves.style.transform = `translate3d(0, ${curr}px, 0)`;
+      if(layers[0]) layers[0].style.transform = `translate3d(0, ${curr*0.15}px, 0)`;
+      if(layers[1]) layers[1].style.transform = `translate3d(0, ${curr*0.25}px, 0)`;
+      if(layers[2]) layers[2].style.transform = `translate3d(0, ${curr*0.35}px, 0)`;
+      raf = requestAnimationFrame(loop);
+    };
+    if(!raf) raf = requestAnimationFrame(loop);
+  }, {threshold: 0});
+  io.observe(waves);
+})();
+
+(function(){
+  const vids=[...document.querySelectorAll('.video-card video')];
+  if(!vids.length) return;
+  const io=new IntersectionObserver(es=>es.forEach(({target,isIntersecting})=>{
+    if(isIntersecting){ target.play().catch(()=>{}); }
+    else{ target.pause(); }
+  }),{threshold:.6});
+  vids.forEach(v=>io.observe(v));
+})();
+(function(){
+    const blocks=[...document.querySelectorAll('header.hero, section, footer')];
+    const getSurface=(el)=>getComputedStyle(el).getPropertyValue('--surface-bg').trim()||'#fff';
+    blocks.forEach((cur,i)=>{
+      const next=blocks[i+1]; if(!next) return;
+      const path=cur.querySelector('.sep-wave path');
+      if(path){ cur.style.setProperty('--sep-color', getSurface(next)); }
+    });
+  })();
+
+  (function(){
+    const nav=document.querySelector('.topnav');
+    const secs=[...document.querySelectorAll('[data-surface]')];
+    if(!nav||!secs.length) return;
+    const io=new IntersectionObserver(es=>{
+      es.forEach(e=>{ if(e.isIntersecting) nav.dataset.theme=e.target.dataset.surface; });
+    },{rootMargin:'-45% 0px -45% 0px'});
+    secs.forEach(s=>io.observe(s));
+  })();
+
+(function(){
+  const bg = document.querySelector('.hero-bg');
+  if(!bg) return;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce) return;
+
+  let raf=0, cx=0, cy=0, tx=0, ty=0;
+  const onMove = (x, y)=>{
+    // x,y в диапазоне [-.5, .5]
+    tx = x * 14;  // горизонтальный параллакс
+    ty = y * 10;  // вертикальный параллакс
+    if(!raf) raf = requestAnimationFrame(loop);
+  };
+  const loop = ()=>{
+    cx += (tx - cx) * .12;
+    cy += (ty - cy) * .12;
+    bg.style.transform = `translate3d(${cx}px, ${cy}px, 0)`;
+    raf = requestAnimationFrame(()=>{
+      if(Math.abs(tx-cx)<0.1 && Math.abs(ty-cy)<0.1){ cancelAnimationFrame(raf); raf=0; }
+      else loop();
+    });
+  };
+
+  // мышь/тач
+  addEventListener('pointermove', e=>{
+    onMove(e.clientX / innerWidth - .5, e.clientY / innerHeight - .5);
+  }, {passive:true});
+
+  // лёгкий параллакс при скролле (фон чуть «плывёт»)
+  addEventListener('scroll', ()=>{
+    const y = (scrollY / innerHeight);
+    onMove(0, Math.min(.5, y*.1));
+  }, {passive:true});
+})();
