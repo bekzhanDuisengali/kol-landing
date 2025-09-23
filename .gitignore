@@ -83,7 +83,8 @@ assets/fonts/**/docs/**
 assets/fonts/**/specimen/**
 assets/fonts/**/Specimen*/**
 # Если ты всё же оставил TTF — УДАЛИ следующую строку:
-assets/fonts/**/*.ttf
+!assets/fonts/**/*.ttf
+
 
 # Вариант Б (если хочешь оставить TTF как запасной):
 # — просто удали/закомментируй строку выше с *.ttf

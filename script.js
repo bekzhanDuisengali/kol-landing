@@ -199,3 +199,14 @@ document.addEventListener('click',e=>{
     onMove(0, Math.min(.5, y*.1));
   }, {passive:true});
 })();
+
+// honest 100vh on mobile (iOS динамические бары)
+(function(){
+  const setVH = () => {
+    document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+  };
+  setVH();
+  window.addEventListener('resize', setVH);
+})();
+
+
