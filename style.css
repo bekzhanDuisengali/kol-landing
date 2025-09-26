@@ -273,46 +273,42 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 .adv-text{color:var(--ink);font-weight:600}
 
 /* ===== About (scoped vars) ===== */
+/* === Правая секция (фон-бумага) === */
 .kol-right{
-  background:
-    radial-gradient(1200px 600px at 10% 0%, rgba(255,255,255,.75), rgba(255,255,255,0) 60%),
-    radial-gradient(800px 400px at 100% 100%, rgba(255,255,255,.55), rgba(255,255,255,0) 60%),
-    linear-gradient(0deg, rgba(0,0,0,.02), rgba(255,255,255,.02)),
-    var(--paper);
+  position: relative;
+  z-index: 0;
   padding:56px 0 64px;
   color:var(--ink);
-  min-height: auto;
+  background:
+    radial-gradient(1200px 600px at 12% -10%, rgba(255,255,255,.80), rgba(255,255,255,0) 60%),
+    radial-gradient(900px 500px at 100% 110%, rgba(255,255,255,.55), rgba(255,255,255,0) 60%),
+    linear-gradient(0deg, rgba(0,0,0,.02), rgba(255,255,255,.02)),
+    var(--paper, #F5F6F8);
 }
 
 /* --- «Опыт с 1999» --- */
-/* ===== Подгонка под референс ===== */
-
-/* 1) Левая колонка: заголовок */
 .kol-experience{
   max-width:1200px;
   margin:0 auto;
   padding:0 24px 50px;
   display:grid;
-  grid-template-columns: .78fr 1.22fr; /* левый столбец чуть уже */
+  grid-template-columns:.78fr 1.22fr;
   gap:28px;
   align-items:center;
-  min-height: 700px;
+  min-height:700px;
 }
 
-.exp-title {
-    display: grid;
-    grid-template-columns: max-content max-content;
-    grid-template-areas:
-        "kicker kicker"
-        "year goda";
-    align-items: center;
-    column-gap: -7px;
-    margin: 0 0 34px;
-    font-family: "Oswald", "Inter", system-ui;
-    line-height: -37.1;
-    align-content: center;
-    text-align: left;
+.exp-title{
+  display:grid;
+  grid-template-columns:max-content max-content;
+  grid-template-areas:"kicker kicker" "year goda";
+  align-items:center;
+  column-gap:-7px;
+  margin:0 0 34px;
+  font-family:"Oswald","Inter",system-ui;
+  text-align:left;
 }
+
 .exp-kicker{
   margin:0 0 8px;
   text-transform:uppercase;
@@ -320,69 +316,57 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   letter-spacing:.16em;
   color:#1F5194;
 }
+
 .exp-year{
   grid-area:year;
   font:900 clamp(82px,10vw,150px)/.86 "Oswald","Inter",system-ui;
   letter-spacing:-.01em;
   color:#226CC3;
-  text-shadow:0 4px 12px rgba(34,108,195,.25); /* лёгкая глубина как на рефе */
-}
-/* Вертикальное написание */
-/* Вертикальное слово с повернутыми буквами (как на референсе) */
-.exp-vert{
-  grid-area: goda;              /* оставь, если у тебя grid */
-  display: inline-block;
-  white-space: nowrap;
-  color:#226CC3;
-  /* Fallback по умолчанию — просто крутим слово */
-  font:1100 clamp(18px,2.2vw,28px)/1 "Oswald","Inter",system-ui;
-  
-  transform: rotate(180deg);     /* делает буквы «лежачими» как в образце */
-  transform-origin: left top;
-  margin-left:6px;
-  translate: 0 4px;            /* тонкая подгонка по верхнему краю цифр */
+  text-shadow:0 4px 12px rgba(34,108,195,.25);
 }
 
-/* Если браузер умеет вертикальную верстку с боковой ориентацией — используем ее */
+/* Вертикальное слово «ГОДА» */
+.exp-vert{
+  grid-area:goda;
+  display:inline-block;
+  white-space:nowrap;
+  color:#226CC3;
+  font:1100 clamp(18px,2.2vw,28px)/1 "Oswald","Inter",system-ui;
+  transform:rotate(180deg);
+  transform-origin:left top;
+  margin-left:6px;
+  translate:0 4px;
+}
 @supports (writing-mode: vertical-rl) and (text-orientation: sideways){
   .exp-vert{
-    transform:none;             /* отключаем вращение */
-    writing-mode: vertical-rl;  /* столбик справа-налево */
-    text-orientation: sideways; /* все буквы повернуты на 90° */
+    transform:none;
+    writing-mode:vertical-rl;
+    text-orientation:sideways;
     letter-spacing:.08em;
   }
 }
-
-/* Старый WebKit (иногда требует другое ключевое слово) */
 @supports (writing-mode: vertical-rl) and (text-orientation: sideways-right){
-  .exp-vert{ text-orientation: sideways-right; }
+  .exp-vert{ text-orientation:sideways-right; }
 }
 
 .exp-vert-text{
-  color:#226CC3;
+  margin:.65rem 0;
+  max-width:262px;
   font:300 16px/1 "Inter",system-ui;
-  margin:.65rem 0;
-  max-width: 262px;
-}
-.exp-vert-text b{
   color:#226CC3;
-  font:700 16px/1 "Inter",system-ui;
-  margin:.65rem 0;
-  max-width: 262px;
 }
-/* 2) Фото-стек справа: рваный верх/низ у большого фото + подсветка */
-.exp-stack{ position:relative; width:min(780px,100%); margin-left:auto;--overlay: .60;}
-.exp-photo{width:100%; display:block; box-shadow:0 18px 42px rgba(0,0,0,.18)}
+.exp-vert-text b{ font-weight:700; }
+
+/* Фото-стек */
+.exp-stack{ position:relative; width:min(780px,100%); margin-left:auto; --overlay:.60; }
+.exp-photo{ width:100%; display:block; box-shadow:0 18px 42px rgba(0,0,0,.18); }
 .exp-photo.back{
   width:70%;
-  aspect-ratio: 15 / 11;     /* фиксирум пропорции */
-  object-fit:cover;                     /* как на рефе — кадрируется */
+  aspect-ratio:15/11;
+  object-fit:cover;
   position:relative;
-  border-radius:0;                      /* скругления мешали «рваности» */
   filter:grayscale(1) contrast(1.05) brightness(1.02);
   opacity:.95;
-
-  /* Рваные верх+низ (чуть крупнее, как на макете) */
   --rip-top: radial-gradient(20px 12px at 18px 0,     transparent 98%, #000) 0 0/60px 32px repeat-x;
   --rip-bot: radial-gradient(20px 12px at 18px 100%,  transparent 98%, #000) 0 100%/60px 32px repeat-x;
   -webkit-mask: var(--rip-top), var(--rip-bot), linear-gradient(#000,#000);
@@ -393,92 +377,63 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 
 /* мягкая «бумажная» засветка поверх фото */
 .exp-stack::before{
-  content:""; position:absolute; inset:0; pointer-events:none;
-  background: linear-gradient(180deg, rgba(255,255,255,.00) 0 48%,
+  content:"";
+  position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg, rgba(255,255,255,.00) 0 48%,
                                        rgba(255,255,255,.10) 78%,
                                        rgba(255,255,255,.22) 100%);
-  z-index:1;                               /* дымка над фото */
-}
-@media (min-width: 1280px){
-  .kol-experience{ grid-template-columns: .72fr 1.28fr; }
-  .exp-stack{ width: min(780px, 100%); }
-  .polaroid{ --w: clamp(300px, 30vw, 380px); }
+  z-index:1;
 }
 
-/* До 1200 — чуть компактнее, но всё ещё акцент на фото */
-@media (max-width: 1200px){
-  .kol-experience{ grid-template-columns: .9fr 1.1fr; }
-  .exp-stack{ width: min(640px, 100%); }
-  .polaroid{ --w: clamp(240px, 30vw, 320px); }
-}
-
-/* До 960 — одна колонка, фото по центру и крупное */
-@media (max-width: 960px){
-  .kol-experience{ grid-template-columns: 1fr; gap: 22px; }
-  .exp-stack{ width: 100%; }
-  .polaroid{
-    --w: clamp(220px, 58vw, 320px);
-    right: -6px; bottom: -18px; transform: rotate(-4deg);
-  }
-  .scribble{ left:-4%; top:-8%; width:104%; }
-}
-
-/* До 600 — максимально читаемо, полароид почти во всю ширину */
-@media (max-width: 600px){
-  .polaroid{
-    --w: clamp(220px, 82vw, 360px);
-    right: -4px; bottom: -14px;
-  }
-}
-/* 3) Полароид поверх фото */
+/* Полароид поверх фото */
 .polaroid{
   --pad:16px;
-  --w: clamp(260px, 20vw, 360px);      /* Оставляем ОДНУ переменную */
+  --w: clamp(260px, 20vw, 360px);
   position:absolute; right:150px; bottom:-130px; width:var(--w);
   background:#fff; border-radius:12px; padding:var(--pad);
   transform:rotate(-5deg);
   filter:drop-shadow(0 12px 30px rgba(0,0,0,.25));
-  z-index:3;                            /* полароид над росчерком */
+  z-index:3;
 }
-
-.polaroid.front img{width:100%;display:block;border-radius:8px}
+.polaroid.front img{ width:100%; display:block; border-radius:8px; }
 .polaroid figcaption{
-  font:800 14px/1 "Oswald","Inter",system-ui; letter-spacing:.10em;
-  text-align:center; margin-top:10px; color:#111
+  font:800 14px/1 "Oswald","Inter",system-ui;
+  letter-spacing:.10em; text-align:center; margin-top:10px; color:#111;
 }
 
-/* 4) Большой росчерк (svg) поверх фото, но под полароидом */
+/* Росчерк над фото */
 .scribble{
-  position:absolute; left:-10%; top:-16%;  /* как на рефе — шире и ниже */
-  width:112%; height:auto;
-  z-index:2;                               /* росчерк над дымкой, под полароидом */
+  position:absolute; left:-10%; top:-16%;
+  width:112%; height:auto; z-index:2;
 }
 .scribble path{
   stroke:rgba(20,38,74,.35);
-  stroke-width:10;
-  stroke-linecap:round;
-  fill:none;
-}
-/* 5) Фон-бумага секции (оставляем как есть, но чуть мягче) */
-.kol-right{
-  background:
-    radial-gradient(1200px 600px at 12% -10%, rgba(255,255,255,.80), rgba(255,255,255,0) 60%),
-    radial-gradient(900px 500px at 100% 110%, rgba(255,255,255,.55), rgba(255,255,255,0) 60%),
-    linear-gradient(0deg, rgba(0,0,0,.02), rgba(255,255,255,.02)),
-    #F5F6F8;
+  stroke-width:10; stroke-linecap:round; fill:none;
 }
 
-/* 6) Адаптив — скрываем вертикальное «ГОДА» на узких экранах */
-@media (max-width: 960px){
-  .kol-experience{grid-template-columns:1fr}
-  .exp-vert{display:none}
-  .polaroid{right:-6px; bottom:-18px; --w:240px; transform:rotate(-4deg)}
+/* Адаптив «Опыт…» */
+@media (min-width:1280px){
+  .kol-experience{ grid-template-columns:.72fr 1.28fr; }
+  .exp-stack{ width:min(780px,100%); }
+  .polaroid{ --w: clamp(300px,30vw,380px); }
+}
+@media (max-width:1200px){
+  .kol-experience{ grid-template-columns:.9fr 1.1fr; }
+  .exp-stack{ width:min(640px,100%); }
+  .polaroid{ --w: clamp(240px,30vw,320px); }
+}
+@media (max-width:960px){
+  .kol-experience{ grid-template-columns:1fr; gap:22px; }
+  .exp-vert{ display:none; }
+  .exp-stack{ width:100%; }
+  .polaroid{ --w: clamp(220px,58vw,320px); right:-6px; bottom:-18px; transform:rotate(-4deg); }
+  .scribble{ left:-4%; top:-8%; width:104%; }
+}
+@media (max-width:600px){
+  .polaroid{ --w: clamp(220px,82vw,360px); right:-4px; bottom:-14px; }
 }
 
 /* --- Плашка «После реорганизации» --- */
-/* --- Плашка «После реорганизации» --- */
-/* === CSS === */
-/* Контейнер секции */
 .kol-reorg{
   max-width:1200px;
   min-height:600px;
@@ -486,63 +441,72 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   padding:0 24px;
   position:relative;
   background:url("assets/boat-schema.jpg") no-repeat center/contain;
-  background-color:#0d2f75; /* запасной фон */
+  background-color:#0d2f75;
   box-shadow:inset 0 0 0 2px rgba(255,255,255,.05), 0 10px 28px rgba(0,0,0,.08);
   overflow:hidden;
 }
-.reorg-band { position: relative; }
+
+.reorg-band{
+  position:relative;
+  isolation:isolate;
+  padding-top:var(--cloud-h);
+  z-index:1;
+}
 .reorg-band h3{
-  margin:0;
-  text-align:center;
+  margin:0; padding:16px 22px; text-align:center;
   font:900 clamp(18px,2.4vw,24px)/1 "Oswald","Inter",system-ui;
-  text-transform:uppercase;
-  letter-spacing:.04em;
-  color:#fff;
+  text-transform:uppercase; letter-spacing:.04em; color:#fff;
   background:linear-gradient(180deg,var(--kol-blue-2),var(--kol-blue-3));
   box-shadow:0 10px 22px rgba(13,47,117,.25);
-  padding:16px 22px;
-
-  /* волна */
-  --wave-w: 64px;         /* ширина волны (чаще/реже) */
-  --wave-h: 20px;         /* высота волны */
-
-  /* чтобы текст не упирался в волну */
-  padding-bottom: calc(16px + var(--wave-h));
-  /* ВАЖНО: перекрываем следующую секцию,
-     чтобы через прозрачные вырезы было видно фон нижней секции, а не белый body */
-  margin-bottom: calc(-1 * var(--wave-h));
-  z-index: 2;             /* поверх следующей секции */
+  position:relative; z-index:2;
 }
-
-/* Маска для соврем. браузеров */
-@supports ((-webkit-mask: none) or (mask: none)){
-  .reorg-band h3{
-    /* ряды полукругов снизу */
-    --wave-mask: radial-gradient(50% var(--wave-h) at 50% 100%,
-                     transparent 99%, #000 101%)
-                  0 100% / var(--wave-w) var(--wave-h) repeat-x;
-
-    /* применяем: «сплошная» маска минус волна */
-    -webkit-mask: var(--wave-mask), linear-gradient(#000 0 0);
-            mask: var(--wave-mask), linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;   /* WebKit */
-            mask-composite: exclude; /* спецификация */
+.reorg-band::before{
+  content:""; position:absolute; top:calc(-1 * var(--cloud-h)); left:50%;
+  transform:translateX(-50%); width:100vw; height:var(--cloud-h);
+  pointer-events:none;
+  background:linear-gradient(180deg, var(--kol-blue-2,#226CC3), var(--kol-blue-3,#1F5194));
+  filter:drop-shadow(0 -2px 8px rgba(0,0,0,.12));
+  z-index:0;
+}
+@supports ((-webkit-mask-image:linear-gradient(#000,#000)) or (mask-image:linear-gradient(#000,#000))){
+  .reorg-band::before{
+    --s1:120px; --s2:200px; --s3:320px;
+    -webkit-mask-image:
+      radial-gradient(closest-side at 20% 100%, #000 98%, transparent 100%),
+      radial-gradient(closest-side at 50% 100%, #000 98%, transparent 100%),
+      radial-gradient(closest-side at 80% 100%, #000 98%, transparent 100%);
+            mask-image:
+      radial-gradient(closest-side at 20% 100%, #000 98%, transparent 100%),
+      radial-gradient(closest-side at 50% 100%, #000 98%, transparent 100%),
+      radial-gradient(closest-side at 80% 100%, #000 98%, transparent 100%);
+    -webkit-mask-size: var(--s1) var(--cloud-h), var(--s2) var(--cloud-h), var(--s3) var(--cloud-h);
+            mask-size: var(--s1) var(--cloud-h), var(--s2) var(--cloud-h), var(--s3) var(--cloud-h);
+    -webkit-mask-repeat: repeat-x, repeat-x, repeat-x;
+            mask-repeat: repeat-x, repeat-x, repeat-x;
+    -webkit-mask-position: 0 100%, 0 100%, 0 100%;
+            mask-position: 0 100%, 0 100%, 0 100%;
   }
-
-  /* (опционально) лёгкая анимация волны */
   @media (prefers-reduced-motion: no-preference){
-    .reorg-band h3{ animation: waveSlide 12s linear infinite; }
-    @keyframes waveSlide{
+    .reorg-band::before{ animation:cloudDrift 28s linear infinite; }
+    @keyframes cloudDrift{
       to{
-        -webkit-mask-position: var(--wave-w) 100%, 0 0;
-                mask-position: var(--wave-w) 100%, 0 0;
+        -webkit-mask-position: var(--s1) 100%, calc(-1 * var(--s2)) 100%, var(--s3) 100%;
+                mask-position: var(--s1) 100%, calc(-1 * var(--s2)) 100%, var(--s3) 100%;
       }
     }
   }
 }
+@supports not ((-webkit-mask-image:linear-gradient(#000,#000)) or (mask-image:linear-gradient(#000,#000))){
+  .reorg-band::before{
+    clip-path:polygon(0 0,100% 0,100% 70%,92% 100%,80% 78%,65% 100%,50% 75%,35% 100%,20% 78%,8% 100%,0 70%);
+  }
+}
+@media (max-width:600px){
+  .reorg-band{ --cloud-h:42px; }
+  .reorg-band::before{ --s1:88px; --s2:140px; --s3:220px; }
+}
 
-
-/* Ряд: слева текст, справа стек из фото+полароид */
+/* Контент реорганизации */
 .reorg-wrap{
   display:flex;
   justify-content:space-between;
@@ -552,42 +516,33 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   z-index:1;
 }
 
-/* Левая колонка — текстовый блок с «рваным» верхом/низом */
+/* Левая колонка (рваные края) */
 .reorg-note{
   position:relative;
-  flex:0 -1 44%;
+  flex:0 1 44%;
   max-width:680px;
   padding:28px 32px;
   background:
     var(--paper-texture, none) center/cover no-repeat,
     linear-gradient(#ffffff, #fdfdfd);
   background-blend-mode:multiply;
-  border:0;
-  border-radius:6px;
+  border:0; border-radius:6px;
   box-shadow:0 10px 22px rgba(0,0,0,.18), 0 3px 8px rgba(0,0,0,.12);
   filter:saturate(.8) contrast(.98);
-  color:#2a2a2a;
-  line-height:1.5;
-  /* плавная «рваная» кромка сверху/снизу */
+  color:#2a2a2a; line-height:1.5;
   clip-path:polygon(
-    /* верхняя волна */
-    0% 0%, 12% 2%, 25% 0%, 38% 3%, 50% 0%, 62% 2%, 75% 0%, 88% 3%, 100% 0%,
-    /* правая грань */
-    100% 0%, 100% 100%,
-    /* нижняя волна */
-    100% 100%, 88% 98%, 75% 100%, 62% 97%, 50% 100%, 38% 98%, 25% 100%, 12% 97%, 0% 100%,
-    /* левая грань */
-    0% 100%, 0% 0%
+    0% 0%,12% 2%,25% 0%,38% 3%,50% 0%,62% 2%,75% 0%,88% 3%,100% 0%,
+    100% 0%,100% 100%,
+    100% 100%,88% 98%,75% 100%,62% 97%,50% 100%,38% 98%,25% 100%,12% 97%,0% 100%,
+    0% 100%,0% 0%
   );
 }
 .reorg-note p{
   font:700 24px/1.35 "Inter",system-ui;
-  color:#226CC3;
-  margin:0;
-  max-width:100%;
+  color:#226CC3; margin:0; max-width:100%;
 }
 
-/* Правая колонка (фото + полароид) */
+/* Правая колонка */
 .reorg-right{
   flex:0 1 56%;
   display:flex;
@@ -595,89 +550,114 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   gap:24px;
 }
 
-/* Фото — больше и слегка заходит на полароид */
 .aviva-picture{
-  flex:0 1 100%;           /* крупнее доля */
+  flex:0 1 100%;
   position:relative;
-  margin-right:-72px;     /* ключ: заезжаем на полароид */
+  margin-right:-72px;
   filter:drop-shadow(0 12px 30px rgba(0,0,0,.25));
-  z-index:3;              /* поверх полароида */
+  z-index:3;
 }
-.aviva-picture img{
-  display:block;
-  width:100%;
-  height:auto;
-}
+.aviva-picture img{ display:block; width:100%; height:auto; }
 
-/* Колонка полароида */
-.blueprint{
-  position:relative;
-  flex:0 1 40%;
-  z-index:2;              /* ниже фото */
-}
+/* Полароид справа */
+.blueprint{ position:relative; flex:0 1 40%; z-index:2; }
 
-/* Карточка-полароид — больше */
 .polaroid-pic{
-  position:absolute;
-  top:-28px;
-  right:0;
-  background:#fff;
-  border-radius:12px;
-  padding:80px;
-  width:clamp(300px, 34vw, 380px); /* увеличил размер */
+  position:absolute; top:-28px; right:0;
+  background:#fff; border-radius:12px; padding:80px;
+  width:clamp(300px,34vw,380px);
   box-shadow:0 10px 22px rgba(0,0,0,.25);
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  align-items:center;
-  transform:rotate(-1.5deg);       /* лёгкая «живость» */
+  display:flex; flex-direction:column; gap:10px; align-items:center;
+  transform:rotate(-1.5deg);
 }
-.polaroid-pic img{
-  display:block;
-  width:100%;
-  height:auto;
-  border-radius:8px;
-}
+.polaroid-pic img{ display:block; width:100%; height:auto; border-radius:8px; }
 .polaroid-pic figcaption{
   font:800 12px/1.2 "Oswald","Inter",system-ui;
-  text-align:center;
-  color:#111;
-  letter-spacing:.08em;
+  text-align:center; color:#111; letter-spacing:.08em;
 }
 
-/* Доп. подписи (опционально) */
 .blueprint-watermark{
-  position:absolute;
-  left:16px;
-  bottom:12px;
+  position:absolute; left:16px; bottom:12px;
   font:900 clamp(24px,5vw,42px)/1 "Oswald","Inter",system-ui;
-  letter-spacing:.12em;
-  color:rgba(255,255,255,.14);
-  z-index:0;
+  letter-spacing:.12em; color:rgba(255,255,255,.14); z-index:0;
 }
 .blueprint-caption{
-  position:absolute;
-  right:16px;
-  bottom:14px;
+  position:absolute; right:16px; bottom:14px;
   font:700 clamp(14px,2.4vw,20px)/1 "Oswald","Inter",system-ui;
-  letter-spacing:.08em;
-  color:#E9F1FF;
-  text-transform:uppercase;
-  z-index:0;
+  letter-spacing:.08em; color:#E9F1FF; text-transform:uppercase; z-index:0;
 }
 
-/* Адаптив: убираем перекрытие, складываем в колонку */
+/* Адаптив блока реорганизации */
 @media (max-width:960px){
   .reorg-wrap{ flex-direction:column; align-items:center; gap:16px; }
   .reorg-right{ width:100%; flex-direction:column; gap:12px; }
   .aviva-picture{ margin-right:0; z-index:1; }
-  .polaroid-pic{
-    position:static;
-    width:min(260px, 80%);
-    transform:none;
-    margin-top:8px;
+  .polaroid-pic{ position:static; width:min(260px,80%); transform:none; margin-top:8px; }
+}
+/* Облачные волны внутри синей секции */
+.kol-reorg{ position:relative; overflow:hidden; } /* уже есть — дублировать не страшно */
+.cloud-wave{
+  position:absolute;
+  left:0; width:100%; height:88px;   /* высота гребня */
+  pointer-events:none;
+  z-index:0;                         /* под контентом секции */
+}
+.cloud-wave svg{ display:block; width:100%; height:100%; }
+
+.cloud-wave--top{ top:0; transform: scaleY(-1); transform-origin: top center; }
+.cloud-wave--bottom{ bottom:0; }
+
+/* Чтобы контент гарантированно был над волнами */
+.reorg-wrap{ position:relative; z-index:1; }
+
+/* Синие облака-«кап» над плашкой */
+.wavecap{
+  position: relative;
+  height: 92px;            /* высота гребня; подбери под вкус */
+  margin-bottom: -6px;     /* чтобы волна плотнее примыкала к плашке */
+  z-index: 2;              /* поверх всего, что под ней */
+}
+.wavecap svg{
+  display:block; width:100%; height:100%;
+  filter: drop-shadow(0 6px 12px rgba(13,47,117,.20));
+  overflow: visible;        /* позволяет «каплям» слегка выходить за край */
+}
+
+/* Палитра волн (совместима с твоими переменными) */
+.wavecap .w1{ fill: var(--kol-blue-3, #1F5194); } /* передний слой (тёмный) */
+.wavecap .w2{ fill: var(--kol-blue-2, #226CC3); } /* средний слой */
+.wavecap .w3{ fill: var(--kol-blue-1, #4D87D5); } /* задний слой (светлый) */
+.wavecap .drop{ fill: var(--kol-blue-1, #4D87D5); }
+
+/* Плашка с заголовком — оставляем как есть, но под волной */
+.reorg-band{ position: relative; z-index: 1; }
+
+/* Адаптив — чуть ниже волны на мобилках */
+@media (max-width:600px){
+  .wavecap{ height: 80px; margin-bottom: -4px; }
+}
+/* волна "вырезается" из контейнера и тянется на всю ширину окна */
+.wavecap--bleed{
+  position: relative;
+  z-index: 3;                 /* выше плашки, если нужно */
+  width: 100vw;
+  left: 50%;
+  margin-left: -50vw;         /* ломаемся из центра на края окна */
+  margin-right: -50vw;
+}
+
+/* чтобы избежать горизонтального скролла из-за полосы прокрутки — современный юнит */
+@supports (width: 100dvw){
+  .wavecap--bleed{
+    width: 100dvw;
+    margin-left: -50dvw;
+    margin-right: -50dvw;
   }
 }
+
+/* если волна идёт прямо перед .reorg-band, плашку держим под ней */
+.reorg-band{ position: relative; z-index: 2; }
+
 
 
 /* ===== Services ===== */
