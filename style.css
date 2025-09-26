@@ -490,8 +490,7 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   box-shadow:inset 0 0 0 2px rgba(255,255,255,.05), 0 10px 28px rgba(0,0,0,.08);
   overflow:hidden;
 }
-
-/* Заголовок (если нужно) */
+.reorg-band { position: relative; }
 .reorg-band h3{
   margin:0;
   text-align:center;
@@ -502,15 +501,52 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   background:linear-gradient(180deg,var(--kol-blue-2),var(--kol-blue-3));
   box-shadow:0 10px 22px rgba(13,47,117,.25);
   padding:16px 22px;
+
+  /* волна */
+  --wave-w: 64px;         /* ширина волны (чаще/реже) */
+  --wave-h: 20px;         /* высота волны */
+
+  /* чтобы текст не упирался в волну */
+  padding-bottom: calc(16px + var(--wave-h));
+  /* ВАЖНО: перекрываем следующую секцию,
+     чтобы через прозрачные вырезы было видно фон нижней секции, а не белый body */
+  margin-bottom: calc(-1 * var(--wave-h));
+  z-index: 2;             /* поверх следующей секции */
 }
-.reorg-band h3:last-child{ padding:16px 22px; }
+
+/* Маска для соврем. браузеров */
+@supports ((-webkit-mask: none) or (mask: none)){
+  .reorg-band h3{
+    /* ряды полукругов снизу */
+    --wave-mask: radial-gradient(50% var(--wave-h) at 50% 100%,
+                     transparent 99%, #000 101%)
+                  0 100% / var(--wave-w) var(--wave-h) repeat-x;
+
+    /* применяем: «сплошная» маска минус волна */
+    -webkit-mask: var(--wave-mask), linear-gradient(#000 0 0);
+            mask: var(--wave-mask), linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;   /* WebKit */
+            mask-composite: exclude; /* спецификация */
+  }
+
+  /* (опционально) лёгкая анимация волны */
+  @media (prefers-reduced-motion: no-preference){
+    .reorg-band h3{ animation: waveSlide 12s linear infinite; }
+    @keyframes waveSlide{
+      to{
+        -webkit-mask-position: var(--wave-w) 100%, 0 0;
+                mask-position: var(--wave-w) 100%, 0 0;
+      }
+    }
+  }
+}
+
 
 /* Ряд: слева текст, справа стек из фото+полароид */
 .reorg-wrap{
   display:flex;
   justify-content:space-between;
   align-items:stretch;
-  gap:24px;
   margin-top:40px;
   position:relative;
   z-index:1;
@@ -519,7 +555,7 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 /* Левая колонка — текстовый блок с «рваным» верхом/низом */
 .reorg-note{
   position:relative;
-  flex:0 1 44%;
+  flex:0 -1 44%;
   max-width:680px;
   padding:28px 32px;
   background:
