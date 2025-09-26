@@ -502,7 +502,6 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   }
 }
 @media (max-width:600px){
-  .reorg-band{ --cloud-h:42px; }
   .reorg-band::before{ --s1:88px; --s2:140px; --s3:220px; }
 }
 
