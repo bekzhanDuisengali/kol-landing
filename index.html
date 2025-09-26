@@ -184,24 +184,38 @@
     <!-- AFTER REORGANIZATION -->
     <div class="kol-reorg">
       <div class="reorg-wrap">
+        <!-- 1) Текст -->
         <div class="reorg-note">
-          <p>В 2022 году, сохранив бесценный опыт и лучшие традиции, мы открыли новую главу, основав компанию <b>Korea Orient Line (KOL)</b>.
-            <br> <br>
-            Сегодня Korea Orient Line — динамично развивающаяся компания, которая предлагает клиентам со всего мира все преимущества морской логистики из Южной Кореи.
+          <p>
+            В 2022 году, сохранив бесценный опыт и лучшие традиции, мы открыли новую главу, основав компанию
+            <b>Korea Orient Line (KOL)</b>.
+            <br><br>
+            Сегодня Korea Orient Line — динамично развивающаяся компания, которая предлагает клиентам со всего мира
+            все преимущества морской логистики из Южной Кореи.
           </p>
         </div>
 
-        <figure class="aviva-picture">
-          <img src="assets/aviva-photo.png" alt="Контейнеровоз">
-        </figure>
-
-        <div class="blueprint">
-          <figure class="polaroid-pic">
-            <img src="assets/logo.png" alt="KOL">
+        <!-- 2–3) Фото + полароид справа (единая правая колонка) -->
+        <div class="reorg-right">
+          <figure class="aviva-picture">
+            <img src="assets/aviva-photo.png" alt="Контейнеровоз AVIVA" />
           </figure>
+
+          <div class="blueprint">
+            <figure class="polaroid-pic">
+              <img src="assets/logo.png" alt="Логотип KOL" />
+              <!-- <figcaption>Korea Orient Line</figcaption> -->
+            </figure>
+
+            <!-- При необходимости:
+            <div class="blueprint-watermark">KOL</div>
+            <div class="blueprint-caption">Marine Logistics</div>
+            -->
+          </div>
         </div>
       </div>
     </div>
+
   </section>
 
 
@@ -431,6 +445,19 @@
     <a href="mailto:info@kol.com" class="btn primary">Связаться с менеджером</a>
     <p>Тел: <a href="tel:+821073099001">+821073099001</a> | Email: <a href="mailto:info@kol.com">info@kol.com</a></p>
   </footer>
+  <!-- SVG-фильтр "crumple" для смятой бумаги -->
+  <svg width="0" height="0" style="position:absolute; left:-9999px;">
+    <filter id="crumple" x="-20%" y="-20%" width="140%" height="140%">
+      <!-- крупные заломы -->
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="bigNoise"/>
+      <!-- мелкая рябь -->
+      <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="1" seed="11" result="fineNoise"/>
+      <!-- смешиваем -->
+      <feBlend in="bigNoise" in2="fineNoise" mode="multiply" result="noise"/>
+      <!-- смещаем изображение по карте шума -->
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
 
   <!-- Crisp Chat -->
   <script type="text/javascript">
