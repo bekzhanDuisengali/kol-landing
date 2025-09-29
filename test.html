@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KOL — герой-блок</title>
+<style>
+  /* ===== CSS variables & base ===== */
+  :root{
+    --ink: #1F57B0;                          /* насыщенный синий для текста */
+    --overlay: rgba(10,25,60,.55);           /* тёмно-синий градиент-оверлей */
+    --paper: #ffffff;                        /* цвет «бумаги» */
+    --lines: #e9edf3;                        /* линии тетрадного листа */
+    --stack-gap: clamp(16px, 2.2vw, 28px);   /* зазор между карточками справа */
+    --radius: 14px;                          /* базовое скругление */
+    --pad-lg: clamp(28px, 3.2vw, 36px);      /* паддинги карточек */
+    --container-pad: clamp(32px, 4vw, 40px); /* внутренние отступы секции */
+    --shadow-1: 0 10px 24px rgba(5, 20, 60, .22);
+    --shadow-2: 0 3px 8px rgba(5, 20, 60, .16);
+    --shadow-3: 0 2px 2px rgba(5, 20, 60, .10);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    color: var(--ink);
+    background: #0a193c;
+  }
+
+  /* ===== Hero block ===== */
+  .kol-hero{
+    position: relative;
+    width: 100%;
+    overflow: clip;
+    background:
+      linear-gradient(var(--overlay), var(--overlay)),
+      url("./boat-schema.jpg") center/cover no-repeat;
+  }
+
+  .kol-hero__inner{
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: clamp(40px, 6vw, 72px) var(--container-pad);
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;   /* лёгкий акцент влево */
+    gap: clamp(24px, 3.5vw, 40px);
+    align-items: center;
+  }
+
+  /* ===== Left: torn paper ===== */
+  .paper{
+    position: relative;
+    z-index: 1;
+    color: var(--ink);
+    /* лёгкая «бумажная» глубина */
+    filter: drop-shadow(0 1px 0 rgba(0,0,0,.05)) drop-shadow(var(--shadow-3));
+  }
+
+  /* «лист бумаги» отрисован псевдо-элементом, чтобы наложить маску рваного края */
+  .paper::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      /* лёгкая зернистость из градиентов (имитация текстуры) */
+      radial-gradient(120% 100% at 0% 0%, rgba(255,255,255,.9), rgba(255,255,255,.96) 40%, rgba(255,255,255,1) 70%),
+      linear-gradient(#fff, #fff);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-2), var(--shadow-1);
+    /* SVG-маска с неровной кромкой сверху и снизу */
+    -webkit-mask: url('data:image/svg+xml;utf8,\
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">\
+        <path fill="white" d="M0,8 L8,2 L16,8 L24,3 L32,9 L40,3 L48,9 L56,2 L64,8 L72,2 L80,8 L88,3 L96,8 L100,8 L100,92 L96,92 L88,98 L80,92 L72,98 L64,92 L56,98 L48,92 L40,98 L32,92 L24,98 L16,92 L8,98 L0,92 Z"/>\
+      </svg>') center / 100% 100% no-repeat;
+            mask: url('data:image/svg+xml;utf8,\
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">\
+        <path fill="white" d="M0,8 L8,2 L16,8 L24,3 L32,9 L40,3 L48,9 L56,2 L64,8 L72,2 L80,8 L88,3 L96,8 L100,8 L100,92 L96,92 L88,98 L80,92 L72,98 L64,92 L56,98 L48,92 L40,98 L32,92 L24,98 L16,92 L8,98 L0,92 Z"/>\
+      </svg>') center / 100% 100% no-repeat;
+  }
+
+  .paper__body{
+    position: relative;
+    padding: var(--pad-lg);
+  }
+
+  .paper p{
+    margin: 0 0 clamp(16px, 2.2vw, 22px) 0;
+  }
+
+  .paper .lead{
+    font-weight: 700;
+    font-size: clamp(24px, 2.2vw, 28px);
+    line-height: 1.3;
+  }
+  .paper .sub{
+    font-weight: 600;
+    font-size: clamp(20px, 1.9vw, 22px);
+    line-height: clamp(1.4, 2vw, 1.5);
+  }
+
+  /* ===== Right: stacked cards ===== */
+  .stack{
+    position: relative;
+    min-height: 380px;         /* чтобы полароид не перекрывал контейнер */
+    display: grid;
+    place-items: center;
+  }
+
+  .stack__inner{
+    position: relative;
+    width: min(560px, 100%);
+    /* столбик, где полароид лежит поверх заметки */
+  }
+
+  /* Note (тетрадный лист с логотипом) — ниже по слою */
+  .note{
+    position: relative;
+    z-index: 1;
+    padding: var(--pad-lg);
+    border-radius: var(--radius);
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        var(--paper),
+        var(--paper) 22px,
+        var(--lines) 22px,
+        var(--lines) 24px
+      );
+    box-shadow: var(--shadow-2), var(--shadow-1);
+    transform: rotate(3deg);
+  }
+
+  /* Скрепка — инлайн SVG, позиционируется сверху */
+  .paperclip{
+    position: absolute;
+    top: 8px; left: clamp(10px, 2vw, 16px);
+    width: clamp(42px, 5vw, 56px);
+    height: auto;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
+    pointer-events: none;
+  }
+
+  .logo{
+    display: block;
+    width: clamp(65%, 72%, 80%);
+    max-width: 520px;
+    margin: clamp(14px, 2.2vw, 20px) auto;
+    object-fit: contain;
+  }
+
+  /* Polaroid — поверх заметки */
+  .polaroid{
+    position: absolute;
+    inset: auto 0  -14%  0;   /* немного свисает вниз */
+    margin: 0 auto;
+    width: clamp(320px, 36vw, 380px);
+    transform: rotate(-8deg);
+    z-index: 2;
+    filter: drop-shadow(0 12px 24px rgba(0,0,0,.35)) drop-shadow(0 2px 4px rgba(0,0,0,.25));
+  }
+
+  /* «блик-тень» под полароидом для ощущения отрыва */
+  .polaroid::after{
+    content:"";
+    position: absolute;
+    left: 10%;
+    bottom: -6%;
+    width: 80%;
+    height: 18%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(0,0,0,.35), transparent 70%);
+    filter: blur(6px);
+    z-index: -1;
+    transform: rotate(2deg);
+  }
+
+  .polaroid img{
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;              /* у исходника уже есть белая рамка; лёгкое скругление */
+    box-shadow: 0 2px 0 rgba(0,0,0,.08) inset;
+  }
+
+  /* ===== Accessibility: better text legibility on overlay ===== */
+  .kol-hero, .paper, .note { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 1200px){
+    .kol-hero__inner{
+      grid-template-columns: 1fr 1fr;
+    }
+    .polaroid{ transform: rotate(-6deg); }
+    .note{ transform: rotate(2deg); }
+  }
+
+  @media (max-width: 900px){
+    .kol-hero__inner{
+      grid-template-columns: 1fr;
+    }
+    /* порядок: сначала лист (текст), затем полароид, потом логотипный лист */
+    .paper{ order: 1; }
+    .stack{ order: 2; }
+    .stack__inner{
+      display: grid;
+      gap: var(--stack-gap);
+    }
+    /* перестраиваем: полароид сверху как обычный потоковый элемент */
+    .polaroid{
+      position: relative;
+      inset: unset;
+      margin: 0 auto;
+      transform: rotate(-5deg);
+      width: clamp(300px, 70vw, 420px);
+    }
+    .polaroid::after{ bottom: -7%; filter: blur(7px); }
+    .note{
+      transform: rotate(1.5deg);
+      padding: clamp(22px, 4vw, 28px);
+    }
+  }
+
+  @media (max-width: 600px){
+    .paper .lead{ font-size: 22px; }
+    .paper .sub{  font-size: 18px; line-height: 1.45; }
+    .polaroid{ transform: rotate(-3deg); width: min(92%, 420px); }
+    .note{ transform: rotate(1deg); border-radius: 12px; }
+    .logo{ width: 78%; }
+    .paper::before{ border-radius: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="kol-hero">
+  <div class="kol-hero__inner">
+
+    <!-- Left: torn paper with text -->
+    <article class="paper" aria-label="О компании KOL — текстовый лист с рваным краем">
+      <div class="paper__body">
+        <p class="lead">
+          «В 2022 году, сохранив бесценный опыт и лучшие традиции, мы открыли новую главу, основав компанию Korea Orient Line (KOL).»
+        </p>
+        <p class="sub">
+          «Сегодня Korea Orient Line — это динамично развивающаяся компания, которая предлагает клиентам со всего мира все преимущества морской логистики из Южной Кореи!»
+        </p>
+      </div>
+    </article>
+
+    <!-- Right: stacked cards -->
+    <div class="stack" aria-label="Стопка карточек: полароид и тетрадный лист с логотипом">
+      <div class="stack__inner">
+
+        <!-- Note with logo -->
+        <div class="note">
+          <!-- inline SVG paperclip -->
+          <svg class="paperclip" viewBox="0 0 64 128" aria-hidden="true">
+            <g fill="none" stroke="#8A8A8A" stroke-width="2" stroke-linecap="round">
+              <path d="M34 20c-10 0-18 8-18 18v56c0 9 7 16 16 16s16-7 16-16V36c0-6-5-11-11-11s-11 5-11 11v55"/>
+              <path d="M46 36v58c0 13-11 24-24 24S-2 107 6 94l0-58c0-16 13-28 28-28s28 12 28 28v62"/>
+            </g>
+          </svg>
+
+          <!-- KOL logo -->
+          <img
+            class="logo"
+            src="./assets/logo.png"
+            alt="Логотип Korea Orient Line (KOL)"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        <!-- Polaroid on top -->
+        <figure class="polaroid">
+          <img
+            src="./assets/aviva-photo.png"
+            alt="Полароидное фото с подписью «AVIVA»"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+            
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!--
+  Ключевые моменты:
+  - Фон секции: boat-schema.jpg + полупрозрачный синий градиент для контраста текста.
+  - Левый блок: «лист бумаги» с SVG-маской рваного края, гибкие паддинги и типографика.
+  - Правый блок: стопка — нижний тетрадный лист (note) со скрепкой (inline-SVG), сверху полароид под углом и с «бликом-тенью».
+  - Все размеры и отступы адаптивны через clamp(); медиа <1200 / <900 / <600.
+  - Без фреймворков, системный шрифт, изображения lazy/async.
+-->
+</body>
+</html>

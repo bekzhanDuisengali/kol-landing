@@ -438,7 +438,7 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   max-width:1200px;
   min-height:600px;
   margin:0 auto;
-  padding:0 24px;
+  /* padding:0 24px 0 0; */
   position:relative;
   background:url("assets/boat-schema.jpg") no-repeat center/contain;
   background-color:#0d2f75;
@@ -510,7 +510,6 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   display:flex;
   justify-content:space-between;
   align-items:stretch;
-  margin-top:40px;
   position:relative;
   z-index:1;
 }
@@ -518,9 +517,8 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 /* Левая колонка (рваные края) */
 .reorg-note{
   position:relative;
-  flex:0 1 44%;
-  max-width:680px;
   padding:28px 32px;
+  max-height: 320px;
   background:
     var(--paper-texture, none) center/cover no-repeat,
     linear-gradient(#ffffff, #fdfdfd);
@@ -542,38 +540,22 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 }
 
 /* Правая колонка */
-.reorg-right{
-  flex:0 1 56%;
-  display:flex;
-  align-items:flex-start;
-  gap:24px;
+.reorg-right{ flex:0 1 56%; display:flex; align-items:flex-start; gap:24px;   margin-top: 20px;
 }
 
-.aviva-picture{
-  flex:0 1 100%;
-  position:relative;
-  margin-right:-72px;
-  filter:drop-shadow(0 12px 30px rgba(0,0,0,.25));
-  z-index:3;
-}
-.aviva-picture img{ display:block; width:100%; height:auto; }
+/* Фото AVIVA без дополнительной белой подложки */
+.aviva-picture{ margin-right:-28px; z-index:3; filter:drop-shadow(0 12px 30px rgba(0,0,0,.25)); transform:rotate(-3deg); }
+.aviva-picture img{ display:block; height:auto; position: absolute; top: -265px; right: 200px; width: 400px;}
 
-/* Полароид справа */
-.blueprint{ position:relative; flex:0 1 40%; z-index:2; }
-
-.polaroid-pic{
-  position:absolute; top:-28px; right:0;
-  background:#fff; border-radius:12px; padding:80px;
-  width:clamp(300px,34vw,380px);
-  box-shadow:0 10px 22px rgba(0,0,0,.25);
-  display:flex; flex-direction:column; gap:10px; align-items:center;
-  transform:rotate(-1.5deg);
+/* Блокнот с логотипом на фоне тетради и синей сетки */
+.notepad{ position:relative; flex:0 1 48%; align-self:stretch; display:flex; align-items:center; justify-content:center; }
+.notepad::before{ content:none; }
+.notepad-inner{
+  position:relative;    transform: rotate(-3deg); z-index:1; width:clamp(260px,32vw,420px); background:#fff; border-radius:12px; padding:100px 100px; box-shadow:0 10px 24px rgba(0,0,0,.22);
+  background-image:repeating-linear-gradient(#ffffff, #ffffff 22px, #e8eef8 23px); max-height: 500px; margin-left: 80px; /* линовка */
 }
-.polaroid-pic img{ display:block; width:100%; height:auto; border-radius:8px; }
-.polaroid-pic figcaption{
-  font:800 12px/1.2 "Oswald","Inter",system-ui;
-  text-align:center; color:#111; letter-spacing:.08em;
-}
+.notepad-logo{ display:block; width:70%; margin:32px auto; filter:drop-shadow(0 1px 0 rgba(0,0,0,.04)); }
+.paperclip{ position:absolute; top:-12px; left:50%; width:16px; height:32px; border:2px solid rgba(0,0,0,.35); border-radius:12px; background:transparent; z-index:2; transform:translateX(-50%); opacity:.85 }
 
 .blueprint-watermark{
   position:absolute; left:16px; bottom:12px;
@@ -589,9 +571,10 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 /* Адаптив блока реорганизации */
 @media (max-width:960px){
   .reorg-wrap{ flex-direction:column; align-items:center; gap:16px; }
-  .reorg-right{ width:100%; flex-direction:column; gap:12px; }
-  .aviva-picture{ margin-right:0; z-index:1; }
-  .polaroid-pic{ position:static; width:min(260px,80%); transform:none; margin-top:8px; }
+  .reorg-right{ width:100%; flex-direction:column; gap:16px; align-items:center; }
+  .aviva-picture{ margin-right:0; transform:none; }
+  .notepad::before{ inset:-12px; }
+  .notepad-inner{ width:min(360px,88vw); }
 }
 /* Облачные волны внутри синей секции */
 .kol-reorg{ position:relative; overflow:hidden; } /* уже есть — дублировать не страшно */
@@ -617,7 +600,7 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   z-index: 2;              /* поверх всего, что под ней */
 }
 .wavecap svg{
-  display:block; width:100%; height:100%;
+  display:block; width:130%; height:100%;
   filter: drop-shadow(0 6px 12px rgba(13,47,117,.20));
   overflow: visible;        /* позволяет «каплям» слегка выходить за край */
 }
@@ -900,7 +883,6 @@ html{
 }
 /* ---------- Глобально полезные мелочи ---------- */
 html { scroll-padding-top: 76px; }             /* якоря не прячутся под шапку */
-img, video { max-width: 100%; height: auto; display:block; } /* не вываливаемся */
 
 /* НЕ ограничиваем ширину секций (у тебя есть правило section{max-width:1200px}).
    Оно мешает полноширинным градиентам. Если оно осталось — удали/закомментируй. */
