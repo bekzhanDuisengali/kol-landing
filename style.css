@@ -217,7 +217,6 @@ ul{list-style:none}
 @keyframes wave{from{transform:translateX(0)}to{transform:translateX(-25%)}}
 
 
-header.hero, section, footer { scroll-margin-top: 76px; }
 
 
 
