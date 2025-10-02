@@ -1100,7 +1100,7 @@ html { scroll-padding-top: 76px; }             /* якоря не прячутс
 /* ---------- Hero: честная высота на мобилках + безопасные зоны ---------- */
 .hero{
   /* честная высота: fallback через --vh + нативный dvh где есть */
-  min-height: calc(var(--vh, 1vh) * 50);
+  min-height: calc(var(--vh, 1vh) * 100);
 }
 /* --- Hero mobile fix --- */
 .hero-grid {
