@@ -276,8 +276,6 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 /* === Правая секция (фон-бумага) === */
 .kol-right{
   /* флюидные переменные */
-  --pad-top: clamp(40px, 6vw, 72px);
-  --pad-bot: clamp(48px, 7vw, 88px);
   --minh:     clamp(520px, 78dvh, 960px); /* от ~520px до ~экранной высоты */
 
   position: relative;
@@ -301,8 +299,6 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 /* чуть «компактнее» на телефонах */
 @media (max-width: 600px){
   .kol-right{
-    --pad-top: clamp(28px, 7vw, 48px);
-    --pad-bot: clamp(36px, 8vw, 64px);
     --minh:    clamp(440px, 80svh, 820px);
   }
 }
@@ -1145,11 +1141,11 @@ html { scroll-padding-top: 76px; }             /* якоря не прячутс
   .hero-stats .num {
     font-weight: 800;
     line-height: 1;
-    font-size: clamp(20px, 9vw, 36px);
+    font-size: clamp(20px, 9vw, 24px);
   }
   .hero-stats .label {
     line-height: 1.2;
-    font-size: clamp(11px, 3.4vw, 14px);
+    font-size: clamp(11px, 3.4vw, 12px);
     overflow-wrap: anywhere;       /* перенос длинных подпесей */
     word-break: break-word;
   }
