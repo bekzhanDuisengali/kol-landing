@@ -175,7 +175,16 @@ ul{list-style:none}
 .side-contact{position:absolute;right:0;top:50%;transform:rotate(-90deg) translateY(-50%);transform-origin:right center;background:#ff6600;color:#fff;padding:10px;z-index:3}
 
 /* ===== Hero (light sea -> blue theme) ===== */
-.hero{position:relative;max-height:150vh;color:var(--ink);overflow:hidden;opacity:1;pointer-events:auto;transition:opacity 1.2s;background:#FFFFFF}
+.hero{
+  position:relative;
+  max-height:150vh;
+  color:var(--ink);
+  overflow:hidden;
+  opacity:1;
+  pointer-events:auto;
+  transition:opacity 1.2s;
+  background:#FFFFFF
+}
 .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero-bg{position:absolute;inset:0;z-index:1;background: var(--tint-0);}
 .hero-overlay{position:relative;z-index:2;height:100%;padding:110px 32px 40px;background:linear-gradient(to bottom,color-mix(in srgb, var(--brand) 12%, transparent),color-mix(in srgb, var(--ink) 8%, transparent) 30%,color-mix(in srgb, var(--brand) 10%, transparent))}
@@ -647,7 +656,7 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 @media (max-width: 480px) {
     .aviva-picture img {
         width: clamp(160px, 60vw, 280px);
-        top: clamp(-107px, 13vw, 28px);
+        top: clamp(-127px, 13vw, -107px);
         right: clamp(-32px, -3vw, 26px);
     }
 }
@@ -750,7 +759,7 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   .aviva-picture{ margin-right:0; transform:none; }
 
   /* Оба ширины завязаны на одну переменную */
-  .notepad-inner{ width: var(--unit); }
+  .notepad-inner{ width: 285px }
   .aviva-picture img{
     width: calc(var(--unit) * 0.95238); /* 400/420 = 0.95238 → пропорция к notepad */
   }
@@ -1123,7 +1132,7 @@ html { scroll-padding-top: 76px; }             /* якоря не прячутс
     align-self: stretch;
   }
   .hero{
-    height: 70vh;
+    height: 1600px;
   }
   .hero-stats {
     display: grid;
@@ -1157,12 +1166,12 @@ html { scroll-padding-top: 76px; }             /* якоря не прячутс
     grid-template-columns: 1fr;    /* 1x4 */
   }
   .hero{
-    height: 80vh;
+    height: 800px;
   }
 }
 @media(max-width:560px){
   .hero{
-    height: 150vh;
+    height: 1200px;
   }
 }
 /* Защита от «жёстких» карточек в глобальном стиле */
