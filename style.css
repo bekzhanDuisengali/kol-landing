@@ -158,6 +158,7 @@ ul{list-style:none}
   .menu{position:absolute;top:60px;right:20px;display:none;flex-direction:column;align-items:stretch;gap:10px;padding:14px;background:rgba(0,0,0,.7);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.25);backdrop-filter:blur(6px)}
   .menu.show{display:flex}
   .menu .divider{display:none}
+  .hero{height: 60vh;}
 }
 
 /* ===== Buttons (unified) ===== */
@@ -174,7 +175,7 @@ ul{list-style:none}
 .side-contact{position:absolute;right:0;top:50%;transform:rotate(-90deg) translateY(-50%);transform-origin:right center;background:#ff6600;color:#fff;padding:10px;z-index:3}
 
 /* ===== Hero (light sea -> blue theme) ===== */
-.hero{position:relative;height:100vh;color:var(--ink);overflow:hidden;opacity:1;pointer-events:auto;transition:opacity 1.2s;background:#FFFFFF}
+.hero{position:relative;max-height:100vh;color:var(--ink);overflow:hidden;opacity:1;pointer-events:auto;transition:opacity 1.2s;background:#FFFFFF}
 .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero-bg{position:absolute;inset:0;z-index:1;background: var(--tint-0);}
 .hero-overlay{position:relative;z-index:2;height:100%;padding:110px 32px 40px;background:linear-gradient(to bottom,color-mix(in srgb, var(--brand) 12%, transparent),color-mix(in srgb, var(--ink) 8%, transparent) 30%,color-mix(in srgb, var(--brand) 10%, transparent))}
@@ -184,7 +185,7 @@ ul{list-style:none}
 /* Two-column layout */
 .hero-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);align-items:center;gap:40px}
 .logo{max-width:200px}
-.hero-lead .logo{max-width:140px;margin-bottom:12px;opacity:.95}
+.hero-lead .logo{max-width:140px;margin-bottom:12px;opacity:.95;margin-top: 30px;}
 .hero-lead h1{font-size:48px;line-height:1.1;margin:.2em 0 .3em;color:var(--brand)}
 .hero-sub{max-width:640px;opacity:.9;color:var(--ink)}
 .hero-actions{margin-top:20px;display:flex;gap:12px;flex-wrap:wrap}
@@ -275,15 +276,36 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 /* ===== About (scoped vars) ===== */
 /* === Правая секция (фон-бумага) === */
 .kol-right{
+  /* флюидные переменные */
+  --pad-top: clamp(40px, 6vw, 72px);
+  --pad-bot: clamp(48px, 7vw, 88px);
+  --minh:     clamp(520px, 78dvh, 960px); /* от ~520px до ~экранной высоты */
+
   position: relative;
   z-index: 0;
-  padding:56px 0 64px;
-  color:var(--ink);
+  padding: var(--pad-top) 0 var(--pad-bot);
+  min-height: var(--minh);
+
+  color: var(--ink);
   background:
     radial-gradient(1200px 600px at 12% -10%, rgba(255,255,255,.80), rgba(255,255,255,0) 60%),
     radial-gradient(900px 500px at 100% 110%, rgba(255,255,255,.55), rgba(255,255,255,0) 60%),
     linear-gradient(0deg, rgba(0,0,0,.02), rgba(255,255,255,.02)),
     var(--paper, #F5F6F8);
+}
+
+/* fallback для браузеров без dvh (старый iOS, старый Safari) */
+@supports not (height: 1dvh){
+  .kol-right{ min-height: clamp(520px, 78vh, 960px); }
+}
+
+/* чуть «компактнее» на телефонах */
+@media (max-width: 600px){
+  .kol-right{
+    --pad-top: clamp(28px, 7vw, 48px);
+    --pad-bot: clamp(36px, 8vw, 64px);
+    --minh:    clamp(440px, 80svh, 820px);
+  }
 }
 
 /* --- «Опыт с 1999» --- */
@@ -424,15 +446,39 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 }
 @media (max-width:960px){
   .kol-experience{ grid-template-columns:1fr; gap:22px; }
-  .exp-vert{ display:none; }
-  .exp-stack{ width:100%; }
-  .polaroid{ --w: clamp(220px,58vw,320px); right:-6px; bottom:-18px; transform:rotate(-4deg); }
+  .exp-stack{ width:100%; font-size: small;}
+  .polaroid{ --w: clamp(220px,58vw,420px); right:-6px; bottom:-18px; transform:rotate(-4deg); }
   .scribble{ left:-4%; top:-8%; width:104%; }
+  .exp-copy{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 30px;
+  }
+}
+@media(max-width:800px){
+  .polaroid{--w: clamp(220px,75vw,320px)}
+  .exp-copy{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 }
 @media (max-width:600px){
-  .polaroid{ --w: clamp(220px,82vw,360px); right:-4px; bottom:-14px; }
+  .polaroid{ --w: clamp(160px,82vw,220px); right:-4px; bottom:-14px;}
+  .exp-photo.back{
+    width: 65%;
+  }
+  .exp-copy{
+    display: flex;
+    flex-direction: column;
+  }
 }
-
+@media(max-width:420px){
+  .exp-photo.back{
+    width: 75%;
+  }
+}
 /* --- Плашка «После реорганизации» --- */
 .kol-reorg{
   max-width:1200px;
@@ -516,44 +562,169 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 
 /* Левая колонка (рваные края) */
 .reorg-note{
-  position:relative;
-  padding:28px 32px;
-  max-height: 320px;
+  /* флюидные параметры */
+  --pad-x: clamp(16px, 3.2vw, 32px);
+  --pad-y: clamp(14px, 3vw, 28px);
+  --minh:  clamp(160px, 28dvh, 360px);  /* нижняя граница высоты */
+  --maxh:  min(60dvh, 520px);           /* верхняя граница (чтобы не раздувалась) */
+
+  position: relative;
+  padding: var(--pad-y) var(--pad-x);
+  max-height: var(--maxh);
+  overflow: auto;                       /* прокрутка при избытке текста */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
+
   background:
     var(--paper-texture, none) center/cover no-repeat,
     linear-gradient(#ffffff, #fdfdfd);
-  background-blend-mode:multiply;
-  border:0; border-radius:6px;
-  box-shadow:0 10px 22px rgba(0,0,0,.18), 0 3px 8px rgba(0,0,0,.12);
-  filter:saturate(.8) contrast(.98);
-  color:#2a2a2a; line-height:1.5;
-  clip-path:polygon(
+  background-blend-mode: multiply;
+
+  border: 0;
+  border-radius: 6px;
+  box-shadow: 0 10px 22px rgba(0,0,0,.18), 0 3px 8px rgba(0,0,0,.12);
+  filter: saturate(.8) contrast(.98);
+  color: #2a2a2a;
+  line-height: 1.5;
+
+  /* рваный край как был */
+  clip-path: polygon(
     0% 0%,12% 2%,25% 0%,38% 3%,50% 0%,62% 2%,75% 0%,88% 3%,100% 0%,
     100% 0%,100% 100%,
     100% 100%,88% 98%,75% 100%,62% 97%,50% 100%,38% 98%,25% 100%,12% 97%,0% 100%,
     0% 100%,0% 0%
   );
 }
-.reorg-note p{
-  font:700 24px/1.35 "Inter",system-ui;
-  color:#226CC3; margin:0; max-width:100%;
+
+/* fallback, если dvh/svh нет (старые Safari/iOS) */
+@supports not (height: 1dvh){
+  .reorg-note{
+    min-height: clamp(160px, 28vh, 360px);
+    max-height: min(60vh, 520px);
+  }
 }
+
+.reorg-note p{
+  font: 700 clamp(16px, 2.2vw, 24px)/1.35 "Inter", system-ui;
+  color: #226CC3;
+  margin: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere; /* длинные слова не ломают макет */
+}
+
+/* На очень узких экранах делаем карточку компактнее */
+@media (max-width: 480px){
+  .reorg-note{
+    --minh: clamp(140px, 32svh, 300px);
+    --maxh: min(58svh, 440px);
+    --pad-x: clamp(14px, 4vw, 22px);
+    --pad-y: clamp(12px, 4.5vw, 20px);
+  }
+}
+
 
 /* Правая колонка */
 .reorg-right{ flex:0 1 56%; display:flex; align-items:flex-start; gap:24px;   margin-top: 20px;
 }
 
 /* Фото AVIVA без дополнительной белой подложки */
-.aviva-picture{ margin-right:-28px; z-index:3; filter:drop-shadow(0 12px 30px rgba(0,0,0,.25)); transform:rotate(-3deg); }
-.aviva-picture img{ display:block; height:auto; position: absolute; top: -265px; right: 200px; width: 400px;}
+.aviva-picture{ position: relative;margin-right:-28px; z-index:3; filter:drop-shadow(0 12px 30px rgba(0,0,0,.25)); transform:rotate(-3deg); }
+.aviva-picture img{
+  position: absolute;
+  display: block;
+  height: auto;
 
+  /* АДАПТИВ */
+  width: clamp(180px, 28vw, 400px);          /* сжимается на узких, но не больше 400 */
+  top:   clamp(-265px, -18vw, -120px);       /* чем уже экран — тем меньше отрицательный отступ */
+  right: clamp(12px, 10vw, 200px);           /* правый отступ тоже «плавает» */
+
+  /* если где-то глобально стоит img{max-width:100%} и мешает — раскомментируй: */
+  /* max-width: none; */
+}
+@media (max-width: 762px){
+  .aviva-picture img{
+    width: clamp(160px, 60vw, 280px);
+    top: clamp(-120px, -12vw, -60px);
+    right: clamp(8px, 6vw, 40px);
+  }
+}
+@media (max-width: 480px) {
+    .aviva-picture img {
+        width: clamp(160px, 60vw, 280px);
+        top: clamp(-107px, 13vw, 28px);
+        right: clamp(-32px, -3vw, 26px);
+    }
+}
 /* Блокнот с логотипом на фоне тетради и синей сетки */
 .notepad{ position:relative; flex:0 1 48%; align-self:stretch; display:flex; align-items:center; justify-content:center; }
 .notepad::before{ content:none; }
+/* Контейнер опционален, но помогает в сетках */
+.notepad { position: relative; }
+
+/* АДАПТИВНЫЙ БЛОК */
 .notepad-inner{
-  position:relative;    transform: rotate(-3deg); z-index:1; width:clamp(260px,32vw,420px); background:#fff; border-radius:12px; padding:100px 100px; box-shadow:0 10px 24px rgba(0,0,0,.22);
-  background-image:repeating-linear-gradient(#ffffff, #ffffff 22px, #e8eef8 23px); max-height: 500px; margin-left: 80px; /* линовка */
+  /* Тонкие ручки под разные экраны */
+  --line: clamp(18px, 2.4vw, 26px);          /* шаг линейки */
+  --pad-x: clamp(14px, 3.6vw, 32px);         /* горизонтальные отступы */
+  --pad-y: clamp(20px, 4.8vw, 60px);         /* вертикальные отступы */
+  --tilt: -3deg;                              /* наклон, уменьшим на мобилках */
+
+  position: relative;
+  z-index: 1;
+  width: clamp(260px, 34vw, 420px);          /* уже было хорошо — чуть расширил середину */
+  max-width: 100%;
+  min-width: 0;                              /* чтобы не распирало в grid/flex */
+  background: #fff;
+  border-radius: 12px;
+  padding: var(--pad-y) var(--pad-x);
+  box-shadow: 0 10px 24px rgba(0,0,0,.22);
+  margin-left: clamp(0px, 6vw, 80px);        /* «поле» слева ужимается на узких экранах */
+
+  max-height: min(70vh, 520px);              /* вписывается по высоте окна */
+  overflow: auto;                             /* скролл, если контента много */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
+
+  transform: rotate(var(--tilt));
+  transform-origin: 20% 20%;
+
+  /* Адаптивная линовка: белая полоса + тонкая голубая линия */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    #ffffff 0,
+    #ffffff calc(var(--line) - 1px),
+    #e8eef8  calc(var(--line) - 1px),
+    #e8eef8  var(--line)
+  );
 }
+
+/* Плавно уменьшаем наклон и подправляем размеры на планшетах */
+@media (max-width: 900px){
+  .notepad-inner{
+    --tilt: -2deg;
+  }
+}
+
+/* На телефонах — шире, по центру, мягче линовка */
+@media (max-width: 600px){
+  .notepad-inner{
+    width: min(92vw, 420px);
+    margin-left: auto;
+    margin-right: auto;
+    --tilt: -1deg;
+    --line: clamp(16px, 6vw, 22px);
+  }
+}
+
+/* Самые узкие — убираем наклон совсем, чтобы не резало края */
+@media (max-width: 420px){
+  .notepad-inner{
+    --tilt: 0deg;
+    border-radius: 10px;
+  }
+}
+
 .notepad-logo{ display:block; width:70%; margin:32px auto; filter:drop-shadow(0 1px 0 rgba(0,0,0,.04)); }
 .paperclip{ position:absolute; top:-12px; left:50%; width:16px; height:32px; border:2px solid rgba(0,0,0,.35); border-radius:12px; background:transparent; z-index:2; transform:translateX(-50%); opacity:.85 }
 
@@ -569,13 +740,39 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 }
 
 /* Адаптив блока реорганизации */
+/* <= 960px: общий контроллер размера для обоих блоков */
 @media (max-width:960px){
-  .reorg-wrap{ flex-direction:column; align-items:center; gap:16px; }
+  /* родитель обоих элементов */
+  .reorg-wrap{
+    /* мастер-ширина макета (база ~420px) */
+    --unit: clamp(220px, 80vw, 420px);
+  }
+
   .reorg-right{ width:100%; flex-direction:column; gap:16px; align-items:center; }
-  .aviva-picture{ margin-right:0; transform:none; }
+  .reorg-wrap{ flex-direction:column; align-items:center; gap:16px; }
+
   .notepad::before{ inset:-12px; }
-  .notepad-inner{ width:min(360px,88vw); }
+  .aviva-picture{ margin-right:0; transform:none; }
+
+  /* Оба ширины завязаны на одну переменную */
+  .notepad-inner{ width: var(--unit); }
+  .aviva-picture img{
+    width: calc(var(--unit) * 0.95238); /* 400/420 = 0.95238 → пропорция к notepad */
+  }
+
+  /* Если нужно сохранить относительное позиционирование картинки — тоже в долях: */
+  .aviva-picture img{
+    /* коммент снизу раскомментируй, если у тебя остаётся absolute-позиционирование */
+    /* top:   calc(var(--unit) * -0.631);   /* -265px / 420 */
+    /* right: calc(var(--unit) *  0.476);   /*  200px / 420 */
+  }
 }
+
+/* ещё компактнее на телефонах */
+@media (max-width:600px){
+  .reorg-wrap{ --unit: clamp(220px, 92vw, 360px); }
+}
+
 /* Облачные волны внутри синей секции */
 .kol-reorg{ position:relative; overflow:hidden; } /* уже есть — дублировать не страшно */
 .cloud-wave{
@@ -600,11 +797,15 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   z-index: 2;              /* поверх всего, что под ней */
 }
 .wavecap svg{
-  display:block; width:130%; height:100%;
+  display:block; width:100%; height:100%;
   filter: drop-shadow(0 6px 12px rgba(13,47,117,.20));
   overflow: visible;        /* позволяет «каплям» слегка выходить за край */
 }
-
+@media(max-width:1200px){
+  .wavecap svg{
+    width: 100%;
+  }
+}
 /* Палитра волн (совместима с твоими переменными) */
 .wavecap .w1{ fill: var(--kol-blue-3, #1F5194); } /* передний слой (тёмный) */
 .wavecap .w2{ fill: var(--kol-blue-2, #226CC3); } /* средний слой */
@@ -731,7 +932,7 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   .btn{width:100%}
   .adv-grid,.service-grid,.video-list{flex-direction:column;align-items:center}
   .side-contact{font-size:14px;padding:6px}
-  .ts-grid{grid-template-columns:1fr 1fr}
+  .ts-grid{grid-template-columns:1fr}
 }
 @media (max-width:560px){
   .hero-stats.card{grid-template-columns:1fr}
@@ -904,7 +1105,7 @@ html { scroll-padding-top: 76px; }             /* якоря не прячутс
 /* ---------- Hero: честная высота на мобилках + безопасные зоны ---------- */
 .hero{
   /* честная высота: fallback через --vh + нативный dvh где есть */
-  min-height: calc(var(--vh, 1vh) * 100);
+  min-height: calc(var(--vh, 1vh) * 50);
 }
 /* --- Hero mobile fix --- */
 .hero-grid {
@@ -926,7 +1127,9 @@ html { scroll-padding-top: 76px; }             /* якоря не прячутс
     margin: 0;
     align-self: stretch;
   }
-
+  .hero{
+    height: 70vh;
+  }
   .hero-stats {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2x2 на мобиле */
@@ -958,7 +1161,14 @@ html { scroll-padding-top: 76px; }             /* якоря не прячутс
   .hero-stats {
     grid-template-columns: 1fr;    /* 1x4 */
   }
+  .hero{
+    height: 80vh;
+  }
 }
-
+@media(max-width:560px){
+  .hero{
+    height: 90vh;
+  }
+}
 /* Защита от «жёстких» карточек в глобальном стиле */
 *, *::before, *::after { box-sizing: border-box; }
