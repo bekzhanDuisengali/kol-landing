@@ -175,7 +175,7 @@ ul{list-style:none}
 .side-contact{position:absolute;right:0;top:50%;transform:rotate(-90deg) translateY(-50%);transform-origin:right center;background:#ff6600;color:#fff;padding:10px;z-index:3}
 
 /* ===== Hero (light sea -> blue theme) ===== */
-.hero{position:relative;max-height:100vh;color:var(--ink);overflow:hidden;opacity:1;pointer-events:auto;transition:opacity 1.2s;background:#FFFFFF}
+.hero{position:relative;max-height:150vh;color:var(--ink);overflow:hidden;opacity:1;pointer-events:auto;transition:opacity 1.2s;background:#FFFFFF}
 .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero-bg{position:absolute;inset:0;z-index:1;background: var(--tint-0);}
 .hero-overlay{position:relative;z-index:2;height:100%;padding:110px 32px 40px;background:linear-gradient(to bottom,color-mix(in srgb, var(--brand) 12%, transparent),color-mix(in srgb, var(--ink) 8%, transparent) 30%,color-mix(in srgb, var(--brand) 10%, transparent))}
@@ -1167,7 +1167,7 @@ html { scroll-padding-top: 76px; }             /* якоря не прячутс
 }
 @media(max-width:560px){
   .hero{
-    height: 90vh;
+    height: 150vh;
   }
 }
 /* Защита от «жёстких» карточек в глобальном стиле */
