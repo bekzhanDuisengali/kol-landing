@@ -316,7 +316,9 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 .contact-note{margin:16px 0 0;color:var(--muted);font-size:.92rem}
 .contact-chip:focus-visible{outline:3px solid color-mix(in srgb, var(--brand) 30%, #fff);outline-offset:2px}
 @media (max-width: 1024px){.contact-grid{grid-template-columns:repeat(2,1fr)}}
-@media (max-width: 560px){.contact-grid{grid-template-columns:1fr}}
+@media (max-width: 560px){
+  .contact-grid{grid-template-columns:1fr}
+}
 
 /* ===== Advantages (scoped vars) ===== */
 .advantages{width:100%;max-width:none;margin:0;padding:80px 40px; min-height: 600px;}
@@ -543,9 +545,9 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   max-width:1200px;
   min-height:600px;
   margin:0 auto;
-  /* padding:0 24px 0 0; */
+  padding:0 45px 0 0;
   position:relative;
-  background:url("assets/boat-schema.jpg") no-repeat center/contain;
+  background: url("assets/boat-schema.jpg") center/cover no-repeat;
   background-color:#0d2f75;
   box-shadow:inset 0 0 0 2px rgba(255,255,255,.05), 0 10px 28px rgba(0,0,0,.08);
   overflow:hidden;
@@ -687,34 +689,28 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 }
 
 /* Фото AVIVA без дополнительной белой подложки */
-.aviva-picture{ position: relative;margin-right:-28px; z-index:3; filter:drop-shadow(0 12px 30px rgba(0,0,0,.25)); transform:rotate(-3deg); }
+.aviva-picture{
+  position: relative;
+  margin-right:-28px;
+  z-index:3;
+  filter:drop-shadow(0 12px 30px rgba(0,0,0,.25));
+  transform:rotate(-3deg);
+}
 .aviva-picture img{
   position: absolute;
   display: block;
   height: auto;
 
   /* АДАПТИВ */
-  width: clamp(180px, 28vw, 400px);          /* сжимается на узких, но не больше 400 */
-  top:   clamp(-265px, -18vw, -120px);       /* чем уже экран — тем меньше отрицательный отступ */
+  width: clamp(180px, 35vw, 448px);          /* сжимается на узких, но не больше 400 */
+  top:   clamp(-265px, 10vw, -37px);       /* чем уже экран — тем меньше отрицательный отступ */
   right: clamp(12px, 10vw, 200px);           /* правый отступ тоже «плавает» */
 
   /* если где-то глобально стоит img{max-width:100%} и мешает — раскомментируй: */
   /* max-width: none; */
 }
-@media (max-width: 762px){
-  .aviva-picture img{
-    width: clamp(160px, 60vw, 280px);
-    top: clamp(-120px, -12vw, -60px);
-    right: clamp(8px, 6vw, 40px);
-  }
-}
-@media (max-width: 480px) {
-    .aviva-picture img {
-        width: clamp(160px, 60vw, 280px);
-        top: clamp(-127px, 13vw, -107px);
-        right: clamp(-32px, -3vw, 26px);
-    }
-}
+
+
 /* Блокнот с логотипом на фоне тетради и синей сетки */
 .notepad{ position:relative; flex:0 1 48%; align-self:stretch; display:flex; align-items:center; justify-content:center; }
 .notepad::before{ content:none; }
@@ -726,7 +722,7 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   /* Тонкие ручки под разные экраны */
   --line: clamp(18px, 2.4vw, 26px);          /* шаг линейки */
   --pad-x: clamp(14px, 3.6vw, 32px);         /* горизонтальные отступы */
-  --pad-y: clamp(20px, 4.8vw, 60px);         /* вертикальные отступы */
+  --pad-y: clamp(20px, 9.8vw, 69px);         /* вертикальные отступы */
   --tilt: -3deg;                              /* наклон, уменьшим на мобилках */
 
   position: relative;
@@ -768,7 +764,7 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 /* На телефонах — шире, по центру, мягче линовка */
 @media (max-width: 600px){
   .notepad-inner{
-    width: min(92vw, 420px);
+    width: 230px;
     margin-left: auto;
     margin-right: auto;
     --tilt: -1deg;
@@ -777,15 +773,27 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
 }
 
 /* Самые узкие — убираем наклон совсем, чтобы не резало края */
-@media (max-width: 420px){
-  .notepad-inner{
-    --tilt: 0deg;
-    border-radius: 10px;
-  }
-}
 
-.notepad-logo{ display:block; width:70%; margin:32px auto; filter:drop-shadow(0 1px 0 rgba(0,0,0,.04)); }
-.paperclip{ position:absolute; top:-12px; left:50%; width:16px; height:32px; border:2px solid rgba(0,0,0,.35); border-radius:12px; background:transparent; z-index:2; transform:translateX(-50%); opacity:.85 }
+
+.notepad-logo{
+  display:block;
+  width:30%;
+  margin:32px auto;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.04));
+}
+.paperclip{
+  position:absolute;
+  top:26px;
+  left:50%;
+  width:16px;
+  height:32px;
+  border:2px solid rgba(0,0,0,.35);
+  border-radius:12px;
+  background:transparent;
+  z-index:2;
+  transform:translateX(-50%);
+  opacity:.85
+}
 
 .blueprint-watermark{
   position:absolute; left:16px; bottom:12px;
@@ -804,7 +812,7 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   /* родитель обоих элементов */
   .reorg-wrap{
     /* мастер-ширина макета (база ~420px) */
-    --unit: clamp(220px, 80vw, 420px);
+    --unit: clamp(220px, 80vw, 360px);
   }
 
   .reorg-right{ width:100%; flex-direction:column; gap:16px; align-items:center; }
@@ -814,22 +822,34 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
   .aviva-picture{ margin-right:0; transform:none; }
 
   /* Оба ширины завязаны на одну переменную */
-  .notepad-inner{ width: 285px }
-  .aviva-picture img{
-    width: calc(var(--unit) * 0.95238); /* 400/420 = 0.95238 → пропорция к notepad */
+  .notepad-inner{
+    width: 300px;
   }
 
   /* Если нужно сохранить относительное позиционирование картинки — тоже в долях: */
   .aviva-picture img{
-    /* коммент снизу раскомментируй, если у тебя остаётся absolute-позиционирование */
-    /* top:   calc(var(--unit) * -0.631);   /* -265px / 420 */
-    /* right: calc(var(--unit) *  0.476);   /*  200px / 420 */
+    right: clamp(12px, 19vw, 200px);
+    top: clamp(-265px, 12vw, -150px);
+  }
+  .paperclip{
+    top:-10px;
   }
 }
-
+@media (max-width: 762px){
+  .aviva-picture img{
+    width: clamp(160px, 60vw, 280px);
+    top: clamp(-120px, -12vw, -60px);
+    right: clamp(11px, 27vw, 166px);
+  }
+}
 /* ещё компактнее на телефонах */
 @media (max-width:600px){
   .reorg-wrap{ --unit: clamp(220px, 92vw, 360px); }
+  .aviva-picture img{
+    width: clamp(160px, 60vw, 280px);
+    top: clamp(-120px, -12vw, -60px);
+    right: clamp(-36px, 49vw, -30px);
+  }
 }
 
 /* Облачные волны внутри синей секции */
@@ -896,7 +916,14 @@ section h2{font-size:2.2rem;text-align:center;color:var(--ink)}
     margin-right: -50dvw;
   }
 }
-
+@media (max-width: 420px){
+  .notepad-inner{
+    --tilt: 0deg;
+    border-radius: 10px;
+    width: 190px;
+  }
+  
+}
 /* если волна идёт прямо перед .reorg-band, плашку держим под ней */
 .reorg-band{ position: relative; z-index: 2; }
 
