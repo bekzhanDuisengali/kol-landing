@@ -1,300 +1,879 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>KOL — герой-блок</title>
-<style>
-  /* ===== CSS variables & base ===== */
-  :root{
-    --ink: #1F57B0;                          /* насыщенный синий для текста */
-    --overlay: rgba(10,25,60,.55);           /* тёмно-синий градиент-оверлей */
-    --paper: #ffffff;                        /* цвет «бумаги» */
-    --lines: #e9edf3;                        /* линии тетрадного листа */
-    --stack-gap: clamp(16px, 2.2vw, 28px);   /* зазор между карточками справа */
-    --radius: 14px;                          /* базовое скругление */
-    --pad-lg: clamp(28px, 3.2vw, 36px);      /* паддинги карточек */
-    --container-pad: clamp(32px, 4vw, 40px); /* внутренние отступы секции */
-    --shadow-1: 0 10px 24px rgba(5, 20, 60, .22);
-    --shadow-2: 0 3px 8px rgba(5, 20, 60, .16);
-    --shadow-3: 0 2px 2px rgba(5, 20, 60, .10);
-  }
-
-  * { box-sizing: border-box; }
-  html, body { height: 100%; }
-  body {
-    margin: 0;
-    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    color: var(--ink);
-    background: #0a193c;
-  }
-
-  /* ===== Hero block ===== */
-  .kol-hero{
-    position: relative;
-    width: 100%;
-    overflow: clip;
-    background:
-      linear-gradient(var(--overlay), var(--overlay)),
-      url("./boat-schema.jpg") center/cover no-repeat;
-  }
-
-  .kol-hero__inner{
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: clamp(40px, 6vw, 72px) var(--container-pad);
-    display: grid;
-    grid-template-columns: 1.05fr .95fr;   /* лёгкий акцент влево */
-    gap: clamp(24px, 3.5vw, 40px);
-    align-items: center;
-  }
-
-  /* ===== Left: torn paper ===== */
-  .paper{
-    position: relative;
-    z-index: 1;
-    color: var(--ink);
-    /* лёгкая «бумажная» глубина */
-    filter: drop-shadow(0 1px 0 rgba(0,0,0,.05)) drop-shadow(var(--shadow-3));
-  }
-
-  /* «лист бумаги» отрисован псевдо-элементом, чтобы наложить маску рваного края */
-  .paper::before{
-    content:"";
-    position:absolute; inset:0;
-    background:
-      /* лёгкая зернистость из градиентов (имитация текстуры) */
-      radial-gradient(120% 100% at 0% 0%, rgba(255,255,255,.9), rgba(255,255,255,.96) 40%, rgba(255,255,255,1) 70%),
-      linear-gradient(#fff, #fff);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-2), var(--shadow-1);
-    /* SVG-маска с неровной кромкой сверху и снизу */
-    -webkit-mask: url('data:image/svg+xml;utf8,\
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">\
-        <path fill="white" d="M0,8 L8,2 L16,8 L24,3 L32,9 L40,3 L48,9 L56,2 L64,8 L72,2 L80,8 L88,3 L96,8 L100,8 L100,92 L96,92 L88,98 L80,92 L72,98 L64,92 L56,98 L48,92 L40,98 L32,92 L24,98 L16,92 L8,98 L0,92 Z"/>\
-      </svg>') center / 100% 100% no-repeat;
-            mask: url('data:image/svg+xml;utf8,\
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">\
-        <path fill="white" d="M0,8 L8,2 L16,8 L24,3 L32,9 L40,3 L48,9 L56,2 L64,8 L72,2 L80,8 L88,3 L96,8 L100,8 L100,92 L96,92 L88,98 L80,92 L72,98 L64,92 L56,98 L48,92 L40,98 L32,92 L24,98 L16,92 L8,98 L0,92 Z"/>\
-      </svg>') center / 100% 100% no-repeat;
-  }
-
-  .paper__body{
-    position: relative;
-    padding: var(--pad-lg);
-  }
-
-  .paper p{
-    margin: 0 0 clamp(16px, 2.2vw, 22px) 0;
-  }
-
-  .paper .lead{
-    font-weight: 700;
-    font-size: clamp(24px, 2.2vw, 28px);
-    line-height: 1.3;
-  }
-  .paper .sub{
-    font-weight: 600;
-    font-size: clamp(20px, 1.9vw, 22px);
-    line-height: clamp(1.4, 2vw, 1.5);
-  }
-
-  /* ===== Right: stacked cards ===== */
-  .stack{
-    position: relative;
-    min-height: 380px;         /* чтобы полароид не перекрывал контейнер */
-    display: grid;
-    place-items: center;
-  }
-
-  .stack__inner{
-    position: relative;
-    width: min(560px, 100%);
-    /* столбик, где полароид лежит поверх заметки */
-  }
-
-  /* Note (тетрадный лист с логотипом) — ниже по слою */
-  .note{
-    position: relative;
-    z-index: 1;
-    padding: var(--pad-lg);
-    border-radius: var(--radius);
-    background:
-      repeating-linear-gradient(
-        to bottom,
-        var(--paper),
-        var(--paper) 22px,
-        var(--lines) 22px,
-        var(--lines) 24px
-      );
-    box-shadow: var(--shadow-2), var(--shadow-1);
-    transform: rotate(3deg);
-  }
-
-  /* Скрепка — инлайн SVG, позиционируется сверху */
-  .paperclip{
-    position: absolute;
-    top: 8px; left: clamp(10px, 2vw, 16px);
-    width: clamp(42px, 5vw, 56px);
-    height: auto;
-    filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
-    pointer-events: none;
-  }
-
-  .logo{
-    display: block;
-    width: clamp(65%, 72%, 80%);
-    max-width: 520px;
-    margin: clamp(14px, 2.2vw, 20px) auto;
-    object-fit: contain;
-  }
-
-  /* Polaroid — поверх заметки */
-  .polaroid{
-    position: absolute;
-    inset: auto 0  -14%  0;   /* немного свисает вниз */
-    margin: 0 auto;
-    width: clamp(320px, 36vw, 380px);
-    transform: rotate(-8deg);
-    z-index: 2;
-    filter: drop-shadow(0 12px 24px rgba(0,0,0,.35)) drop-shadow(0 2px 4px rgba(0,0,0,.25));
-  }
-
-  /* «блик-тень» под полароидом для ощущения отрыва */
-  .polaroid::after{
-    content:"";
-    position: absolute;
-    left: 10%;
-    bottom: -6%;
-    width: 80%;
-    height: 18%;
-    border-radius: 50%;
-    background: radial-gradient(closest-side, rgba(0,0,0,.35), transparent 70%);
-    filter: blur(6px);
-    z-index: -1;
-    transform: rotate(2deg);
-  }
-
-  .polaroid img{
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 8px;              /* у исходника уже есть белая рамка; лёгкое скругление */
-    box-shadow: 0 2px 0 rgba(0,0,0,.08) inset;
-  }
-
-  /* ===== Accessibility: better text legibility on overlay ===== */
-  .kol-hero, .paper, .note { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
-
-  /* ===== Responsive ===== */
-  @media (max-width: 1200px){
-    .kol-hero__inner{
-      grid-template-columns: 1fr 1fr;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Korea Orient Line — Море возможностей</title>
+  <meta name="description" content="Korea Orient Line — международные перевозки из Кореи во Владивосток. Еженедельные погрузки, фото‑видео отчёты, контроль на каждом этапе." />
+  <meta property="og:title" content="Korea Orient Line — Море возможностей" />
+  <meta property="og:description" content="Перевозки, фото‑видео отчёты, связь на каждом этапе." />
+  <meta property="og:image" content="assets/og-cover.jpg" />
+  <meta name="theme-color" content="#0b5cff" />
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="preload" href="assets/fonts/Inter/Inter-VariableFont_slnt,wght.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/Oswald/Oswald-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+  <style>
+    :root{
+      --ink:#0a0c10;
+      --paper:#0f1320;
+      --muted:#a2b0d0;
+      --brand:#0b5cff;
+      --brand-2:#4aa3ff;
+      --white:#fff;
+      --card:#0b1020;
+      --glass:rgba(16,22,40,.55);
+      --ring:rgba(80,140,255,.35);
     }
-    .polaroid{ transform: rotate(-6deg); }
-    .note{ transform: rotate(2deg); }
-  }
-
-  @media (max-width: 900px){
-    .kol-hero__inner{
-      grid-template-columns: 1fr;
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+      color:var(--white);
+      background:
+        radial-gradient(1200px 800px at 80% -20%, rgba(33,93,255,.25), rgba(33,93,255,0) 60%),
+        radial-gradient(900px 700px at -10% 10%, rgba(12,227,255,.12), rgba(12,227,255,0) 55%),
+        linear-gradient(180deg,#070a12,#0a0f1e 45%, #0a0c10);
+      overflow-x:hidden;
     }
-    /* порядок: сначала лист (текст), затем полароид, потом логотипный лист */
-    .paper{ order: 1; }
-    .stack{ order: 2; }
-    .stack__inner{
-      display: grid;
-      gap: var(--stack-gap);
+    a{color:inherit;text-decoration:none}
+    img,video{display:block;max-width:100%;height:auto}
+    button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
+    .container{width:min(1180px,92vw);margin:0 auto}
+    /* HEADER */
+    .nav{
+      position:fixed;
+      inset:18px 18px auto;
+      z-index:60;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 18px;
+      border-radius:16px;
+      background:var(--glass);
+      backdrop-filter:saturate(160%) blur(16px);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 10px 40px rgba(0,0,0,.25),0 0 0 1px rgba(255,255,255,.03) inset;
     }
-    /* перестраиваем: полароид сверху как обычный потоковый элемент */
-    .polaroid{
-      position: relative;
-      inset: unset;
-      margin: 0 auto;
-      transform: rotate(-5deg);
-      width: clamp(300px, 70vw, 420px);
+    .brand{display:flex;gap:10px;align-items:center;font-weight:700}
+    .brand img{height:28px;width:auto;filter:drop-shadow(0 2px 12px rgba(74,163,255,.35))}
+    .brand span{display:flex;flex-direction:column;line-height:1}
+    .brand small{opacity:.7;font-weight:500;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+    .menu{display:flex;align-items:center;gap:16px}
+    .menu a{padding:10px 12px;border-radius:10px;opacity:.9;transition:background .2s ease}
+    .menu a:hover{background:rgba(255,255,255,.06)}
+    .btn{padding:10px 14px;border-radius:12px;display:inline-flex;align-items:center;gap:6px}
+    .btn.primary{background:linear-gradient(180deg,var(--brand),#0950dc);box-shadow:0 8px 24px rgba(11,92,255,.35)}
+    .btn.ghost{border:1px solid rgba(255,255,255,.14)}
+    .burger{display:none;background:rgba(255,255,255,.08);border-radius:10px;padding:8px 12px}
+    /* HERO */
+    .hero{
+      position:relative;
+      padding:clamp(120px,18vh,180px) 0 clamp(120px,14vh,180px);
+      min-height:96svh;
+      display:grid;
+      place-items:center;
+      isolation:isolate;
     }
-    .polaroid::after{ bottom: -7%; filter: blur(7px); }
-    .note{
-      transform: rotate(1.5deg);
-      padding: clamp(22px, 4vw, 28px);
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-20vh -20vw -10vh -20vw;
+      z-index:-2;
+      pointer-events:none;
+      background:
+        radial-gradient(1200px 700px at 70% -10%, rgba(74,163,255,.35), transparent 60%),
+        radial-gradient(900px 600px at -10% 20%, rgba(12,227,255,.12), transparent 60%);
+      filter:blur(10px);
     }
-  }
-
-  @media (max-width: 600px){
-    .paper .lead{ font-size: 22px; }
-    .paper .sub{  font-size: 18px; line-height: 1.45; }
-    .polaroid{ transform: rotate(-3deg); width: min(92%, 420px); }
-    .note{ transform: rotate(1deg); border-radius: 12px; }
-    .logo{ width: 78%; }
-    .paper::before{ border-radius: 12px; }
-  }
+    .hero-video{position:absolute;inset:0;z-index:-3;object-fit:cover;opacity:.18}
+    .ocean{
+      position:absolute;
+      inset:auto 0 0 0;
+      height:40vh;
+      min-height:260px;
+      z-index:-1;
+      background:linear-gradient(180deg,transparent,rgba(9,20,45,.75) 30%, #070a12 90%);
+      -webkit-mask:linear-gradient(180deg,transparent,black 30%);
+    }
+    .waves{position:absolute;inset:auto 0 0 0;width:100%;height:240px}
+    .ship{position:absolute;left:8%;bottom:34vh;width:120px;opacity:.9}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:42px;align-items:center}
+    .lede h1{font-family:"Oswald",system-ui,sans-serif;font-size:clamp(38px,6vw,68px);letter-spacing:.02em;margin:0 0 12px}
+    .lede p{font-size:clamp(16px,2.2vw,18px);opacity:.82;line-height:1.6;margin:0}
+    .lede .cta{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .kpi{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px 14px}
+    .kpi .num{font-size:clamp(22px,4.5vw,32px);font-weight:800;letter-spacing:.02em}
+    .kpi .lbl{opacity:.7;font-size:13px}
+    /* SECTION WRAPPER */
+    section{padding:clamp(80px,12vw,120px) 0;position:relative}
+    section .head{margin-bottom:28px}
+    section .eyebrow{letter-spacing:.14em;text-transform:uppercase;font-size:12px;opacity:.7}
+    section h2{font-family:"Oswald",system-ui,sans-serif;font-size:clamp(28px,4vw,42px);margin:4px 0 6px}
+    section .sub{opacity:.75;max-width:760px;margin:0}
+    /* ADVANTAGES */
+    .adv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:18px;position:relative;overflow:hidden}
+    .card::after{content:"";position:absolute;inset:-80% 20% auto -40%;height:220px;border-radius:999px;background:radial-gradient(closest-side,rgba(90,155,255,.28),transparent 60%);filter:blur(20px);opacity:.4}
+    .adv-card h3{margin:0 0 6px;font-size:18px}
+    .adv-card .big{font-size:32px;font-weight:800;letter-spacing:.02em;margin-bottom:6px}
+    .adv-card p{opacity:.78;margin:0}
+    /* EXPERIENCE STRIP */
+    .experience{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+    .exp-media{position:relative}
+    .exp-media .frame{border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 60px rgba(0,0,0,.45)}
+    .exp-media .polaroid{position:absolute;right:-16px;bottom:-16px;width:min(42%,300px);transform:rotate(-3deg);border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.14)}
+    .exp-title{font-size:54px;font-weight:900;letter-spacing:.02em;display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+    .exp-title .year{font-family:"Oswald",system-ui,sans-serif;font-size:86px;line-height:.9;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.7)}
+    .exp-copy p{opacity:.8;line-height:1.7}
+    /* KOL ROUTE STORY */
+    .kol-route-story{
+      width:min(1180px,92vw);
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);
+      gap:clamp(28px,5vw,52px);
+      align-items:start;
+      padding:clamp(100px,14vw,160px) 0;
+    }
+    .krs-visual{position:sticky;top:120px;height:min(70vh,640px);border-right:1px solid rgba(255,255,255,.08);padding-right:clamp(12px,2vw,32px);overflow:hidden}
+    .krs-svg{width:100%;height:100%;display:block;object-fit:contain}
+    .krs-narrative{padding:0 clamp(12px,2vw,30px)}
+    .krs-title{font-family:'Oswald',sans-serif;font-size:clamp(36px,5vw,64px);line-height:1.05;margin:0 0 8px;color:var(--white)}
+    .krs-title span{background:linear-gradient(90deg,#7ae1ff,#6fb7ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .krs-lead{opacity:.92;line-height:1.75;max-width:66ch;margin:0 auto 10px;font-size:20px}
+    .krs-chips{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px}
+    .chip{padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);font-size:12px;color:#d5ebff;display:inline-flex;gap:8px;align-items:center}
+    .krs-btn{display:inline-block;padding:12px 18px;border-radius:12px;background:#e8f6ff;color:#04213d;text-decoration:none;font-weight:700;border:1px solid rgba(255,255,255,.22)}
+    .krs-btn:hover{filter:brightness(1.03)}
+    .krs-cards{display:grid;gap:24px;margin-top:10vh}
+    .krs-card{padding:20px;border-radius:16px;background:linear-gradient(180deg,rgba(10,22,40,.82),rgba(10,22,40,.66));border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(4px);box-shadow:0 10px 40px rgba(0,0,0,.35)}
+    .krs-card h3{margin:0 0 6px;font-size:18px}
+    .krs-card p{margin:0;opacity:.9}
+    .krs-card.is-active{outline:2px solid rgba(122,225,255,.55)}
+    .pulse{animation:krs-pulse 2.8s ease-out infinite}
+    .pulse:nth-child(2){animation-delay:.4s}
+    @keyframes krs-pulse{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.9)}}
+    /* SERVICES */
+    .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .service{padding:18px}
+    .service h3{margin:0 0 6px}
+    .badge{display:inline-block;font-size:11px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);margin:8px 0 0}
+    .placeholder{height:160px;border-radius:14px;background:repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 10px, rgba(255,255,255,.03) 10px 20px);border:1px dashed rgba(255,255,255,.15);display:grid;place-items:center;opacity:.8}
+    /* SHIPMENTS */
+    .grid-vid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .video{position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+    .video video{width:100%;height:100%;opacity:.9}
+    .video .overlay{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.55));opacity:0;transition:.25s}
+    .video:hover .overlay{opacity:1}
+    .play{display:inline-grid;place-items:center;width:68px;height:68px;border-radius:999px;background:rgba(11,92,255,.9);box-shadow:0 10px 30px rgba(11,92,255,.45)}
+    /* TESTIMONIALS */
+    .ts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .ts-card .head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+    .avatar{width:40px;height:40px;border-radius:999px;object-fit:cover}
+    .ts-card p{opacity:.85}
+    /* PARTNERS */
+    .marquee{overflow:hidden;mask-image:linear-gradient(90deg,transparent,black 10%, black 90%, transparent)}
+    .marquee .row{display:flex;gap:24px;align-items:center;animation:scroll 28s linear infinite}
+    .marquee img{height:36px;filter:grayscale(100%) contrast(110%);opacity:.8}
+    @keyframes scroll{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+    /* CONTACT */
+    .contact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .chip.card{display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);width:100%}
+    .chip.card div{flex:1;display:flex;flex-direction:column;gap:4px}
+    .chip em{opacity:.7;font-style:normal;font-size:12px}
+    .copy-note{opacity:.65;font-size:14px;margin-top:10px}
+    /* FOOTER */
+    footer{padding:46px 0;border-top:1px solid rgba(255,255,255,.08);opacity:.85}
+    footer .cta{margin:10px 0 0}
+    /* UTIL */
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)}
+    .grid{display:grid;gap:14px}
+    .muted{color:var(--muted)}
+    .ringed{box-shadow:0 0 0 8px var(--ring);border-radius:18px}
+    .sr{position:absolute !important;clip:rect(1px,1px,1px,1px);padding:0;border:0;height:1px;width:1px;overflow:hidden}
+    /* REORG — After Reorganization */
+    .reorg{position:relative;padding:120px 0;overflow:clip}
+    .reorg::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.25;
+      background:
+        radial-gradient(1400px 700px at 120% -10%, rgba(74,163,255,.18), transparent 60%),
+        radial-gradient(800px 520px at -20% 120%, rgba(12,227,255,.10), transparent 60%),
+        linear-gradient(180deg,transparent,rgba(11,20,40,.5) 60%, rgba(8,12,24,.9) 100%);
+    }
+    .reorg .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+    .reorg .kicker{letter-spacing:.18em;text-transform:uppercase;font-size:12px;opacity:.75}
+    .reorg h2{font-family:"Oswald",system-ui,sans-serif;font-size:clamp(32px,5vw,56px);margin:6px 0 12px}
+    .reorg .lead{opacity:.86;line-height:1.7;margin-bottom:18px}
+    /* Nautical steps */
+    .manifest{display:grid;gap:12px;margin-top:8px}
+    .manifest-item{display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:flex-start;border-radius:16px;padding:14px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden}
+    .manifest-item::after{content:"";position:absolute;inset:auto 16px -18px auto;width:120px;height:120px;border-radius:50%;background:radial-gradient(closest-side,rgba(90,155,255,.18),transparent 70%);filter:blur(12px);opacity:.35}
+    .badge-num{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);font-weight:800}
+    .manifest-item h4{margin:0 0 4px}
+    .manifest-item p{margin:0;opacity:.8}
+    /* Right column — Porthole media */
+    .porthole{position:relative;padding:18px;border-radius:24px;background:rgba(16,22,40,.5);border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 80px rgba(0,0,0,.45)}
+    .porthole-inner{position:relative;border-radius:18px;padding:16px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.10)}
+    .porthole-frame{position:relative;width:100%;aspect-ratio:1/1;border-radius:50%;overflow:hidden;border:10px solid rgba(160,190,255,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22), 0 10px 40px rgba(0,0,0,.5)}
+    .porthole img.main{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(.8)}
+    .porthole .cardlet{position:absolute;right:4%;bottom:6%;width:min(42%,260px);transform:rotate(-6deg);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.25);box-shadow:0 22px 60px rgba(0,0,0,.6)}
+    .sonar{position:absolute;inset:auto 0 0 0;height:42%;display:grid;place-items:center;pointer-events:none}
+    .sonar .ring{position:absolute;width:60%;aspect-ratio:1;border-radius:50%;border:2px solid rgba(120,170,255,.45);opacity:.55;animation:sonar 4.6s ease-out infinite}
+    .sonar .ring:nth-child(2){animation-delay:1.2s}
+    .sonar .ring:nth-child(3){animation-delay:2.4s}
+    @keyframes sonar{0%{transform:scale(.35);opacity:.6}90%{transform:scale(1.2);opacity:0}100%{opacity:0}}
+    /* Rope divider & tags */
+    .rope{height:16px;background:repeating-linear-gradient(135deg,rgba(240,240,255,.6) 0 6px, rgba(150,190,255,.5) 6px 12px);border-radius:999px;filter:blur(.2px);opacity:.5}
+    .r-tags{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+    .r-tag{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);font-size:12px}
+    /* CTA accent */
+    .reorg .cta-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+    /* FX */
+    .fx-gradient{background:linear-gradient(90deg,#8ab8ff,#53ffe5,#8ab8ff);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% 200%;animation:gradient-pan 6s ease infinite}
+    @keyframes gradient-pan{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    /* MEDIA QUERIES */
+    @media (max-width:1200px){
+      .nav{inset:16px 16px auto}
+      .kol-route-story{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+      .krs-visual{top:110px}
+    }
+    @media (max-width:1024px){
+      .nav{gap:12px;padding:10px 16px}
+      .burger{display:block}
+      .menu{display:none}
+      .menu.open{
+        display:flex;
+        position:absolute;
+        top:calc(100% + 12px);
+        right:0;
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+        padding:16px;
+        min-width:240px;
+        border-radius:14px;
+        background:var(--glass);
+        border:1px solid rgba(255,255,255,.1);
+        box-shadow:0 22px 70px rgba(0,0,0,.35);
+        backdrop-filter:blur(18px);
+      }
+      .menu.open .btn,
+      .menu.open a{width:100%;justify-content:center}
+      .hero{padding-top:calc(110px + 6vh)}
+      .hero-grid{grid-template-columns:1fr;gap:32px}
+      .lede .cta{justify-content:center}
+      .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .experience{grid-template-columns:1fr;gap:32px}
+      .exp-media .polaroid{right:auto;bottom:auto;width:60%;margin:-40px auto 0;transform:rotate(-2deg)}
+      .services-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .grid-vid{grid-template-columns:1fr}
+      .ts-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .contact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .reorg .grid{grid-template-columns:1fr}
+      .kol-route-story{grid-template-columns:1fr;padding:clamp(80px,12vw,140px) 0}
+      .krs-visual{position:relative;top:auto;height:auto;border-right:none;padding-right:0;margin:0 auto 48px;max-width:640px}
+      .krs-narrative{padding:0}
+      .krs-cards{margin-top:40px}
+    }
+    @media (max-width:768px){
+      .nav{inset:14px 12px auto;padding:10px 12px;border-radius:14px}
+      .brand img{height:24px}
+      .brand small{font-size:11px}
+      section{padding:70px 0}
+      .hero{padding-top:calc(100px + 6vh);padding-bottom:clamp(80px,16vw,120px)}
+      .hero-grid{gap:26px}
+      .lede .cta{justify-content:flex-start}
+      .kpis{grid-template-columns:1fr}
+      .adv-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .services-grid{grid-template-columns:1fr}
+      .ts-grid{grid-template-columns:1fr}
+      .contact-grid{grid-template-columns:1fr}
+      .exp-title{gap:8px}
+      .exp-title .year{font-size:72px}
+      .exp-media .polaroid{width:72%;margin:-28px auto 0}
+      .grid{gap:12px}
+      .porthole{margin:0 auto;max-width:420px}
+      .manifest{gap:10px}
+      .manifest-item{grid-template-columns:44px 1fr;padding:12px 14px}
+      .krs-lead{font-size:18px}
+    }
+    @media (max-width:640px){
+      .nav{inset:12px 12px auto}
+      .adv-grid{grid-template-columns:1fr}
+      .krs-cards{gap:20px}
+      .kol-route-story{padding:clamp(64px,14vw,110px) 0}
+      .chip{font-size:11px}
+    }
+    @media (max-width:560px){
+      body{font-size:15px}
+      .nav{inset:10px 10px auto;padding:8px 10px;border-radius:12px}
+      .burger{padding:6px 10px;font-size:14px}
+      .menu.open{left:0;right:0;min-width:auto}
+      .hero{padding-top:calc(94px + 5vh)}
+      .hero-grid{gap:22px}
+      .lede .cta{width:100%;gap:8px}
+      .lede .cta .btn{flex:1;justify-content:center}
+      .kpis{gap:10px}
+      .ship{width:88px;bottom:32vh}
+      .experience{gap:26px}
+      .exp-title{flex-direction:column;align-items:flex-start}
+      .exp-title .year{font-size:62px}
+      .exp-media .polaroid{width:86%;margin:-18px auto 0}
+      .grid-vid{gap:12px}
+      .krs-title{font-size:clamp(28px,8vw,40px)}
+      .krs-cards{margin-top:28px}
+      .chip.card{flex-direction:column;align-items:flex-start;gap:12px}
+      .chip.card .btn{align-self:stretch;justify-content:center}
+      .copy-note{margin-top:18px}
+      footer .grid{grid-template-columns:1fr;text-align:center;gap:18px}
+      footer .cta{margin:0;display:flex;justify-content:center}
+    }
+    @media (max-width:420px){
+      .nav{inset:8px 8px auto}
+      .btn{padding:9px 12px}
+      .hero{padding-bottom:90px}
+      .manifest-item{grid-template-columns:38px 1fr}
+      .krs-lead{font-size:17px}
+      .krs-cards{gap:18px}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .sonar .ring{animation:none;opacity:.25}
+      .ship{animation:none}
+      .marquee .row{animation-duration:0s}
+    }
 </style>
 </head>
 <body>
+  <!-- NAV -->
+  <nav class="nav container" aria-label="Главная навигация">
+    <a href="#home" class="brand">
+      <img src="assets/logo.png" alt="KOL" />
+      <span><span style="display:block;line-height:1">Korea Orient Line</span><small>Море возможностей</small></span>
+    </a>
+    <button class="burger" id="burger" aria-expanded="false">Меню ▾</button>
+    <div class="menu" id="menu">
+      <a href="#services">Услуги</a>
+      <a href="#about">О нас</a>
+      <a href="#shipments">Погрузки</a>
+      <a href="#partners">Партнёры</a>
+      <a href="#contact" class="btn ghost">Контакты</a>
+      <a href="https://wa.me/821073099001" target="_blank" rel="noopener" class="btn primary">Быстрая консультация</a>
+    </div>
+  </nav>
 
-<section class="kol-hero">
-  <div class="kol-hero__inner">
-
-    <!-- Left: torn paper with text -->
-    <article class="paper" aria-label="О компании KOL — текстовый лист с рваным краем">
-      <div class="paper__body">
-        <p class="lead">
-          «В 2022 году, сохранив бесценный опыт и лучшие традиции, мы открыли новую главу, основав компанию Korea Orient Line (KOL).»
-        </p>
-        <p class="sub">
-          «Сегодня Korea Orient Line — это динамично развивающаяся компания, которая предлагает клиентам со всего мира все преимущества морской логистики из Южной Кореи!»
-        </p>
-      </div>
-    </article>
-
-    <!-- Right: stacked cards -->
-    <div class="stack" aria-label="Стопка карточек: полароид и тетрадный лист с логотипом">
-      <div class="stack__inner">
-
-        <!-- Note with logo -->
-        <div class="note">
-          <!-- inline SVG paperclip -->
-          <svg class="paperclip" viewBox="0 0 64 128" aria-hidden="true">
-            <g fill="none" stroke="#8A8A8A" stroke-width="2" stroke-linecap="round">
-              <path d="M34 20c-10 0-18 8-18 18v56c0 9 7 16 16 16s16-7 16-16V36c0-6-5-11-11-11s-11 5-11 11v55"/>
-              <path d="M46 36v58c0 13-11 24-24 24S-2 107 6 94l0-58c0-16 13-28 28-28s28 12 28 28v62"/>
-            </g>
-          </svg>
-
-          <!-- KOL logo -->
-          <img
-            class="logo"
-            src="./assets/logo.png"
-            alt="Логотип Korea Orient Line (KOL)"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-
-        <!-- Polaroid on top -->
-        <figure class="polaroid">
-          <img
-            src="./assets/aviva-photo.png"
-            alt="Полароидное фото с подписью «AVIVA»"
-            loading="lazy"
-            decoding="async"
-          />
-        </figure>
-            
-      </div>
+  <!-- HERO -->
+  <header class="hero" id="home" role="banner">
+    <!-- Serious maritime FX: foam canvas + motion-path route -->
+    <canvas id="foamCanvas" aria-hidden="true" style="position:absolute;inset:0;z-index:-2;opacity:.22"></canvas>
+    <video class="hero-video" src="assets/loading2.mp4" autoplay muted loop playsinline></video>
+    <div class="ocean">
+      <svg class="waves" viewBox="0 0 1440 240" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="wgrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="rgba(33,93,255,.38)"/>
+            <stop offset="100%" stop-color="rgba(33,93,255,.08)"/>
+          </linearGradient>
+        </defs>
+        <path class="w1" fill="url(#wgrad)" d="M0,120 C180,200 360,40 540,120 C720,200 900,60 1080,120 C1260,180 1350,120 1440,140 L1440,240 L0,240 Z"></path>
+        <path class="w2" fill="url(#wgrad)" d="M0,140 C180,220 360,60 540,140 C720,220 900,80 1080,140 C1260,200 1350,140 1440,160 L1440,240 L0,240 Z"></path>
+        <path class="w3" fill="url(#wgrad)" d="M0,160 C180,240 360,80 540,160 C720,240 900,100 1080,160 C1260,220 1350,160 1440,180 L1440,240 L0,240 Z"></path>
+        <!-- Invisible route for motion path -->
+        <path id="shipRoute" d="M-120,175 C200,100 520,210 800,150 S1400,165 1560,145" fill="none" stroke="transparent" />
+      </svg>
+      <svg class="ship" viewBox="0 0 120 48" aria-hidden="true" style="offset-path:path('M-120,175 C200,100 520,210 800,150 S1400,165 1560,145'); offset-distance:0%;">
+        <defs>
+          <filter id="wake" x="-20%" y="-20%" width="140%" height="140%"> 
+            <feGaussianBlur stdDeviation="1.2"/>
+          </filter>
+        </defs>
+        <g>
+          <!-- wake -->
+          <rect x="-40" y="34" width="80" height="3" fill="rgba(255,255,255,.55)" opacity=".45" filter="url(#wake)"/>
+          <!-- hull & superstructure -->
+          <path d="M5 32h78l14 10H18z" fill="rgba(13,47,117,.95)"/>
+          <rect x="28" y="18" width="26" height="12" rx="2" fill="#ffffff" opacity=".9"/>
+          <rect x="56" y="20" width="12" height="10" rx="2" fill="#ffffff" opacity=".9"/>
+          <rect x="62" y="12" width="6" height="8" rx="1.5" fill="#226CC3"/>
+          <rect x="10" y="22" width="10" height="8" fill="#7FB3FF" opacity=".9"/>
+          <rect x="20" y="22" width="10" height="8" fill="#5A9BFF" opacity=".9"/>
+          <rect x="30" y="22" width="10" height="8" fill="#7FB3FF" opacity=".9"/>
+        </g>
+      </svg>
     </div>
 
-  </div>
-</section>
+    <div class="container hero-grid">
+      <div class="lede"> 
+        <div class="pill waterline">Море → ЖД → Авто</div>
+        <h1>Международная логистика <br>под ключ</h1>
+        <p>От корейских портов до двери клиента: быстро, надёжно, прозрачно. Фото‑видео отчёты, связь на каждом этапе.</p>
+        <div class="cta">
+          <a href="https://wa.me/821073099001" target="_blank" rel="noopener" class="btn primary">Быстрая консультация</a>
+          <a href="https://t.me/notredame_on_flame" target="_blank" rel="noopener" class="btn ghost">Букировка</a>
+        </div>
+      </div>
+      <aside class="kpis">
+        <div class="kpi card"><div class="num">20+</div><div class="lbl">лет опыта</div></div>
+        <div class="kpi card"><div class="num">3000+</div><div class="lbl">контейнеров в месяц</div></div>
+        <div class="kpi card"><div class="num">5</div><div class="lbl">стран присутствия</div></div>
+        <div class="kpi card"><div class="num">24/7</div><div class="lbl">поддержка клиентов</div></div>
+      </aside>
+    </div>
+  </header>
 
-<!--
-  Ключевые моменты:
-  - Фон секции: boat-schema.jpg + полупрозрачный синий градиент для контраста текста.
-  - Левый блок: «лист бумаги» с SVG-маской рваного края, гибкие паддинги и типографика.
-  - Правый блок: стопка — нижний тетрадный лист (note) со скрепкой (inline-SVG), сверху полароид под углом и с «бликом-тенью».
-  - Все размеры и отступы адаптивны через clamp(); медиа <1200 / <900 / <600.
-  - Без фреймворков, системный шрифт, изображения lazy/async.
--->
+  <!-- ADVANTAGES -->
+  <section id="advantages">
+    <div class="container">
+      <div class="head"><div class="eyebrow">Наши преимущества</div><h2>Цифры и факты</h2><p class="sub">Реальная операционная мощность, проверенная морскими линиями и корпоративными клиентами</p></div>
+      <div class="adv-grid">
+        <article class="adv-card card"><div class="big">1000+</div><p>успешных операций</p></article>
+        <article class="adv-card card"><div class="big">98%</div><p>точность сроков</p></article>
+        <article class="adv-card card"><div class="big">30+</div><p>корпоративных партнёров</p></article>
+        <article class="adv-card card"><div class="big">24/7</div><p>поддержка клиентов</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / EXPERIENCE SINCE 1999 -->
+  <section id="about">
+    <div class="container experience">
+      <div class="exp-copy">
+        <div class="exp-title"><span>Опыт с</span> <span class="year">1999</span></div>
+        <p>За плечами нашей команды — многолетний опыт в области морских грузоперевозок, накопленный с <strong>1999 года</strong>. За более чем два десятилетия мы досконально изучили все тонкости морской логистики из Южной Кореи. Это наш фундамент.</p>
+        <p class="muted">В 2022 году, сохранив бесценный опыт и лучшие традиции, мы открыли новую главу, основав компанию <strong>Korea Orient Line (KOL)</strong>. Сегодня KOL — динамично развивающаяся компания, предлагающая клиентам со всего мира все преимущества морской логистики из Южной Кореи.</p>
+      </div>
+      <div class="exp-media">
+        <figure class="frame ringed"><img src="assets/old-boat.png" alt="Судно в порту" style="display:block;width:100%;height:auto" loading="lazy"></figure>
+        <figure class="polaroid"><img src="assets/boat.jpg" alt="Погрузка контейнеров" style="display:block;width:100%;height:auto" loading="lazy"></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- AFTER REORGANIZATION (WOW) -->
+  <section class="kol-route-story" id="kol-route">
+    <!-- Sticky visual side -->
+    <div class="krs-visual" aria-hidden="true">
+      <svg class="krs-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="krs-ocean" cx="50%" cy="50%" r="75%">
+            <stop offset="0%" stop-color="#061426"/>
+            <stop offset="100%" stop-color="#010914"/>
+          </radialGradient>
+          <linearGradient id="krs-route" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0%" stop-color="#72e6ff" stop-opacity="0"/>
+            <stop offset="50%" stop-color="#72e6ff" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#72e6ff" stop-opacity="0"/>
+          </linearGradient>
+          <filter id="krs-glow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <mask id="krs-arc-mask">
+            <rect width="1000" height="600" fill="white"/>
+            <!-- Carved arc for a unique silhouette -->
+            <circle cx="-120" cy="580" r="540" fill="black"/>
+          </mask>
+        </defs>
+        <rect width="1000" height="600" fill="url(#krs-ocean)"/>
+
+        <!-- Subtle world silhouette -->
+        <g fill="#0b1f34" opacity=".85" mask="url(#krs-arc-mask)">
+          <path d="M60,470 C220,420 350,390 460,370 C610,340 700,330 820,320 C900,312 950,318 990,330 L990,600 L60,600 Z"/>
+          <path d="M120,210 C220,190 320,180 420,192 C520,204 720,230 880,275 L880,300 C690,260 520,235 380,220 C250,207 180,208 120,218 Z" opacity=".55"/>
+        </g>
+
+        <!-- Route path (smooth S‑curve) -->
+        <path id="krs-route-path" d="M260,300 C380,240 620,240 780,300" stroke="url(#krs-route)" stroke-width="3" fill="none" stroke-dasharray="1000" stroke-dashoffset="1000" filter="url(#krs-glow)"/>
+
+        <!-- Ports with pulse -->
+        <g class="krs-ports" stroke="#a6ecff" fill="none" stroke-width="2">
+          <g id="krs-vlad" transform="translate(260,300)">
+            <circle r="8" fill="#a6ecff"/>
+            <circle class="pulse" r="14"/>
+            <circle class="pulse" r="22"/>
+            <text y="-14" text-anchor="middle" fill="#c9efff" font-size="12">VLADIVOSTOK</text>
+          </g>
+          <g id="krs-busan" transform="translate(780,300)">
+            <circle r="8" fill="#a6ecff"/>
+            <circle class="pulse" r="14"/>
+            <circle class="pulse" r="22"/>
+            <text y="-14" text-anchor="middle" fill="#c9efff" font-size="12">BUSAN</text>
+          </g>
+        </g>
+
+        <!-- Ship -->
+        <g id="krs-ship" transform="translate(260,300)">
+          <g transform="scale(0.9)">
+            <path d="M-10 6 h64 l12 10 h-84 z" fill="#173a74"/>
+            <rect x="6" y="-6" width="28" height="10" rx="2" fill="#e6f3ff"/>
+            <rect x="36" y="-4" width="10" height="8" rx="1.5" fill="#d9ecff"/>
+          </g>
+        </g>
+
+        <!-- Compass / legend on the side -->
+        <g class="krs-legend">
+          <circle cx="70" cy="70" r="38" fill="none" stroke="#1f3a5a" stroke-width="2"/>
+          <text x="70" y="76" text-anchor="middle" font-size="10" fill="#9db6cc">KOL</text>
+          <path d="M70,34 L70,14 M70,106 L70,126 M34,70 L14,70 M106,70 L126,70" stroke="#274b74"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Scroll narrative side -->
+    <div class="krs-narrative">
+      <article class="krs-intro">
+        <h2 class="krs-title">Korea Orient Line <span>(KOL)</span></h2>
+        <p class="krs-lead">В 2022 году, сохранив бесценный опыт и лучшие традиции, мы открыли новую главу, основав компанию Korea Orient Line (KOL).</p>
+        <p class="krs-lead">Сегодня Korea Orient Line — это динамично развивающуюся компания, которая предлагает клиентам со всего мира все преимущества морской логистики из Южной Кореи!</p>
+        <div class="krs-chips">
+          <span class="chip">1999 → 2022 → Today</span>
+          <span class="chip">KR ↔ RU</span>
+        </div>
+        <a href="https://t.me/notredame_on_flame" target="_blank" class="krs-btn">Забронировать место</a>
+      </article>
+
+      <!-- scrollytelling cards that drive the route state -->
+      <div class="krs-cards">
+        <section class="krs-card" data-from="0.00" data-to="0.33">
+          <h3>Старт маршрута</h3>
+          <p>Букинг и подготовка: подтверждение места, документы и инспекция груза.</p>
+        </section>
+        <section class="krs-card" data-from="0.33" data-to="0.66">
+          <h3>Погрузка и контроль</h3>
+          <p>Терминальные операции с фото/видео-отчётами и трекингом статусов.</p>
+        </section>
+        <section class="krs-card" data-from="0.66" data-to="1.00">
+          <h3>Прибытие и доставка</h3>
+          <p>Согласование окна прибытия, выпуск и наземная доставка до склада.</p>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="head"><div class="eyebrow">Что делаем</div><h2>Наши услуги</h2><p class="sub">Сопровождаем груз на каждом этапе: от погрузки в Корее до доставки во Владивосток</p></div>
+      <div class="services-grid">
+        <article class="service card">
+          <h3>Перевозки грузов</h3>
+          <p>Морем, ЖД и автотранспортом. Полный комплекс под ключ.</p>
+          <div class="placeholder">Схема маршрута / инфографика</div>
+          <span class="badge">Порты Южной Кореи → Владивосток</span>
+        </article>
+        <article class="service card">
+          <h3>Фото‑видео отчёт погрузок</h3>
+          <p>Прозрачность и контроль: фото и видео с терминала в день погрузки.</p>
+          <span class="badge">Отчёты в WhatsApp / Telegram</span>
+        </article>
+        <article class="service card">
+          <h3>Обратная связь на каждом этапе</h3>
+          <p>Менеджер на связи 24/7 — от букинга до разгрузки.</p>
+          <span class="badge">Русский / 한국어 / English</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHIPMENTS -->
+  <section id="shipments">
+    <div class="container">
+      <div class="head"><div class="eyebrow">Каждую неделю</div><h2>Погрузки и отправки</h2><p class="sub">Смотрите, как мы загружаем и отправляем контейнеры каждую неделю</p></div>
+      <div class="grid-vid">
+        <figure class="video"><video src="assets/loading1.mp4" preload="metadata" muted></video><figcaption class="overlay"><button class="play" data-play>▶</button></figcaption></figure>
+        <figure class="video"><video src="assets/loading2.mp4" preload="metadata" muted></video><figcaption class="overlay"><button class="play" data-play>▶</button></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="container">
+      <div class="head"><div class="eyebrow">Со слов клиентов</div><h2>Отзывы</h2></div>
+      <div class="ts-grid">
+        <article class="ts-card card">
+          <div class="head"><img class="avatar" src="assets/avatars/client1.jpg" alt="Алексей П."><div><strong>Алексей П.</strong><div class="muted">Логистика, Владивосток</div></div></div>
+          <p>Оперативная букировка, точные сроки. Получили фото‑видео отчёт с погрузки — всё прозрачно.</p>
+        </article>
+        <article class="ts-card card">
+          <div class="head"><img class="avatar" src="assets/avatars/client2.jpg" alt="Kim S."><div><strong>Kim S.</strong><div class="muted">Busan, KR</div></div></div>
+          <p>Надёжный партнёр по направлению Корея → Владивосток. Груз шёл по плану, без задержек.</p>
+        </article>
+        <article class="ts-card card">
+          <div class="head"><img class="avatar" src="assets/avatars/client3.jpg" alt="Ирина К."><div><strong>Ирина К.</strong><div class="muted">Производство, Москва</div></div></div>
+          <p>Менеджер всегда на связи. Быстрая обратная связь и аккуратная обработка документов.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTNERS -->
+  <section id="partners">
+    <div class="container">
+      <div class="head"><div class="eyebrow">Нам доверяют</div><h2>Партнёры</h2></div>
+      <div class="marquee card" aria-label="Логотипы партнёров">
+        <div class="row">
+          <img src="assets/Costco_Wholesale_Logo.png" alt="Costco">
+          <img src="assets/Hansol_logo.svg.png" alt="Hansol">
+          <img src="assets/LG_Chem_logo_(english).svg.png" alt="LG Chem">
+          <img src="assets/lotte-chemical.png" alt="Lotte Chemical">
+          <img src="assets/ottogi logo.png" alt="Ottogi">
+          <img src="assets/S-OIL_Logo.svg.png" alt="S-Oil">
+          <!-- duplicate for seamless scroll -->
+          <img src="assets/Costco_Wholesale_Logo.png" alt="Costco">
+          <img src="assets/Hansol_logo.svg.png" alt="Hansol">
+          <img src="assets/LG_Chem_logo_(english).svg.png" alt="LG Chem">
+          <img src="assets/lottechemical.png" alt="Lotte Chemical">
+          <img src="assets/ottogi logo.png" alt="Ottogi">
+          <img src="assets/S-OIL_Logo.svg.png" alt="S-Oil">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section id="map">
+    <div class="container">
+      <div class="head"><div class="eyebrow">Порты</div><h2>Корея — Владивосток</h2></div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3264.765977217568!2d129.00115038560844!3d35.08757959219829!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e835cae48ff3%3A0x468a17a382ab698e!2zNDY1LTMgR2FtY2hlb24tZG9uZywgU2FoYS1ndSwgQnVzYW4sINCu0LbQvdCw0Y8g0JrQvtGA0LXRjw!5e0!3m2!1sru!2skz!4v1755430420585!5m2!1sru!2skz" width="100%" height="420" style="border:0;display:block" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="head"><div class="eyebrow">Связаться</div><h2>Быстрые каналы</h2><p class="sub">Ответим быстро в рабочее время</p></div>
+      <div class="contact-grid">
+        <a class="chip card" href="tel:+821073099001"><div><strong>+82 10 7309 9001</strong><div class="muted">Позвонить</div></div><span class="btn ghost">Звонок</span></a>
+        <a class="chip card" href="https://wa.me/821073099001" target="_blank" rel="noopener"><div><strong>WhatsApp</strong><div class="muted">Ответ быстро</div></div><span class="btn ghost">Открыть</span></a>
+        <a class="chip card" href="https://t.me/notredame_on_flame" target="_blank" rel="noopener"><div><strong>Telegram</strong><div class="muted">Онлайн</div></div><span class="btn ghost">Открыть</span></a>
+        <button class="chip card" id="copyEmail" data-copy="info@kol.com" type="button"><div><strong>info@kol.com</strong><div class="muted">Скопировать email</div></div><span class="btn ghost">Копировать</span></button>
+      </div>
+      <p class="copy-note">Офис: Владивосток, ул. Станюковича, 13, офис 42</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="grid" style="grid-template-columns:1fr auto;align-items:center">
+        <div>
+          <strong>Korea Orient Line</strong>
+          <div class="muted">© 2025. Все права защищены.</div>
+        </div>
+        <div class="cta">
+          <a class="btn primary" href="mailto:info@kol.com">Связаться с менеджером</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Water FX defs -->
+  <svg id="fx-defs" xmlns="http://www.w3.org/2000/svg">
+    <filter id="waterShift" x="-10%" y="-10%" width="120%" height="120%"> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.01" numOctaves="2" seed="9" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <!-- LIGHTBOX for videos -->
+  <dialog id="lightbox" style="padding:0;border:none;background:transparent">
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,.75);display:grid;place-items:center">
+      <video id="lightboxVideo" controls autoplay style="width:min(1000px,92vw);max-height:82vh;display:block;border-radius:16px;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 120px rgba(0,0,0,.6)"></video>
+    </div>
+  </dialog>
+
+  <script>
+  // ========= KOL CORE INTERACTIONS (single init) =========
+  (function(){
+    if (window._kolInitRanOnce) return; // guard against duplicate injection
+    window._kolInitRanOnce = true;
+
+    // Burger menu
+    const burger = document.getElementById('burger');
+    const menu = document.getElementById('menu');
+    burger?.addEventListener('click',()=>{
+      const open = menu.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open);
+    });
+
+    // Copy email
+    const copyBtn = document.getElementById('copyEmail');
+    copyBtn?.addEventListener('click', ()=>{
+      const email = copyBtn.dataset.copy;
+      navigator.clipboard.writeText(email||'info@kol.com');
+      copyBtn.querySelector('.btn').textContent = 'Скопировано!';
+      setTimeout(()=>copyBtn.querySelector('.btn').textContent='Копировать',1500);
+    });
+
+    // Video lightbox
+    const dlg = document.getElementById('lightbox');
+    const v = document.getElementById('lightboxVideo');
+    document.querySelectorAll('[data-play]').forEach(btn=>{
+      btn.addEventListener('click',e=>{
+        const video = e.currentTarget.closest('.video').querySelector('video');
+        v.src = video.currentSrc || video.src;
+        dlg.showModal();
+      })
+    });
+    dlg?.addEventListener('click', (e)=>{ if(e.target===dlg) { v.pause(); dlg.close(); }});
+
+    // Maritime animations — motion path ship
+    (function(){
+      const ship = document.querySelector('.ship');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(ship && !reduce){
+        let d = 0; const speed = .0045; // percentage per frame
+        function loop(){ d = (d + speed) % 1; ship.style.offsetDistance = (d*100)+'%'; requestAnimationFrame(loop); }
+        requestAnimationFrame(loop);
+      }
+    })();
+
+    // Foam particles on canvas (subtle, professional)
+    (function(){
+      const cvs = document.getElementById('foamCanvas'); if(!cvs) return; const ctx = cvs.getContext('2d');
+      let w,h,px; const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function resize(){ w = cvs.width = window.innerWidth; h = cvs.height = window.innerHeight; px = Math.round(w*h/45000); }
+      window.addEventListener('resize', resize); resize();
+      const dots = new Array(px).fill(0).map(()=>({x:Math.random()*w, y:h*0.65+Math.random()*h*0.3, a:.2+Math.random()*.4, s:.4+Math.random()*1.2}));
+      function draw(){ ctx.clearRect(0,0,w,h); ctx.globalCompositeOperation='lighter';
+        for(const p of dots){ ctx.globalAlpha=p.a; ctx.fillStyle='#cfe7ff'; ctx.beginPath(); ctx.arc(p.x,p.y,1.1,0,6.28); ctx.fill(); p.x+=p.s*0.25; p.y-=0.08; if(p.x>w+10){p.x=-10} if(p.y< h*0.55){p.y=h*0.75+Math.random()*h*0.25} }
+      }
+      function tick(){ draw(); raf = requestAnimationFrame(tick); }
+      let raf; if(!reduce){ tick(); }
+    })();
+
+    // Subtle waterline jitter on eyebrow
+    (function(){ const el = document.querySelector('.waterline'); if(!el) return; let t=0; function j(){ t+=.015; el.style.transform = `translateY(${Math.sin(t)*1.2}px)`; requestAnimationFrame(j);} requestAnimationFrame(j); })();
+
+    // WOW interactions for REORG
+    (function(){
+      // Tilt effect
+      const tilts = document.querySelectorAll('.fx-tilt');
+      window.addEventListener('mousemove', (e)=>{
+        tilts.forEach(el=>{
+          const r = el.getBoundingClientRect();
+          const cx = r.left + r.width/2; const cy = r.top + r.height/2;
+          const dx = (e.clientX - cx) / r.width; const dy = (e.clientY - cy) / r.height;
+          el.style.transform = `rotateX(${(-dy*6).toFixed(2)}deg) rotateY(${(dx*8).toFixed(2)}deg)`;
+        })
+      });
+      // Parallax for stickers (declare ONCE)
+      const depthEls = document.querySelectorAll('.fx-parallax');
+      window.addEventListener('pointermove', (e)=>{
+        const {innerWidth:w, innerHeight:h} = window; const x=(e.clientX-w/2)/w; const y=(e.clientY-h/2)/h;
+        depthEls.forEach(el=>{const d=parseFloat(el.dataset.depth||8); el.style.transform = `translate(${x*d*10}px, ${y*d*10}px) rotate(${d*.6}deg)`;})
+      });
+      // Shock highlight on primary CTA (first view)
+      const shock = document.querySelector('.fx-shock');
+      setTimeout(()=>shock?.classList.add('in'), 600);
+      // Stagger reveal inside REORG
+      const reorg = document.getElementById('reorg');
+      const items = reorg?.querySelectorAll('.r-step');
+      if(items){
+        const obs = new IntersectionObserver((ents)=>{
+          ents.forEach((en)=>{
+            if(en.isIntersecting){ items.forEach((it,i)=>setTimeout(()=>it.classList.add('show'), i*120)); obs.disconnect(); }
+          })
+        },{threshold:.25});
+        obs.observe(reorg);
+      }
+    })();
+
+    // Intersection fade-in (optional)
+    (function(){
+      const observer = new IntersectionObserver((entries)=>{
+        entries.forEach(el=>{ if(el.isIntersecting){ el.target.classList.add('show') } })
+      },{threshold:.08});
+      document.querySelectorAll('section .card, section .head').forEach(el=>{ el.classList.add('pre'); observer.observe(el) });
+      const style = document.createElement('style');
+      style.textContent = `.pre{transform:translateY(12px);opacity:0;transition:.5s ease} .show{transform:none;opacity:1}`;
+      document.head.appendChild(style);
+    })();
+  })();
+  </script>
+
+  <!-- Diagnostics / Test cases -->
+  <script>
+    // Test 1: depthEls is NOT a global (prevents duplicate global const)
+    console.assert(!('depthEls' in window), 'Test1 failed: depthEls should not be a global');
+    // Test 2: initializer ran once
+    console.assert(window._kolInitRanOnce === true, 'Test2 failed: init guard did not set flag');
+    // Test 3: ship element + motion path style present
+    (function(){
+      const ship = document.querySelector('.ship');
+      console.assert(!!ship, 'Test3 failed: ship SVG missing');
+      if (ship) {
+        const hasOffsetPath = ship.style.offsetPath || ship.style['offsetPath'];
+        console.assert(hasOffsetPath !== undefined, 'Test3 note: offset-path style not set');
+      }
+    })();
+  </script>
+  <script>
+    (function(){
+    const story = document.querySelector('.kol-route-story');
+    if(!story) return;
+    const svg = story.querySelector('.krs-svg');
+    const route = story.querySelector('#krs-route-path');
+    const ship = story.querySelector('#krs-ship');
+    const cards = [...story.querySelectorAll('.krs-card')];
+
+    // Draw route on first view
+    const once = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{ if(en.isIntersecting){
+        const len = route.getTotalLength();
+        route.style.transition = 'stroke-dashoffset 1.8s ease';
+        route.style.strokeDashoffset = '0';
+        animateShip(len);
+        once.disconnect();
+      }});
+    },{threshold:.35});
+    once.observe(svg);
+
+    // Sticky scrollytelling: highlight segments based on active card
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{
+        const el = en.target;
+        if(en.isIntersecting){
+          cards.forEach(c=>c.classList.remove('is-active'));
+          el.classList.add('is-active');
+          const from = parseFloat(el.dataset.from || '0');
+          const to = parseFloat(el.dataset.to || '1');
+          highlight(from, to);
+        }
+      });
+    },{rootMargin:'-40% 0% -50% 0%',threshold:.6});
+    cards.forEach(c=>io.observe(c));
+
+    function highlight(start, end){
+      const len = route.getTotalLength();
+      const a = Math.max(0, Math.min(1, start)) * len;
+      const b = Math.max(0, Math.min(1, end)) * len;
+      route.style.strokeDasharray = `${a} ${b-a} ${len-b}`;
+      route.style.strokeDashoffset = `${-a}`;
+    }
+
+    function animateShip(len){
+      let t = 0; const speed = 0.0032;
+      const total = len || 1000;
+      function frame(){
+        t = (t + speed) % 1;
+        const d = t * total;
+        const pt = route.getPointAtLength(d);
+        ship.setAttribute('transform', `translate(${pt.x},${pt.y})`);
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+  })();
+
+  </script>
+  <script type="text/javascript">
+    window.$crisp=[]; window.CRISP_WEBSITE_ID="0146419c-dc34-4831-97ad-2647694df4c1";
+    (function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
+  </script>
+
 </body>
 </html>

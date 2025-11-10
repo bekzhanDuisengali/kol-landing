@@ -1,0 +1,191 @@
+=== KOL Scrollytelling Route (Sticky) ===
+<section class="kol-route-story" id="kol-route">
+  <!-- Sticky visual side -->
+  <div class="krs-visual" aria-hidden="true">
+    <svg class="krs-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="krs-ocean" cx="50%" cy="50%" r="75%">
+          <stop offset="0%" stop-color="#061426"/>
+          <stop offset="100%" stop-color="#010914"/>
+        </radialGradient>
+        <linearGradient id="krs-route" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0%" stop-color="#72e6ff" stop-opacity="0"/>
+          <stop offset="50%" stop-color="#72e6ff" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#72e6ff" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="krs-glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="3" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <mask id="krs-arc-mask">
+          <rect width="1000" height="600" fill="white"/>
+          <!-- Carved arc for a unique silhouette -->
+          <circle cx="-120" cy="580" r="540" fill="black"/>
+        </mask>
+      </defs>
+      <rect width="1000" height="600" fill="url(#krs-ocean)"/>
+
+      <!-- Subtle world silhouette -->
+      <g fill="#0b1f34" opacity=".85" mask="url(#krs-arc-mask)">
+        <path d="M60,470 C220,420 350,390 460,370 C610,340 700,330 820,320 C900,312 950,318 990,330 L990,600 L60,600 Z"/>
+        <path d="M120,210 C220,190 320,180 420,192 C520,204 720,230 880,275 L880,300 C690,260 520,235 380,220 C250,207 180,208 120,218 Z" opacity=".55"/>
+      </g>
+
+      <!-- Route path (smooth S‑curve) -->
+      <path id="krs-route-path" d="M260,300 C380,240 620,240 780,300" stroke="url(#krs-route)" stroke-width="3" fill="none" stroke-dasharray="1000" stroke-dashoffset="1000" filter="url(#krs-glow)"/>
+
+      <!-- Ports with pulse -->
+      <g class="krs-ports" stroke="#a6ecff" fill="none" stroke-width="2">
+        <g id="krs-vlad" transform="translate(260,300)">
+          <circle r="8" fill="#a6ecff"/>
+          <circle class="pulse" r="14"/>
+          <circle class="pulse" r="22"/>
+          <text y="-14" text-anchor="middle" fill="#c9efff" font-size="12">VLADIVOSTOK</text>
+        </g>
+        <g id="krs-busan" transform="translate(780,300)">
+          <circle r="8" fill="#a6ecff"/>
+          <circle class="pulse" r="14"/>
+          <circle class="pulse" r="22"/>
+          <text y="-14" text-anchor="middle" fill="#c9efff" font-size="12">BUSAN</text>
+        </g>
+      </g>
+
+      <!-- Ship -->
+      <g id="krs-ship" transform="translate(260,300)">
+        <g transform="scale(0.9)">
+          <path d="M-10 6 h64 l12 10 h-84 z" fill="#173a74"/>
+          <rect x="6" y="-6" width="28" height="10" rx="2" fill="#e6f3ff"/>
+          <rect x="36" y="-4" width="10" height="8" rx="1.5" fill="#d9ecff"/>
+        </g>
+      </g>
+
+      <!-- Compass / legend on the side -->
+      <g class="krs-legend">
+        <circle cx="70" cy="70" r="38" fill="none" stroke="#1f3a5a" stroke-width="2"/>
+        <text x="70" y="76" text-anchor="middle" font-size="10" fill="#9db6cc">KOL</text>
+        <path d="M70,34 L70,14 M70,106 L70,126 M34,70 L14,70 M106,70 L126,70" stroke="#274b74"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Scroll narrative side -->
+  <div class="krs-narrative">
+    <article class="krs-intro">
+      <h2 class="krs-title">Korea Orient Line <span>(KOL)</span></h2>
+      <p class="krs-lead">В 2022 году, сохранив бесценный опыт и лучшие традиции, мы открыли новую главу, основав компанию Korea Orient Line (KOL).</p>
+      <p class="krs-lead">Сегодня Korea Orient Line — это динамично развивающуюся компания, которая предлагает клиентам со всего мира все преимущества морской логистики из Южной Кореи!</p>
+      <div class="krs-chips">
+        <span class="chip">1999 → 2022 → Today</span>
+        <span class="chip">KR ↔ RU</span>
+      </div>
+      <a href="https://t.me/notredame_on_flame" target="_blank" class="krs-btn">Забронировать место</a>
+    </article>
+
+    <!-- scrollytelling cards that drive the route state -->
+    <div class="krs-cards">
+      <section class="krs-card" data-from="0.00" data-to="0.33">
+        <h3>Старт маршрута</h3>
+        <p>Букинг и подготовка: подтверждение места, документы и инспекция груза.</p>
+      </section>
+      <section class="krs-card" data-from="0.33" data-to="0.66">
+        <h3>Погрузка и контроль</h3>
+        <p>Терминальные операции с фото/видео-отчётами и трекингом статусов.</p>
+      </section>
+      <section class="krs-card" data-from="0.66" data-to="1.00">
+        <h3>Прибытие и доставка</h3>
+        <p>Согласование окна прибытия, выпуск и наземная доставка до склада.</p>
+      </section>
+    </div>
+  </div>
+</section>
+
+<style>
+/* Layout */
+/*  */
+
+.kol-route-story{ grid-template-columns: 1fr; min-height: auto; }
+
+
+/* Sticky visual */
+.krs-visual{ position: sticky; top: 0; height: 100vh; border-right: 1px solid rgba(255,255,255,.06); overflow: hidden; }
+.krs-svg{ width: 100%; height: 100%; display: block; }
+
+/* Narrative column */
+.krs-narrative{ padding: 8vh clamp(20px, 4vw, 48px); }
+
+/* Остальное — как у тебя */
+.krs-title{font-family:'Oswald',sans-serif;font-size:clamp(36px,5vw,64px);line-height:1.05;margin:0 0 8px; color: white;}
+.krs-title span{background:linear-gradient(90deg,#7ae1ff,#6fb7ff);-webkit-background-clip:text;color:transparent; color: white;}
+.krs-lead{opacity:.92;line-height:1.75;max-width:66ch;margin:0 auto 10px auto; color: white; font-size: 20px;}
+.krs-chips{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px; color: white;}
+.chip{padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);font-size:12px;color:#d5ebff}
+.krs-btn{display:inline-block;padding:12px 18px;border-radius:12px;background:#e8f6ff;color:#04213d;text-decoration:none;font-weight:700;border:1px solid rgba(255,255,255,.22)}
+.krs-btn:hover{filter:brightness(1.03)}
+.krs-cards{display:grid;gap:24px;margin-top:10vh; color: white;}
+.krs-card{padding:20px;border-radius:16px;background:linear-gradient(180deg,rgba(10,22,40,.82),rgba(10,22,40,.66));border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(4px);box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.krs-card h3{margin:0 0 6px;font-size:18px}
+.krs-card p{margin:0;opacity:.9}
+.krs-card.is-active{outline:2px solid rgba(122,225,255,.55)}
+.pulse{animation:krs-pulse 2.8s ease-out infinite}
+.pulse:nth-child(2){animation-delay:.4s}
+@keyframes krs-pulse{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.9)}}
+</style>
+
+<script>
+(function(){
+  const story = document.querySelector('.kol-route-story');
+  if(!story) return;
+  const svg = story.querySelector('.krs-svg');
+  const route = story.querySelector('#krs-route-path');
+  const ship = story.querySelector('#krs-ship');
+  const cards = [...story.querySelectorAll('.krs-card')];
+
+  // Draw route on first view
+  const once = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){
+      const len = route.getTotalLength();
+      route.style.transition = 'stroke-dashoffset 1.8s ease';
+      route.style.strokeDashoffset = '0';
+      animateShip(len);
+      once.disconnect();
+    }});
+  },{threshold:.35});
+  once.observe(svg);
+
+  // Sticky scrollytelling: highlight segments based on active card
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      const el = en.target;
+      if(en.isIntersecting){
+        cards.forEach(c=>c.classList.remove('is-active'));
+        el.classList.add('is-active');
+        const from = parseFloat(el.dataset.from || '0');
+        const to = parseFloat(el.dataset.to || '1');
+        highlight(from, to);
+      }
+    });
+  },{rootMargin:'-40% 0% -50% 0%',threshold:.6});
+  cards.forEach(c=>io.observe(c));
+
+  function highlight(start, end){
+    const len = route.getTotalLength();
+    const a = Math.max(0, Math.min(1, start)) * len;
+    const b = Math.max(0, Math.min(1, end)) * len;
+    route.style.strokeDasharray = `${a} ${b-a} ${len-b}`;
+    route.style.strokeDashoffset = `${-a}`;
+  }
+
+  function animateShip(len){
+    let t = 0; const speed = 0.0032;
+    const total = len || 1000;
+    function frame(){
+      t = (t + speed) % 1;
+      const d = t * total;
+      const pt = route.getPointAtLength(d);
+      ship.setAttribute('transform', `translate(${pt.x},${pt.y})`);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+})();
+</script>

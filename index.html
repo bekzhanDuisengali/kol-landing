@@ -1,512 +1,1128 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Мониторинг</title>
-
-  <!-- SEO & Sharing -->
-  <meta name="description" content="Korea Orient Line — международные перевозки из Кореи во Владивосток. Еженедельные погрузки, фото‑видео отчёты, контроль на каждом этапе.">
-  <meta property="og:title" content="Korea Orient Line — Море возможностей">
-  <meta property="og:description" content="Перевозки, фото‑видео отчёты, связь на каждом этапе.">
-  <meta property="og:image" content="assets/og-cover.jpg">
-  <meta property="og:type" content="website">
-  <meta name="theme-color" content="#0b5cff">
-  <link rel="icon" href="assets/favicon.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Korea Orient Line — Море возможностей</title>
+  <meta name="description" content="Korea Orient Line — международные перевозки из Кореи во Владивосток. Еженедельные погрузки, фото‑видео отчёты, контроль на каждом этапе." />
+  <meta property="og:title" content="Korea Orient Line — Море возможностей" />
+  <meta property="og:description" content="Перевозки, фото‑видео отчёты, связь на каждом этапе." />
+  <meta property="og:image" content="assets/og-cover.jpg" />
+  <meta name="theme-color" content="#0b5cff" />
+  <link rel="icon" href="assets/favicon.png" />
   <link rel="preload" href="assets/fonts/Inter/Inter-VariableFont_slnt,wght.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="assets/fonts/Oswald/Oswald-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+  <style>
+    :root{
+      --ink:#0a0c10;
+      --paper:#0f1320;
+      --muted:#a2b0d0;
+      --brand:#0b5cff;
+      --brand-2:#4aa3ff;
+      --white:#fff;
+      --card:#0b1020;
+      --glass:rgba(16,22,40,.55);
+      --ring:rgba(80,140,255,.35);
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+      color:var(--white);
+      background:
+        radial-gradient(1200px 800px at 80% -20%, rgba(33,93,255,.25), rgba(33,93,255,0) 60%),
+        radial-gradient(900px 700px at -10% 10%, rgba(12,227,255,.12), rgba(12,227,255,0) 55%),
+        linear-gradient(180deg,#070a12,#0a0f1e 45%, #0a0c10);
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    img,video{display:block;max-width:100%;height:auto}
+    button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
+    .container{width:min(1180px,92vw);margin:0 auto}
+    /* HEADER */
+    .nav{
+      position:fixed;
+      inset:18px 18px auto;
+      z-index:60;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 18px;
+      border-radius:16px;
+      background:var(--glass);
+      backdrop-filter:saturate(160%) blur(16px);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 10px 40px rgba(0,0,0,.25),0 0 0 1px rgba(255,255,255,.03) inset;
+    }
+    .brand{display:flex;gap:10px;align-items:center;font-weight:700}
+    .brand img{height:28px;width:auto;filter:drop-shadow(0 2px 12px rgba(74,163,255,.35))}
+    .brand span{display:flex;flex-direction:column;line-height:1}
+    .brand small{opacity:.7;font-weight:500;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+    .menu{display:flex;align-items:center;gap:16px}
+    .menu a{padding:10px 12px;border-radius:10px;opacity:.9;transition:background .2s ease}
+    .menu a:hover{background:rgba(255,255,255,.06)}
+    .btn{padding:10px 14px;border-radius:12px;display:inline-flex;align-items:center;gap:6px}
+    .btn.primary{background:linear-gradient(180deg,var(--brand),#0950dc);box-shadow:0 8px 24px rgba(11,92,255,.35)}
+    .btn.ghost{border:1px solid rgba(255,255,255,.14)}
+    .burger{display:none;background:rgba(255,255,255,.08);border-radius:10px;padding:8px 12px}
+    /* HERO */
+    .hero{
+      position:relative;
+      padding:clamp(120px,18vh,180px) 0 clamp(120px,14vh,180px);
+      min-height:96svh;
+      display:grid;
+      place-items:center;
+      isolation:isolate;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-20vh -20vw -10vh -20vw;
+      z-index:-2;
+      pointer-events:none;
+      background:
+        radial-gradient(1200px 700px at 70% -10%, rgba(74,163,255,.35), transparent 60%),
+        radial-gradient(900px 600px at -10% 20%, rgba(12,227,255,.12), transparent 60%);
+      filter:blur(10px);
+    }
+    .hero-video,
+    .hero-video * {
+      opacity: 1 !important;
+      filter: none !important;
+    }
+    .ocean{
+      position:absolute;
+      inset:auto 0 0 0;
+      height:40vh;
+      min-height:260px;
+      z-index:-1;
+      background:linear-gradient(180deg,transparent,rgba(9,20,45,.75) 30%, #070a12 90%);
+      -webkit-mask:linear-gradient(180deg,transparent,black 30%);
+    }
+    .waves{position:absolute;inset:auto 0 0 0;width:100%;height:240px}
+    .ship{position:absolute;left:8%;bottom:34vh;width:120px;opacity:.9}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:42px;align-items:center}
+    .lede h1{font-family:"Oswald",system-ui,sans-serif;font-size:clamp(38px,6vw,68px);letter-spacing:.02em;margin:0 0 12px}
+    .lede p{font-size:clamp(16px,2.2vw,18px);opacity:.82;line-height:1.6;margin:0}
+    .lede .cta{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .kpi{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px 14px}
+    .kpi .num{font-size:clamp(22px,4.5vw,32px);font-weight:800;letter-spacing:.02em}
+    .kpi .lbl{opacity:.7;font-size:13px}
+    /* SECTION WRAPPER */
+    section{padding:clamp(80px,12vw,120px) 0;position:relative}
+    section .head{margin-bottom:28px}
+    section .eyebrow{letter-spacing:.14em;text-transform:uppercase;font-size:12px;opacity:.7}
+    section h2{font-family:"Oswald",system-ui,sans-serif;font-size:clamp(28px,4vw,42px);margin:4px 0 6px}
+    section .sub{opacity:.75;max-width:760px;margin:0}
+    /* ADVANTAGES */
+    .adv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:18px;position:relative;overflow:hidden}
+    .card::after{content:"";position:absolute;inset:-80% 20% auto -40%;height:220px;border-radius:999px;background:radial-gradient(closest-side,rgba(90,155,255,.28),transparent 60%);filter:blur(20px);opacity:.4}
+    .adv-card h3{margin:0 0 6px;font-size:18px}
+    .adv-card .big{font-size:32px;font-weight:800;letter-spacing:.02em;margin-bottom:6px}
+    .adv-card p{opacity:.78;margin:0}
+    /* EXPERIENCE STRIP */
+    .experience{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+    .exp-media{position:relative}
+    .exp-media .frame{border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 60px rgba(0,0,0,.45)}
+    .exp-media .polaroid{position:absolute;right:-16px;bottom:-16px;width:min(42%,300px);transform:rotate(-3deg);border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.14)}
+    .exp-title{font-size:54px;font-weight:900;letter-spacing:.02em;display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+    .exp-title .year{font-family:"Oswald",system-ui,sans-serif;font-size:86px;line-height:.9;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.7)}
+    .exp-copy p{opacity:.8;line-height:1.7}
+    /* KOL ROUTE STORY */
+    .kol-route-story{
+      width:min(1180px,92vw);
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);
+      gap:clamp(28px,5vw,52px);
+      align-items:start;
+      padding:clamp(100px,14vw,160px) 0;
+    }
+    .krs-visual{position:sticky;top:120px;height:min(70vh,640px);border-right:1px solid rgba(255,255,255,.08);padding-right:clamp(12px,2vw,32px);overflow:hidden}
+    .krs-svg{width:100%;height:100%;display:block;object-fit:contain}
+    .krs-narrative{padding:0 clamp(12px,2vw,30px)}
+    .krs-title{font-family:'Oswald',sans-serif;font-size:clamp(36px,5vw,64px);line-height:1.05;margin:0 0 8px;color:var(--white)}
+    .krs-title span{background:linear-gradient(90deg,#7ae1ff,#6fb7ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .krs-lead{opacity:.92;line-height:1.75;max-width:66ch;margin:0 auto 10px;font-size:20px}
+    .krs-chips{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px}
+    .chip{padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);font-size:12px;color:#d5ebff;display:inline-flex;gap:8px;align-items:center}
+    .krs-btn{display:inline-block;padding:12px 18px;border-radius:12px;background:#e8f6ff;color:#04213d;text-decoration:none;font-weight:700;border:1px solid rgba(255,255,255,.22)}
+    .krs-btn:hover{filter:brightness(1.03)}
+    .krs-cards{display:grid;gap:24px;margin-top:10vh}
+    .krs-card{padding:20px;border-radius:16px;background:linear-gradient(180deg,rgba(10,22,40,.82),rgba(10,22,40,.66));border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(4px);box-shadow:0 10px 40px rgba(0,0,0,.35)}
+    .krs-card h3{margin:0 0 6px;font-size:18px}
+    .krs-card p{margin:0;opacity:.9}
+    .krs-card.is-active{outline:2px solid rgba(122,225,255,.55)}
+    .pulse{animation:krs-pulse 2.8s ease-out infinite}
+    .pulse:nth-child(2){animation-delay:.4s}
+    @keyframes krs-pulse{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.9)}}
+    /* SERVICES */
+    .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .service{padding:18px}
+    .service h3{margin:0 0 6px}
+    .badge{display:inline-block;font-size:11px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);margin:8px 0 0}
+    .placeholder{height:160px;border-radius:14px;background:repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 10px, rgba(255,255,255,.03) 10px 20px);border:1px dashed rgba(255,255,255,.15);display:grid;place-items:center;opacity:.8}
+    /* SHIPMENTS */
+    .grid-vid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .video{position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+    .video video{width:100%;height:100%;opacity:.9}
+    .video .overlay{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.55));opacity:0;transition:.25s}
+    .video:hover .overlay{opacity:1}
+    .play{display:inline-grid;place-items:center;width:68px;height:68px;border-radius:999px;background:rgba(11,92,255,.9);box-shadow:0 10px 30px rgba(11,92,255,.45)}
+    /* TESTIMONIALS */
+    .ts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .ts-card .head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+    .avatar{width:40px;height:40px;border-radius:999px;object-fit:cover}
+    .ts-card p{opacity:.85}
+    /* PARTNERS */
+    .marquee{overflow:hidden;mask-image:linear-gradient(90deg,transparent,black 10%, black 90%, transparent)}
+    .marquee .row{display:flex;gap:24px;align-items:center;animation:scroll 28s linear infinite}
+    .marquee img{height:36px;filter:grayscale(100%) contrast(110%);opacity:.8}
+    @keyframes scroll{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+    /* CONTACT */
+    .contact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .chip.card{display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);width:100%}
+    .chip.card div{flex:1;display:flex;flex-direction:column;gap:4px}
+    .chip em{opacity:.7;font-style:normal;font-size:12px}
+    .copy-note{opacity:.65;font-size:14px;margin-top:10px}
+    /* FOOTER */
+    footer{padding:46px 0;border-top:1px solid rgba(255,255,255,.08);opacity:.85}
+    footer .cta{margin:10px 0 0}
+    /* UTIL */
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)}
+    .grid{display:grid;gap:14px}
+    .muted{color:var(--muted)}
+    .ringed{box-shadow:0 0 0 8px var(--ring);border-radius:18px}
+    .sr{position:absolute !important;clip:rect(1px,1px,1px,1px);padding:0;border:0;height:1px;width:1px;overflow:hidden}
+    /* REORG — After Reorganization */
+    .reorg{position:relative;padding:120px 0;overflow:clip}
+    .reorg::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.25;
+      background:
+        radial-gradient(1400px 700px at 120% -10%, rgba(74,163,255,.18), transparent 60%),
+        radial-gradient(800px 520px at -20% 120%, rgba(12,227,255,.10), transparent 60%),
+        linear-gradient(180deg,transparent,rgba(11,20,40,.5) 60%, rgba(8,12,24,.9) 100%);
+    }
+    .reorg .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+    .reorg .kicker{letter-spacing:.18em;text-transform:uppercase;font-size:12px;opacity:.75}
+    .reorg h2{font-family:"Oswald",system-ui,sans-serif;font-size:clamp(32px,5vw,56px);margin:6px 0 12px}
+    .reorg .lead{opacity:.86;line-height:1.7;margin-bottom:18px}
+    /* Nautical steps */
+    .manifest{display:grid;gap:12px;margin-top:8px}
+    .manifest-item{display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:flex-start;border-radius:16px;padding:14px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden}
+    .manifest-item::after{content:"";position:absolute;inset:auto 16px -18px auto;width:120px;height:120px;border-radius:50%;background:radial-gradient(closest-side,rgba(90,155,255,.18),transparent 70%);filter:blur(12px);opacity:.35}
+    .badge-num{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);font-weight:800}
+    .manifest-item h4{margin:0 0 4px}
+    .manifest-item p{margin:0;opacity:.8}
+    /* Right column — Porthole media */
+    .porthole{position:relative;padding:18px;border-radius:24px;background:rgba(16,22,40,.5);border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 80px rgba(0,0,0,.45)}
+    .porthole-inner{position:relative;border-radius:18px;padding:16px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.10)}
+    .porthole-frame{position:relative;width:100%;aspect-ratio:1/1;border-radius:50%;overflow:hidden;border:10px solid rgba(160,190,255,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22), 0 10px 40px rgba(0,0,0,.5)}
+    .porthole img.main{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(.8)}
+    .porthole .cardlet{position:absolute;right:4%;bottom:6%;width:min(42%,260px);transform:rotate(-6deg);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.25);box-shadow:0 22px 60px rgba(0,0,0,.6)}
+    .sonar{position:absolute;inset:auto 0 0 0;height:42%;display:grid;place-items:center;pointer-events:none}
+    .sonar .ring{position:absolute;width:60%;aspect-ratio:1;border-radius:50%;border:2px solid rgba(120,170,255,.45);opacity:.55;animation:sonar 4.6s ease-out infinite}
+    .sonar .ring:nth-child(2){animation-delay:1.2s}
+    .sonar .ring:nth-child(3){animation-delay:2.4s}
 
-  <link rel="stylesheet" href="style.css">
+
+    /* ===== Layout ===== */
+    .kol-timeline { margin: 100px 0; text-align: center; }
+    .kol-timeline .head { margin-bottom: 40px; }
+
+    /* ===== Hero ===== */
+    .hero-video { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 16/9; box-shadow: 0 0 40px rgba(0,0,0,.4); }
+    .hero-video .hero-wrap { position: relative; width: 100%; height: 100%; }
+    .hero-video video { width: 100%; height: 100%; object-fit: cover; background: #000; }
+    .hero-video .overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; color: #fff; padding: 24px;
+      background: linear-gradient(to top, rgba(0,0,0,.12), transparent 65%); }
+    .hero-video .overlay h3 { font-size: 1.5rem; font-weight: 500; letter-spacing: 0.02em; }
+
+    /* ===== Filmstrip ===== */
+    .filmstrip { display: flex; gap: 18px; overflow-x: auto; padding: 24px 0; margin-top: 32px; scroll-snap-type: x mandatory; }
+    .filmstrip::-webkit-scrollbar { display: none; }
+    .filmstrip .frame { flex: 0 0 260px; height: 420px; border: none; padding: 0; background: #000; border-radius: 16px;
+      overflow: hidden; cursor: pointer; scroll-snap-align: start; box-shadow: 0 4px 25px rgba(0,0,0,.3);
+      transition: transform .4s ease, box-shadow .4s ease; }
+    .filmstrip .frame:hover { transform: translateY(-6px); box-shadow: 0 10px 30px rgba(0,80,255,.35); }
+    .filmstrip .frame video { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ===== Hero controls ===== */
+    .hero-btn { position: absolute; z-index: 2; border: none; background: rgba(0,0,0,.35); color: #fff; border-radius: 50%;
+      cursor: pointer; backdrop-filter: blur(6px); transition: all .25s ease; box-shadow: 0 0 15px rgba(0,0,0,.3); }
+    .hero-btn:hover { background: rgba(0,0,0,.55); transform: scale(1.05); }
+
+    /* Play/Pause — центр */
+    .hero-play {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);      /* базовый translate */
+      width: 72px;
+      height: 72px;
+      font-size: 30px;
+    }
+    .hero-play:hover {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+    .hero-sound:hover {
+      transform: scale(1.05);
+    }
+    .hero-play::before { content: '▶'; position: relative; left: 2px; }
+    .hero-play.is-playing::before { content: '⏸'; left: 0; }
+
+    /* Sound — правый нижний угол */
+    .hero-sound { bottom: 20px; right: 20px; width: 46px; height: 46px; font-size: 22px; }
+    .hero-sound::before { content: '🔇'; }
+    .hero-sound.on::before { content: '🔊'; }
+
+    /* CTA */
+    .cta { margin-top: 24px; }
+    .btn-more { display: inline-block; padding: 12px 24px; border-radius: 12px; background: rgba(11,92,255,.15); color: #fff;
+      text-decoration: none; border: 1px solid rgba(255,255,255,.15); transition: all .25s ease; }
+    .btn-more:hover { background: rgba(11,92,255,.3); transform: translateY(-2px); }
+
+
+    /* базовые кнопки уже есть (.hero-btn) — добавим позицию/иконку для полноэкранной */
+    .hero-full {
+      top: 20px;
+      right: 20px;
+      width: 46px;
+      height: 46px;
+      font-size: 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-full::before { content: '⤢'; }      /* enter fullscreen */
+    .hero-full.on::before { content: '⤡'; }   /* exit fullscreen */
+
+    .hero-play { will-change: transform; }    /* чтобы не дёргалось при hover scale */
+    .hero-play:hover { transform: translate(-50%, -50%) scale(1.05); }
+    /* ===== Small tweaks on mobile ===== */
+    @media (max-width: 640px) {
+      .filmstrip .frame { flex-basis: 200px; height: 340px; }
+      .hero-play { width: 64px; height: 64px; font-size: 26px; }
+      .hero-sound { width: 42px; height: 42px; font-size: 20px; }
+    }
+    @keyframes sonar{0%{transform:scale(.35);opacity:.6}90%{transform:scale(1.2);opacity:0}100%{opacity:0}}
+    /* Rope divider & tags */
+    .rope{height:16px;background:repeating-linear-gradient(135deg,rgba(240,240,255,.6) 0 6px, rgba(150,190,255,.5) 6px 12px);border-radius:999px;filter:blur(.2px);opacity:.5}
+    .r-tags{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+    .r-tag{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);font-size:12px}
+    /* CTA accent */
+    .reorg .cta-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+    /* FX */
+    .fx-gradient{background:linear-gradient(90deg,#8ab8ff,#53ffe5,#8ab8ff);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% 200%;animation:gradient-pan 6s ease infinite}
+    @keyframes gradient-pan{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    /* MEDIA QUERIES */
+    @media (max-width:1200px){
+      .nav{inset:16px 16px auto}
+      .kol-route-story{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+      .krs-visual{top:110px}
+    }
+    @media (max-width:1024px){
+      .nav{gap:12px;padding:10px 16px}
+      .burger{display:block}
+      .menu{display:none}
+      .menu.open{
+        display:flex;
+        position:absolute;
+        top:calc(100% + 12px);
+        right:0;
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+        padding:16px;
+        min-width:240px;
+        border-radius:14px;
+        background:var(--glass);
+        border:1px solid rgba(255,255,255,.1);
+        box-shadow:0 22px 70px rgba(0,0,0,.35);
+        backdrop-filter:blur(18px);
+      }
+      .menu.open .btn,
+      .menu.open a{width:100%;justify-content:center}
+      .hero{padding-top:calc(110px + 6vh)}
+      .hero-grid{grid-template-columns:1fr;gap:32px}
+      .lede .cta{justify-content:center}
+      .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .experience{grid-template-columns:1fr;gap:32px}
+      .exp-media .polaroid{right:auto;bottom:auto;width:60%;margin:-40px auto 0;transform:rotate(-2deg)}
+      .services-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .grid-vid{grid-template-columns:1fr}
+      .ts-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .contact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .reorg .grid{grid-template-columns:1fr}
+      .kol-route-story{grid-template-columns:1fr;padding:clamp(80px,12vw,140px) 0}
+      .krs-visual{position:relative;top:auto;height:auto;border-right:none;padding-right:0;margin:0 auto 48px;max-width:640px}
+      .krs-narrative{padding:0}
+      .krs-cards{margin-top:40px}
+    }
+    @media (max-width:768px){
+      .nav{inset:14px 12px auto;padding:10px 12px;border-radius:14px}
+      .brand img{height:24px}
+      .brand small{font-size:11px}
+      section{padding:70px 0}
+      .hero{padding-top:calc(100px + 6vh);padding-bottom:clamp(80px,16vw,120px)}
+      .hero-grid{gap:26px}
+      .lede .cta{justify-content:flex-start}
+      .kpis{grid-template-columns:1fr}
+      .adv-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .services-grid{grid-template-columns:1fr}
+      .ts-grid{grid-template-columns:1fr}
+      .contact-grid{grid-template-columns:1fr}
+      .exp-title{gap:8px}
+      .exp-title .year{font-size:72px}
+      .exp-media .polaroid{width:72%;margin:-28px auto 0}
+      .grid{gap:12px}
+      .porthole{margin:0 auto;max-width:420px}
+      .manifest{gap:10px}
+      .manifest-item{grid-template-columns:44px 1fr;padding:12px 14px}
+      .krs-lead{font-size:18px}
+    }
+    @media (max-width:640px){
+      .nav{inset:12px 12px auto}
+      .adv-grid{grid-template-columns:1fr}
+      .krs-cards{gap:20px}
+      .kol-route-story{padding:clamp(64px,14vw,110px) 0}
+      .chip{font-size:11px}
+    }
+    @media (max-width:560px){
+      body{font-size:15px}
+      .nav{inset:10px 10px auto;padding:8px 10px;border-radius:12px}
+      .burger{padding:6px 10px;font-size:14px}
+      .menu.open{left:0;right:0;min-width:auto}
+      .hero{padding-top:calc(94px + 5vh)}
+      .hero-grid{gap:22px}
+      .lede .cta{width:100%;gap:8px}
+      .lede .cta .btn{flex:1;justify-content:center}
+      .kpis{gap:10px}
+      .ship{width:88px;bottom:32vh}
+      .experience{gap:26px}
+      .exp-title{flex-direction:column;align-items:flex-start}
+      .exp-title .year{font-size:62px}
+      .exp-media .polaroid{width:86%;margin:-18px auto 0}
+      .grid-vid{gap:12px}
+      .krs-title{font-size:clamp(28px,8vw,40px)}
+      .krs-cards{margin-top:28px}
+      .chip.card{flex-direction:column;align-items:flex-start;gap:12px}
+      .chip.card .btn{align-self:stretch;justify-content:center}
+      .copy-note{margin-top:18px}
+      footer .grid{grid-template-columns:1fr;text-align:center;gap:18px}
+      footer .cta{margin:0;display:flex;justify-content:center}
+    }
+    @media (max-width:420px){
+      .nav{inset:8px 8px auto}
+      .btn{padding:9px 12px}
+      .hero{padding-bottom:90px}
+      .manifest-item{grid-template-columns:38px 1fr}
+      .krs-lead{font-size:17px}
+      .krs-cards{gap:18px}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .sonar .ring{animation:none;opacity:.25}
+      .ship{animation:none}
+      .marquee .row{animation-duration:0s}
+    }
+</style>
 </head>
 <body>
-  <!-- Сквозная подложка -->
+  <!-- NAV -->
+  <nav class="nav container" aria-label="Главная навигация">
+    <a href="#home" class="brand">
+      <img src="assets/logo.png" alt="KOL" />
+      <span><span style="display:block;line-height:1">Korea Orient Line</span><small>Море возможностей</small></span>
+    </a>
+    <button class="burger" id="burger" aria-expanded="false">Меню ▾</button>
+    <div class="menu" id="menu">
+      <a href="#services">Услуги</a>
+      <a href="#about">О нас</a>
+      <a href="#shipments">Погрузки</a>
+      <a href="#partners">Партнёры</a>
+      <a href="#contact" class="btn ghost">Контакты</a>
+      <a href="https://wa.me/821073099001" target="_blank" rel="noopener" class="btn primary">Быстрая консультация</a>
+    </div>
+  </nav>
 
-  <!-- ===== HERO ===== -->
-  <header class="hero" data-surface="tint" id="home">
-    <nav class="topnav">
-      <a href="#home" class="brand">
-        <img src="assets/logo.png" alt="KOL" class="brand-logo" />
-        <span class="brand-name">Korea Orient Line</span>
-      </a>
-      <button class="burger" aria-label="Открыть меню" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="menu">
-        <li><a href="#services">Услуги</a></li>
-        <li><a href="#about">О нас</a></li>
-        <li><a href="#partners">Партнёры</a></li>
-        <li><a href="#contact">Контакты</a></li>
-        <li class="divider" aria-hidden="true"></li>
-        <li><a class="btn tiny ghost" href="https://t.me/notredame_on_flame" target="_blank" rel="noopener">Букировка</a></li>
-        <li><a class="btn tiny solid" href="https://wa.me/821073099001" target="_blank" rel="noopener">Консультация</a></li>
-      </ul>
-    </nav>
-
-    <!-- DYNAMIC BACKGROUND -->
-    <div class="hero-bg" aria-hidden="true">
-      <div class="glow g1"></div>
-      <div class="glow g2"></div>
-      <div class="grain"></div>
-      <svg class="waves" viewBox="0 0 1440 320" preserveAspectRatio="none">
-        <path class="w w1" d="M0,160 C240,220 480,100 720,160 C960,220 1200,140 1440,180 L1440,320 L0,320 Z"></path>
-        <path class="w w2" d="M0,200 C240,260 480,140 720,200 C960,260 1200,180 1440,220 L1440,320 L0,320 Z"></path>
-        <path class="w w3" d="M0,240 C240,300 480,180 720,240 C960,300 1200,220 1440,260 L1440,320 L0,320 Z"></path>
+  <!-- HERO -->
+  <header class="hero" id="home" role="banner">
+    <!-- Serious maritime FX: foam canvas + motion-path route -->
+    <canvas id="foamCanvas" aria-hidden="true" style="position:absolute;inset:0;z-index:-2;opacity:.22"></canvas>
+    <div class="ocean">
+      <svg class="waves" viewBox="0 0 1440 240" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="wgrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="rgba(33,93,255,.38)"/>
+            <stop offset="100%" stop-color="rgba(33,93,255,.08)"/>
+          </linearGradient>
+        </defs>
+        <path class="w1" fill="url(#wgrad)" d="M0,120 C180,200 360,40 540,120 C720,200 900,60 1080,120 C1260,180 1350,120 1440,140 L1440,240 L0,240 Z"></path>
+        <path class="w2" fill="url(#wgrad)" d="M0,140 C180,220 360,60 540,140 C720,220 900,80 1080,140 C1260,200 1350,140 1440,160 L1440,240 L0,240 Z"></path>
+        <path class="w3" fill="url(#wgrad)" d="M0,160 C180,240 360,80 540,160 C720,240 900,100 1080,160 C1260,220 1350,160 1440,180 L1440,240 L0,240 Z"></path>
+        <!-- Invisible route for motion path -->
+        <path id="shipRoute" d="M-120,175 C200,100 520,210 800,150 S1400,165 1560,145" fill="none" stroke="transparent" />
       </svg>
-      <!-- tiny liner -->
-      <svg class="ship" viewBox="0 0 120 48" aria-hidden="true">
-        <!-- корпус -->
-        <path d="M5 32h78l14 10H18z" fill="rgba(13,47,117,.95)"/>
-        <!-- надстройка -->
-        <rect x="28" y="18" width="26" height="12" rx="2" fill="#ffffff" opacity=".9"/>
-        <rect x="56" y="20" width="12" height="10" rx="2" fill="#ffffff" opacity=".9"/>
-        <!-- труба -->
-        <rect x="62" y="12" width="6" height="8" rx="1.5" fill="#226CC3"/>
-        <!-- ящики -->
-        <rect x="10" y="22" width="10" height="8" fill="#7FB3FF" opacity=".9"/>
-        <rect x="20" y="22" width="10" height="8" fill="#5A9BFF" opacity=".9"/>
-        <rect x="30" y="22" width="10" height="8" fill="#7FB3FF" opacity=".9"/>
+      <svg class="ship" viewBox="0 0 120 48" aria-hidden="true" style="offset-path:path('M-120,175 C200,100 520,210 800,150 S1400,165 1560,145'); offset-distance:0%;">
+        <defs>
+          <filter id="wake" x="-20%" y="-20%" width="140%" height="140%"> 
+            <feGaussianBlur stdDeviation="1.2"/>
+          </filter>
+        </defs>
+        <g>
+          <!-- wake -->
+          <rect x="-40" y="34" width="80" height="3" fill="rgba(255,255,255,.55)" opacity=".45" filter="url(#wake)"/>
+          <!-- hull & superstructure -->
+          <path d="M5 32h78l14 10H18z" fill="rgba(13,47,117,.95)"/>
+          <rect x="28" y="18" width="26" height="12" rx="2" fill="#ffffff" opacity=".9"/>
+          <rect x="56" y="20" width="12" height="10" rx="2" fill="#ffffff" opacity=".9"/>
+          <rect x="62" y="12" width="6" height="8" rx="1.5" fill="#226CC3"/>
+          <rect x="10" y="22" width="10" height="8" fill="#7FB3FF" opacity=".9"/>
+          <rect x="20" y="22" width="10" height="8" fill="#5A9BFF" opacity=".9"/>
+          <rect x="30" y="22" width="10" height="8" fill="#7FB3FF" opacity=".9"/>
+        </g>
       </svg>
-
-      <!-- Seamless separator to next section -->
-      <svg class="seam seam--hero" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
-        <!-- базовая форма, заливка цветом следующей секции -->
-        <path class="seam-fill"
-              d="M0,32 C240,64 480,0 720,32 C960,64 1200,20 1440,40 L1440,80 L0,80 Z"></path>
-        <!-- «пенка» — тонкая белая линия по гребню -->
-        <path class="seam-foam"
-              d="M0,32 C240,64 480,0 720,32 C960,64 1200,20 1440,40"></path>
-      </svg>
-
     </div>
 
-    <!-- CONTENT -->
-    <div class="hero-overlay fade-element visible">
-      <div class="hero-grid">
-        <div class="hero-lead">
-          <img src="assets/logo.png" alt="KOL Logo" class="logo">
-          <h1>Международная логистика под ключ</h1>
-          <p class="hero-sub">Море — ЖД — Авто. От корейских портов до двери клиента: быстро, надёжно, прозрачно.</p>
-          <div class="hero-actions">
-            <a href="https://wa.me/821073099001" target="_blank" class="btn primary" rel="noopener">Быстрая консультация</a>
-            <a href="https://t.me/notredame_on_flame" target="_blank" class="btn secondary" rel="noopener">Букировка</a>
-          </div>
+    <div class="container hero-grid">
+      <div class="lede"> 
+        <div class="pill waterline">Море → Авто</div>
+        <h1>Международная логистика <br>под ключ</h1>
+        <p>От корейских портов до двери клиента: быстро, надёжно, прозрачно. Фото‑видео отчёты, связь на каждом этапе.</p>
+        <div class="cta">
+          <a href="https://wa.me/821073099001" target="_blank" rel="noopener" class="btn primary">Быстрая консультация</a>
+          <a href="https://t.me/notredame_on_flame" target="_blank" rel="noopener" class="btn ghost">Букировка</a>
         </div>
-        <aside class="hero-stats card" role="group" aria-label="Ключевые показатели">
-          <div class="stat"><div class="num">20+</div><div class="label">лет опыта</div></div>
-          <div class="stat"><div class="num">3000+</div><div class="label">контейнеров в месяц</div></div>
-          <div class="stat"><div class="num">5</div><div class="label">стран присутствия</div></div>
-          <div class="stat"><div class="num">24/7</div><div class="label">поддержка клиентов</div></div>
-        </aside>
       </div>
+      <aside class="kpis">
+        <div class="kpi card"><div class="num">25+</div><div class="lbl">лет опыта</div></div>
+        <div class="kpi card"><div class="num">100.000 куб.метров</div><div class="lbl">кол-во ген.груза в месяц</div></div>
+        <div class="kpi card"><div class="num">Экспедирование</div><div class="lbl">по всему миру</div></div>
+        <div class="kpi card"><div class="num">24/7</div><div class="lbl">поддержка клиентов</div></div>
+      </aside>
     </div>
-
-    <a href="tel:+821073099001" class="side-contact">Связь с менеджером</a>
   </header>
 
-  <!-- Преимущества -->
-  <section class="advantages neon" id="advantages" data-surface="tint">
-    <div class="adv-head">
-      <h2>НАШИ ПРЕИМУЩЕСТВА</h2>
-      <p>Цифры и факты, за которыми стоит реальная операционная мощность</p>
-    </div>
-    <div class="adv-grid neon-grid">
-      <article class="adv-card" data-tilt>
-        <div class="adv-border"></div>
-        <div class="adv-inner">
-          <svg class="adv-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v2H4zm0 7h16v2H4zm0 7h16v2H4z"/></svg>
-          <div class="adv-num"><span data-count="1000">0</span>+</div>
-          <div class="adv-text">успешных операций</div>
-        </div>
-      </article>
-      <article class="adv-card" data-tilt>
-        <div class="adv-border"></div>
-        <div class="adv-inner">
-          <svg class="adv-ic" viewBox="0 0 24 24"><path d="M12 8V4l8 8-8 8v-4H4V8z"/></svg>
-          <div class="adv-num"><span data-count="98">0</span>%</div>
-          <div class="adv-text">точность сроков</div>
-        </div>
-      </article>
-      <article class="adv-card" data-tilt>
-        <div class="adv-border"></div>
-        <div class="adv-inner">
-          <svg class="adv-ic" viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm4 0h14v-2H7v2zM3 19h2v-2H3v2zm4 0h14v-2H7v2zM3 7h2V5H3v2z"/></svg>
-          <div class="adv-num"><span data-count="30">0</span>+</div>
-          <div class="adv-text">корпоративных партнёров</div>
-        </div>
-      </article>
-      <article class="adv-card" data-tilt>
-        <div class="adv-border"></div>
-        <div class="adv-inner">
-          <svg class="adv-ic" viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 10h5v2h-7V6h2v6z"/></svg>
-          <div class="adv-num"><span data-count="24">0</span>/7</div>
-          <div class="adv-text">поддержка клиентов</div>
-        </div>
-      </article>
-    </div>
-    <div class="sep-wave" aria-hidden="true">
-      <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
-        <path d="M0,32 C240,64 480,0 720,32 C960,64 1200,20 1440,40 L1440,80 L0,80 Z"/>
-      </svg>
-    </div>
-  </section>
-
-  <!-- О нас -->
-  <section class="kol-right">
-    <!-- EXPERIENCE SINCE 1999 -->
-    <div class="kol-experience">
-      <div class="exp-col exp-copy">
-        <h2 class="exp-title">
-          <span class="exp-kicker">Опыт работы с</span>
-          <span class="exp-year">1999</span>
-          <span class="exp-vert">ГОДА</span>
-        </h2>
-        <p class="exp-vert-text">За плечами нашей команды — многолетний опыт в области морских грузоперевозок, накопленный с <b>1999 года</b>.</p>
-        <p class="exp-vert-text">За более чем два десятилетия мы досконально изучили все тонкости морской логистики из Южной Кореи. Это наше главное наследие и фундамент, на котором строится работа новой компании.</p>
-      </div>
-
-      <div class="exp-col exp-media">
-        <div class="exp-stack">
-          <!-- большой фон — ч/б судно -->
-          <img class="exp-photo back" src="assets/old-boat.png" alt="Судно в порту">
-          <!-- маленький полароид -->
-          <figure class="polaroid front">
-            <img src="assets/boat.jpg" alt="Погрузка контейнеров">
-          </figure>
-          <!-- <svg class="scribble" viewBox="0 0 800 420" aria-hidden="true">
-            <path d="M40,300 C160,150 300,460 460,240 S780,280 780,130" fill="none"/>
-          </svg> -->
-        </div>
-      </div>
-    </div>
-    
-    <!-- Wave Cap (синие облака) -->
-    <div class="wavecap wavecap--bleed" aria-hidden="true">
-      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" width="100%" height="100%">
-        <!-- задний (самый светлый) слой -->
-        <path class="w3" d="M0,58
-          C60,88 120,88 180,58
-          C240,28 300,28 360,58
-          C420,88 480,88 540,58
-          C600,28 660,28 720,58
-          C780,88 840,88 900,58
-          C960,28 1020,28 1080,58
-          C1140,88 1200,88 1260,58
-          C1320,28 1380,28 1440,58
-          L1440,120 L0,120 Z"/>
-        <!-- средний слой -->
-        <path class="w2" d="M0,64
-          C60,94 120,94 180,64
-          C240,34 300,34 360,64
-          C420,94 480,94 540,64
-          C600,34 660,34 720,64
-          C780,94 840,94 900,64
-          C960,34 1020,34 1080,64
-          C1140,94 1200,94 1260,64
-          C1320,34 1380,34 1440,64
-          L1440,120 L0,120 Z"/>
-        <!-- передний (темный) слой -->
-        <path class="w1" d="M0,70
-          C60,100 120,100 180,70
-          C240,40 300,40 360,70
-          C420,100 480,100 540,70
-          C600,40 660,40 720,70
-          C780,100 840,100 900,70
-          C960,40 1020,40 1080,70
-          C1140,100 1200,100 1260,70
-          C1320,40 1380,40 1440,70
-          L1440,120 L0,120 Z"/>
-        <!-- «капли» по краям -->
-      </svg>
-    </div>
-
-    <div class="reorg-band">
-        <h3>После реорганизации</h3>
-    </div>
-
-    <!-- AFTER REORGANIZATION -->
-    <div class="kol-reorg">
-      <div class="reorg-wrap">
-        <!-- 1) Текст -->
-        <div class="reorg-note">
-          <p>
-            В 2022 году, сохранив бесценный опыт и лучшие традиции, мы открыли новую главу, основав компанию
-            <b>Korea Orient Line (KOL)</b>.
-            <br><br>
-            Сегодня Korea Orient Line — динамично развивающаяся компания, которая предлагает клиентам со всего мира
-            все преимущества морской логистики из Южной Кореи.
-          </p>
-        </div>
-        
-        <!-- 2–3) Фото + полароид справа (единая правая колонка) -->
-        <div class="reorg-right">
-          <!-- Фото AVIVA уже содержит рамку и подпись внутри изображения -->
-          
-
-          <!-- Блок-«блокнот» с логотипом KOL -->
-          <div class="notepad">
-            <div class="paperclip" aria-hidden="true"></div>
-            <div class="notepad-inner">
-              <img class="notepad-logo" src="assets/logo.png" alt="KOL" />
-            </div>
-            <figure class="aviva-picture">
-              <img src="assets/aviva-photo.png" alt="Контейнеровоз AVIVA" />
-            </figure>
-          </div>
-        </div>
-       
-      </div>
-    </div>
-
-  </section>
-
-
-  <!-- Услуги -->
-  <section class="services reveal" id="services" data-surface="light">
-    <div class="services-head">
-      <h2>НАШИ УСЛУГИ</h2>
-      <p>Мы сопровождаем груз на каждом этапе: от погрузки в Корее до доставки во Владивосток</p>
-    </div>
-    <div class="service-grid">
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/></svg>
-        </div>
-        <h3>Перевозки грузов</h3>
-        <p>Морем, ЖД и автотранспортом. Полный комплекс под ключ.</p>
-        <div class="service-image-placeholder">[Схема маршрута]</div>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 8v8m-4-4h8"/></svg>
-        </div>
-        <h3>Фото-Видео отчёт погрузок</h3>
-        <p>Прозрачность и контроль: фото и видео с терминала в день погрузки.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </div>
-        <h3>Обратная связь на каждом этапе</h3>
-        <p>Менеджер на связи 24/7 — от букинга до разгрузки.</p>
-      </div>
-    </div>
-    <div class="sep-wave" aria-hidden="true">
-      <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
-        <path d="M0,32 C240,64 480,0 720,32 C960,64 1200,20 1440,40 L1440,80 L0,80 Z"/>
-      </svg>
-    </div>
-  </section>
-
-  <!-- Погрузки -->
-  <section class="shipments reveal" id="shipments" data-surface="light">
-    <div class="shipments-head">
-      <h2>НАШИ ЕЖЕНЕДЕЛЬНЫЕ ПОГРУЗКИ</h2>
-      <p>Смотрите, как мы загружаем и отправляем контейнеры каждую неделю</p>
-    </div>
-    <div class="video-gallery">
-      <div class="video-card">
-        <video src="assets/loading1.mp4" preload="metadata"></video>
-        <div class="video-overlay">
-          <div class="play-btn">▶</div>
-          <h3>Погрузка во Владивосток</h3>
-        </div>
-      </div>
-      <div class="video-card">
-        <video src="assets/loading2.mp4" preload="metadata"></video>
-        <div class="video-overlay">
-          <div class="play-btn">▶</div>
-          <h3>Контейнеры в Пусан</h3>
-        </div>
-      </div>
-    </div>
-    <div class="sep-wave" aria-hidden="true">
-      <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
-        <path d="M0,32 C240,64 480,0 720,32 C960,64 1200,20 1440,40 L1440,80 L0,80 Z"/>
-      </svg>
-    </div>
-  </section>
-
-  <!-- Отзывы -->
-  <section class="testimonials reveal" id="testimonials" data-surface="tint">
-    <h2>ОТЗЫВЫ КЛИЕНТОВ</h2>
-    <div class="ts-grid">
-      <article class="ts-card">
-        <div class="ts-head">
-          <img src="assets/avatars/client1.jpg" alt="Клиент 1" class="ts-avatar">
-          <div>
-            <strong>Алексей П.</strong>
-            <div class="ts-meta">Логистика, Владивосток</div>
-          </div>
-        </div>
-        <p>Оперативная букировка, точные сроки. Получили фото‑видео отчёт с погрузки — всё прозрачно.</p>
-      </article>
-      <article class="ts-card">
-        <div class="ts-head">
-          <img src="assets/avatars/client2.jpg" alt="Клиент 2" class="ts-avatar">
-          <div>
-            <strong>Kim S.</strong>
-            <div class="ts-meta">Busan, KR</div>
-          </div>
-        </div>
-        <p>Надёжный партнёр по направлению Корея → Владивосток. Груз шёл по плану, без задержек.</p>
-      </article>
-      <article class="ts-card">
-        <div class="ts-head">
-          <img src="assets/avatars/client3.jpg" alt="Клиент 3" class="ts-avatar">
-          <div>
-            <strong>Ирина К.</strong>
-            <div class="ts-meta">Производство, Москва</div>
-          </div>
-        </div>
-        <p>Менеджер всегда на связи. Быстрая обратная связь и аккуратная обработка документов.</p>
-      </article>
-    </div>
-    <div class="sep-wave" aria-hidden="true">
-      <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
-        <path d="M0,32 C240,64 480,0 720,32 C960,64 1200,20 1440,40 L1440,80 L0,80 Z"/>
-      </svg>
-    </div>
-  </section>
-
-  <!-- Партнёры -->
-  <section class="partners reveal" id="partners" data-surface="light">
-    <h2>НАШИ ПАРТНЁРЫ</h2>
-    <div class="logos-marquee">
-      <div class="track">
-        <img src="assets/Costco_Wholesale_Logo.png" alt="Costco" class="partner-logo">
-        <img src="assets/Hansol_logo.svg.png" alt="Hansol" class="partner-logo">
-        <img src="assets/LG_Chem_logo_(english).svg.png" alt="LG Chem" class="partner-logo">
-        <img src="assets/lotte-chemical.png" alt="Lotte Chemical" class="partner-logo">
-        <img src="assets/ottogi logo.png" alt="Ottogi" class="partner-logo">
-        <img src="assets/S-OIL_Logo.svg.png" alt="S-OIL" class="partner-logo">
-        <img src="assets/Costco_Wholesale_Logo.png" alt="" class="partner-logo">
-        <img src="assets/Hansol_logo.svg.png" alt="" class="partner-logo">
-        <img src="assets/LG_Chem_logo_(english).svg.png" alt="" class="partner-logo">
-        <img src="assets/lottechemical.png" alt="" class="partner-logo">
-        <img src="assets/ottogi logo.png" alt="" class="partner-logo">
-        <img src="assets/S-OIL_Logo.svg.png" alt="" class="partner-logo">
-      </div>
-    </div>
-    <div class="sep-wave" aria-hidden="true">
-      <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
-        <path d="M0,32 C240,64 480,0 720,32 C960,64 1200,20 1440,40 L1440,80 L0,80 Z"/>
-      </svg>
-    </div>
-  </section>
-
-  <!-- Связь -->
-  <section class="contact reveal" id="contact" data-surface="light">
+  <!-- ADVANTAGES -->
+  <section id="advantages">
     <div class="container">
-      <h2>СВЯЗЬ</h2>
-      <p class="contact-sub">Ответим быстро в рабочее время. Выберите удобный канал:</p>
-      <ul class="contact-grid">
-        <li>
-          <a class="contact-chip" href="tel:+821073099001" aria-label="Позвонить">
-            <span class="ico" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v2a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 3.16 2 2 0 0 1 4.11 1h2a2 2 0 0 1 2 1.72c.12.9.31 1.77.57 2.61a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.47-1.47a2 2 0 0 1 2.11-.45c.84.26 1.71.45 2.61.57A2 2 0 0 1 22 16.92Z" stroke="currentColor" stroke-width="1.6"/></svg>
-            </span>
-            <span class="txt"><b>+82 10 7309 9001</b><em>Позвонить</em></span>
-          </a>
-        </li>
-        <li>
-          <a class="contact-chip" href="https://wa.me/821073099001" target="_blank" rel="noopener" aria-label="Написать в WhatsApp">
-            <span class="ico" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20.5 12a8.5 8.5 0 1 1-3.2-6.63L18 5.5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/></svg>
-            </span>
-            <span class="txt"><b>WhatsApp</b><em>Ответ быстро</em></span>
-          </a>
-        </li>
-        <li>
-          <a class="contact-chip" href="https://t.me/notredame_on_flame" target="_blank" rel="noopener" aria-label="Написать в Telegram">
-            <span class="ico" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 4 10 13" stroke="currentColor" stroke-width="1.6"/><path d="M21 4 15.5 20a1 1 0 0 1-1.8.2l-3.5-5L4 13a1 1 0 0 1-.2-2L20 3a1 1 0 0 1 1 1Z" stroke="currentColor" stroke-width="1.6"/></svg>
-            </span>
-            <span class="txt"><b>Telegram</b><em>Онлайн</em></span>
-          </a>
-        </li>
-        <li>
-          <button class="contact-chip copy" data-copy="info@kol.com" aria-label="Скопировать email">
-            <span class="ico" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6h16v12H4zM4 6l8 6 8-6" stroke="currentColor" stroke-width="1.6"/></svg>
-            </span>
-            <span class="txt"><b>info@kol.com</b><em>Скопировать</em></span>
+      <div class="head"><div class="eyebrow">Наши преимущества</div><h2>Цифры и факты</h2><p class="sub">Реальная операционная мощность, проверенная морскими линиями и корпоративными клиентами</p></div>
+      <div class="adv-grid">
+        <article class="adv-card card"><div class="big">15.000+</div><p>успешных операций</p></article>
+        <article class="adv-card card"><div class="big">98,5%</div><p>точность сроков</p></article>
+        <article class="adv-card card"><div class="big">30+</div><p>корпоративных партнёров</p></article>
+        <article class="adv-card card"><div class="big">24/7</div><p>поддержка клиентов</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / EXPERIENCE SINCE 1999 -->
+  <section id="about">
+    <div class="container experience">
+      <div class="exp-copy">
+        <div class="exp-title"><span>Опыт с</span> <span class="year">1999</span></div>
+        <p>За плечами нашей команды — многолетний опыт в области морских грузоперевозок, накопленный с <strong>1999 года</strong>. За более чем два десятилетия мы досконально изучили все тонкости морской логистики из Южной Кореи. Это наш фундамент.</p>
+        <p class="muted">В 2022 году, сохранив бесценный опыт и лучшие традиции, мы открыли новую главу, основав компанию <strong>Korea Orient Line (KOL)</strong>. Сегодня KOL — динамично развивающаяся компания, предлагающая клиентам со всего мира все преимущества морской логистики из Южной Кореи.</p>
+      </div>
+      <div class="exp-media">
+        <figure class="frame ringed"><img src="assets/old-boat.png" alt="Судно в порту" style="display:block;width:100%;height:auto" loading="lazy"></figure>
+        <figure class="polaroid"><img src="assets/boat.jpg" alt="Погрузка контейнеров" style="display:block;width:100%;height:auto" loading="lazy"></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- AFTER REORGANIZATION (WOW) -->
+  <section class="kol-route-story" id="kol-route">
+    <!-- Sticky visual side -->
+    <div class="krs-visual" aria-hidden="true">
+      <svg class="krs-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="krs-ocean" cx="50%" cy="50%" r="75%">
+            <stop offset="0%" stop-color="#061426"/>
+            <stop offset="100%" stop-color="#010914"/>
+          </radialGradient>
+          <linearGradient id="krs-route" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0%" stop-color="#72e6ff" stop-opacity="0"/>
+            <stop offset="50%" stop-color="#72e6ff" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#72e6ff" stop-opacity="0"/>
+          </linearGradient>
+          <filter id="krs-glow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <mask id="krs-arc-mask">
+            <rect width="1000" height="600" fill="white"/>
+            <!-- Carved arc for a unique silhouette -->
+            <circle cx="-120" cy="580" r="540" fill="black"/>
+          </mask>
+        </defs>
+        <rect width="1000" height="600" fill="url(#krs-ocean)"/>
+
+        <!-- Subtle world silhouette -->
+        <g fill="#0b1f34" opacity=".85" mask="url(#krs-arc-mask)">
+          <path d="M60,470 C220,420 350,390 460,370 C610,340 700,330 820,320 C900,312 950,318 990,330 L990,600 L60,600 Z"/>
+          <path d="M120,210 C220,190 320,180 420,192 C520,204 720,230 880,275 L880,300 C690,260 520,235 380,220 C250,207 180,208 120,218 Z" opacity=".55"/>
+        </g>
+
+        <!-- Route path (smooth S‑curve) -->
+        <path id="krs-route-path" d="M260,300 C380,240 620,240 780,300" stroke="url(#krs-route)" stroke-width="3" fill="none" stroke-dasharray="1000" stroke-dashoffset="1000" filter="url(#krs-glow)"/>
+
+        <!-- Ports with pulse -->
+        <g class="krs-ports" stroke="#a6ecff" fill="none" stroke-width="2">
+          <g id="krs-vlad" transform="translate(260,300)">
+            <circle r="8" fill="#a6ecff"/>
+            <circle class="pulse" r="14"/>
+            <circle class="pulse" r="22"/>
+            <text y="-14" text-anchor="middle" fill="#c9efff" font-size="12">VLADIVOSTOK</text>
+          </g>
+          <g id="krs-busan" transform="translate(780,300)">
+            <circle r="8" fill="#a6ecff"/>
+            <circle class="pulse" r="14"/>
+            <circle class="pulse" r="22"/>
+            <text y="-14" text-anchor="middle" fill="#c9efff" font-size="12">BUSAN</text>
+          </g>
+        </g>
+
+        <!-- Ship -->
+        <g id="krs-ship" transform="translate(260,300)">
+          <g transform="scale(0.9)">
+            <path d="M-10 6 h64 l12 10 h-84 z" fill="#173a74"/>
+            <rect x="6" y="-6" width="28" height="10" rx="2" fill="#e6f3ff"/>
+            <rect x="36" y="-4" width="10" height="8" rx="1.5" fill="#d9ecff"/>
+          </g>
+        </g>
+
+        <!-- Compass / legend on the side -->
+        <g class="krs-legend">
+          <circle cx="70" cy="70" r="38" fill="none" stroke="#1f3a5a" stroke-width="2"/>
+          <text x="70" y="76" text-anchor="middle" font-size="10" fill="#9db6cc">KOL</text>
+          <path d="M70,34 L70,14 M70,106 L70,126 M34,70 L14,70 M106,70 L126,70" stroke="#274b74"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Scroll narrative side -->
+    <div class="krs-narrative">
+      <article class="krs-intro">
+        <h2 class="krs-title">Korea Orient Line <span>(KOL)</span></h2>
+        <p class="krs-lead">В 2022 году, сохранив бесценный опыт и лучшие традиции, мы открыли новую главу, основав компанию Korea Orient Line (KOL).</p>
+        <p class="krs-lead">Сегодня Korea Orient Line — это динамично развивающуюся компания, которая предлагает клиентам со всего мира все преимущества морской логистики из Южной Кореи!</p>
+        <div class="krs-chips">
+          <span class="chip">1999 → 2022 → Today</span>
+          <span class="chip">KR ↔ RU</span>
+        </div>
+        <a href="https://t.me/notredame_on_flame" target="_blank" class="krs-btn">Забронировать место</a>
+      </article>
+
+      <!-- scrollytelling cards that drive the route state -->
+      <div class="krs-cards">
+        <section class="krs-card" data-from="0.00" data-to="0.33">
+          <h3>Старт маршрута</h3>
+          <p>Букинг и подготовка: подтверждение места, документы и инспекция груза.</p>
+        </section>
+        <section class="krs-card" data-from="0.33" data-to="0.66">
+          <h3>Погрузка и контроль</h3>
+          <p>Терминальные операции с фото/видео-отчётами и трекингом статусов.</p>
+        </section>
+        <section class="krs-card" data-from="0.66" data-to="1.00">
+          <h3>Прибытие и доставка</h3>
+          <p>Согласование окна прибытия, выпуск и наземная доставка до склада.</p>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="head"><div class="eyebrow">Что делаем</div><h2>Наши услуги</h2><p class="sub">Сопровождаем груз на каждом этапе: от погрузки в Корее до доставки во Владивосток</p></div>
+      <div class="services-grid">
+        <article class="service card">
+          <h3>Перевозки грузов</h3>
+          <p>Морем, ЖД и автотранспортом. Полный комплекс под ключ.</p>
+          <div class="placeholder">Схема маршрута / инфографика</div>
+          <span class="badge">Порты Южной Кореи → Владивосток</span>
+        </article>
+        <article class="service card">
+          <h3>Фото‑видео отчёт погрузок</h3>
+          <p>Прозрачность и контроль: фото и видео с терминала в день погрузки.</p>
+          <span class="badge">Отчёты в WhatsApp / Telegram</span>
+        </article>
+        <article class="service card">
+          <h3>Обратная связь на каждом этапе</h3>
+          <p>Менеджер на связи 24/7 — от букинга до разгрузки.</p>
+          <span class="badge">Русский / 한국어 / English</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHIPMENTS -->
+  <section id="shipments" class="kol-timeline">
+    <div class="container">
+      <div class="head">
+        <div class="eyebrow">Каждую неделю</div>
+        <h2>Погрузки и отправки</h2>
+        <p class="sub">Документальные кадры с рейсов и погрузок KOL</p>
+      </div>
+
+      <!-- HERO VIDEO -->
+      <div class="hero-video" id="aviva-hero"></div>
+
+      <!-- FILMSTRIP -->
+      <div class="filmstrip" id="aviva-strip"></div>
+
+      <div class="cta">
+        <a href="https://t.me/kol9001" target="_blank" class="btn-more">
+          Смотреть все рейсы в Telegram →
+        </a>
+      </div>
+    </div>
+  </section>
+  <script>
+  (async function () {
+    try {
+      const res = await fetch('/assets/aviva/videos.json', { cache: 'no-store' });
+      let list = await res.json();
+      list = Array.isArray(list) ? list.filter(v => v && v.url) : [];
+      if (!list.length) return;
+
+      let heroIndex = 0;
+      const heroEl = document.getElementById('aviva-hero');
+      const stripEl = document.getElementById('aviva-strip');
+
+      // fullscreen helpers
+      const isFullscreen = () =>
+        document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+
+      const enterFS = (el) => {
+        if (el.requestFullscreen) return el.requestFullscreen();
+        if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
+        if (el.msRequestFullscreen) return el.msRequestFullscreen();
+        // iOS Safari: у <video> есть webkitEnterFullscreen (системный фуллскрин)
+        if (el.tagName === 'VIDEO' && el.webkitEnterFullscreen) return el.webkitEnterFullscreen();
+      };
+
+      const exitFS = () => {
+        if (document.exitFullscreen) return document.exitFullscreen();
+        if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+        if (document.msExitFullscreen) return document.msExitFullscreen();
+      };
+
+      function render() {
+        // --- HERO ---
+        const hero = list[heroIndex];
+        heroEl.innerHTML = `
+          <div class="hero-wrap">
+            <video src="${hero.url}" autoplay muted loop playsinline></video>
+            <button class="hero-btn hero-play" aria-label="Play/Pause"></button>
+            <button class="hero-btn hero-sound" aria-label="Sound"></button>
+            <button class="hero-btn hero-full" aria-label="Fullscreen"></button>
+          </div>
+          <div class="overlay"><h3>${hero.title || 'AVIVA'}</h3></div>
+        `;
+
+        // --- STRIP (все кроме hero) ---
+        const others = list.map((v, i) => ({ v, i })).filter(x => x.i !== heroIndex);
+        stripEl.innerHTML = others.map(x => `
+          <button class="frame" data-idx="${x.i}" aria-label="Открыть видео ${x.v.title || ''}">
+            <video src="${x.v.url}" preload="metadata" muted playsinline></video>
           </button>
-        </li>
-      </ul>
-      <p class="contact-note">Офис: Владивосток, ул. Станюковича, 13, офис 42</p>
-    </div>
-    <div class="sep-wave" aria-hidden="true">
-      <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
-        <path d="M0,32 C240,64 480,0 720,32 C960,64 1200,20 1440,40 L1440,80 L0,80 Z"/>
-      </svg>
+        `).join('');
+
+        // мини-видео: ховер-автоплей + клик — сделать hero; двойной клик — фуллскрин мини-видео
+        stripEl.querySelectorAll('.frame').forEach(btn => {
+          const vid = btn.querySelector('video');
+          btn.addEventListener('mouseenter', () => vid.play().catch(()=>{}));
+          btn.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
+          btn.addEventListener('click', () => { heroIndex = Number(btn.dataset.idx); render(); });
+          btn.addEventListener('dblclick', (e) => {
+            e.stopPropagation();
+            // на iOS для миниатюр тоже дергаем системный фуллскрин
+            enterFS(vid);
+          });
+        });
+        
+
+        let lastScrollY = 0;
+
+        const isFS = () => document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+        const enterFS = (el) => {
+          lastScrollY = window.scrollY;                 // 1) запомнили позицию
+          if (el.requestFullscreen) return el.requestFullscreen();
+          if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
+          if (el.msRequestFullscreen) return el.msRequestFullscreen();
+          if (el.tagName === 'VIDEO' && el.webkitEnterFullscreen) return el.webkitEnterFullscreen(); // iOS
+        };
+        const exitFS = () => {
+          if (document.exitFullscreen) return document.exitFullscreen();
+          if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+          if (document.msExitFullscreen) return document.msExitFullscreen();
+        };
+
+        // ...внутри render() после навешивания обработчиков:
+        document.addEventListener('fullscreenchange', () => {
+          if (!isFS()) {
+            // 2) когда вышли — вернулись туда, где были
+            window.scrollTo({ top: lastScrollY, left: 0, behavior: 'auto' });
+            // и снимаем фокус с видео, чтобы браузер не докручивал заново
+            heroEl.querySelector('video')?.blur();
+          }
+        });
+        document.addEventListener('webkitfullscreenchange', () => {
+          if (!isFS()) {
+            window.scrollTo({ top: lastScrollY, left: 0, behavior: 'auto' });
+            heroEl.querySelector('video')?.blur();
+          }
+        });
+
+        // --- HERO controls ---
+        const video = heroEl.querySelector('video');
+        const btnPlay = heroEl.querySelector('.hero-play');
+        const btnSound = heroEl.querySelector('.hero-sound');
+        const btnFull = heroEl.querySelector('.hero-full');
+
+        const syncPlayBtn = () => btnPlay.classList.toggle('is-playing', !video.paused);
+        const syncSoundBtn = () => btnSound.classList.toggle('on', !video.muted);
+        const syncFullBtn = () => btnFull.classList.toggle('on', Boolean(isFullscreen()));
+
+        // play/pause
+        btnPlay.addEventListener('click', e => {
+          e.stopPropagation();
+          if (video.paused) video.play().catch(()=>{}); else video.pause();
+          syncPlayBtn();
+        });
+
+        // mute/unmute
+        btnSound.addEventListener('click', e => {
+          e.stopPropagation();
+          video.muted = !video.muted;
+          syncSoundBtn();
+          if (!video.muted && video.paused) video.play().catch(()=>{});
+        });
+
+        // fullscreen toggle по кнопке
+        btnFull.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (isFullscreen()) exitFS(); else enterFS(video);
+        });
+
+        // двойной клик по самому hero-видео — тоже фуллскрин
+        video.addEventListener('dblclick', (e) => {
+          e.stopPropagation();
+          if (isFullscreen()) exitFS(); else enterFS(video);
+        });
+
+        // sync states
+        video.addEventListener('play', syncPlayBtn);
+        video.addEventListener('pause', syncPlayBtn);
+        document.addEventListener('fullscreenchange', syncFullBtn);
+        document.addEventListener('webkitfullscreenchange', syncFullBtn);
+        document.addEventListener('msfullscreenchange', syncFullBtn);
+        syncPlayBtn(); syncSoundBtn(); syncFullBtn();
+
+        // опционально: клавиша F — fullscreen toggle
+        heroEl.onkeydown = (e) => {
+          if (e.key.toLowerCase() === 'f') {
+            if (isFullscreen()) exitFS(); else enterFS(video);
+          }
+        };
+      }
+
+      render();
+    } catch (e) {
+      console.error('AVIVA section error:', e);
+    }
+  })();
+  </script>
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="container">
+      <div class="head"><div class="eyebrow">Со слов клиентов</div><h2>Отзывы</h2></div>
+      <div class="ts-grid">
+        <article class="ts-card card">
+          <div class="head"><img class="avatar" src="assets/avatars/client1.jpg" alt="Алексей П."><div><strong>Алексей П.</strong><div class="muted">Логистика, Владивосток</div></div></div>
+          <p>Оперативная букировка, точные сроки. Получили фото‑видео отчёт с погрузки — всё прозрачно.</p>
+        </article>
+        <article class="ts-card card">
+          <div class="head"><img class="avatar" src="assets/avatars/client2.jpg" alt="Kim S."><div><strong>Kim S.</strong><div class="muted">Busan, KR</div></div></div>
+          <p>Надёжный партнёр по направлению Корея → Владивосток. Груз шёл по плану, без задержек.</p>
+        </article>
+        <article class="ts-card card">
+          <div class="head"><img class="avatar" src="assets/avatars/client3.jpg" alt="Ирина К."><div><strong>Ирина К.</strong><div class="muted">Производство, Москва</div></div></div>
+          <p>Менеджер всегда на связи. Быстрая обратная связь и аккуратная обработка документов.</p>
+        </article>
+      </div>
     </div>
   </section>
 
-  <!-- Карта -->
-  <section class="map reveal" id="map" data-surface="light">
-    <h2>ПОРТЫ: КОРЕЯ — ВЛАДИВОСТОК</h2>
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3264.765977217568!2d129.00115038560844!3d35.08757959219829!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e835cae48ff3%3A0x468a17a382ab698e!2zNDY1LTMgR2FtY2hlb24tZG9uZywgU2FoYS1ndSwgQnVzYW4sINCu0LbQvdCw0Y8g0JrQvtGA0LXRjw!5e0!3m2!1sru!2skz!4v1755430420585!5m2!1sru!2skz" width="100%" height="450" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    <div class="sep-wave" aria-hidden="true">
-      <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
-        <path d="M0,32 C240,64 480,0 720,32 C960,64 1200,20 1440,40 L1440,80 L0,80 Z"/>
-      </svg>
+  <!-- PARTNERS -->
+  <section id="partners">
+    <div class="container">
+      <div class="head"><div class="eyebrow">Нам доверяют</div><h2>Партнёры</h2></div>
+      <div class="marquee card" aria-label="Логотипы партнёров">
+        <div class="row">
+          <img src="assets/Costco_Wholesale_Logo.png" alt="Costco">
+          <img src="assets/Hansol_logo.svg.png" alt="Hansol">
+          <img src="assets/LG_Chem_logo_(english).svg.png" alt="LG Chem">
+          <img src="assets/lotte-chemical.png" alt="Lotte Chemical">
+          <img src="assets/ottogi logo.png" alt="Ottogi">
+          <img src="assets/S-OIL_Logo.svg.png" alt="S-Oil">
+          <!-- duplicate for seamless scroll -->
+          <img src="assets/Costco_Wholesale_Logo.png" alt="Costco">
+          <img src="assets/Hansol_logo.svg.png" alt="Hansol">
+          <img src="assets/LG_Chem_logo_(english).svg.png" alt="LG Chem">
+          <img src="assets/lottechemical.png" alt="Lotte Chemical">
+          <img src="assets/ottogi logo.png" alt="Ottogi">
+          <img src="assets/S-OIL_Logo.svg.png" alt="S-Oil">
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section class="faq reveal" id="faq" data-surface="light">
-    <div class="faq-head">
-      <h2>ЧАСТЫЕ ВОПРОСЫ</h2>
-      <p>Мы собрали ключевые ответы, чтобы вам было проще работать с нами</p>
-    </div>
-    <div class="faq-list">
-      <div class="faq-item">
-        <button class="faq-question"><span>Как быстро оформить букинг?</span><span class="faq-icon">+</span></button>
-        <div class="faq-answer">Обычно в течение 1 рабочего дня. Напишите маршрут и параметры груза — мы закрепим место на ближайшем рейсе.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question"><span>Какие документы нужны?</span><span class="faq-icon">+</span></button>
-        <div class="faq-answer">Инвойс, упаковочный лист, данные отправителя/получателя. Поможем подготовить полный комплект.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question"><span>Сроки доставки Корея → Владивосток?</span><span class="faq-icon">+</span></button>
-        <div class="faq-answer">В среднем 3–7 дней в зависимости от расписания и очереди на терминале.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question"><span>Можно ли получить фото-видео отчёт погрузки?</span><span class="faq-icon">+</span></button>
-        <div class="faq-answer">Да, отправляем отчёты в день погрузки в WhatsApp/Telegram.</div>
+  <!-- MAP -->
+  <section id="map">
+    <div class="container">
+      <div class="head"><div class="eyebrow">Порты</div><h2>Корея — Владивосток</h2></div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3264.765977217568!2d129.00115038560844!3d35.08757959219829!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e835cae48ff3%3A0x468a17a382ab698e!2zNDY1LTMgR2FtY2hlb24tZG9uZywgU2FoYS1ndSwgQnVzYW4sINCu0LbQvdCw0Y8g0JrQvtGA0LXRjw!5e0!3m2!1sru!2skz!4v1755430420585!5m2!1sru!2skz" width="100%" height="420" style="border:0;display:block" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
       </div>
     </div>
-    
   </section>
 
-  <!-- FOOTER -->
-  <footer class="footer" data-surface="ink">
-    <h2>Нужна консультация?</h2>
-    <a href="mailto:info@kol.com" class="btn primary">Связаться с менеджером</a>
-    <p>Тел: <a href="tel:+821073099001">+821073099001</a> | Email: <a href="mailto:info@kol.com">info@kol.com</a></p>
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="head"><div class="eyebrow">Связаться</div><h2>Быстрые каналы</h2><p class="sub">Ответим быстро в рабочее время</p></div>
+      <div class="contact-grid">
+        <a class="chip card" href="tel:+821073099001"><div><strong>+82 10 7309 9001</strong><div class="muted">Позвонить</div></div><span class="btn ghost">Звонок</span></a>
+        <a class="chip card" href="https://wa.me/821073099001" target="_blank" rel="noopener"><div><strong>WhatsApp</strong><div class="muted">Ответ быстро</div></div><span class="btn ghost">Открыть</span></a>
+        <a class="chip card" href="https://t.me/notredame_on_flame" target="_blank" rel="noopener"><div><strong>Telegram</strong><div class="muted">Онлайн</div></div><span class="btn ghost">Открыть</span></a>
+        <button class="chip card" id="copyEmail" data-copy="info@kol.com" type="button"><div><strong>info@kol.com</strong><div class="muted">Скопировать email</div></div><span class="btn ghost">Копировать</span></button>
+      </div>
+      <p class="copy-note">Офис: Владивосток, ул. Станюковича, 13, офис 42</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="grid" style="grid-template-columns:1fr auto;align-items:center">
+        <div>
+          <strong>Korea Orient Line</strong>
+          <div class="muted">© 2025. Все права защищены.</div>
+        </div>
+        <div class="cta">
+          <a class="btn primary" href="mailto:info@kol.com">Связаться с менеджером</a>
+        </div>
+      </div>
+    </div>
   </footer>
-  <!-- SVG-фильтр "crumple" для смятой бумаги -->
-  <svg width="0" height="0" style="position:absolute; left:-9999px;">
-    <filter id="crumple" x="-20%" y="-20%" width="140%" height="140%">
-      <!-- крупные заломы -->
-      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="bigNoise"/>
-      <!-- мелкая рябь -->
-      <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="1" seed="11" result="fineNoise"/>
-      <!-- смешиваем -->
-      <feBlend in="bigNoise" in2="fineNoise" mode="multiply" result="noise"/>
-      <!-- смещаем изображение по карте шума -->
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+
+  <!-- Water FX defs -->
+  <svg id="fx-defs" xmlns="http://www.w3.org/2000/svg">
+    <filter id="waterShift" x="-10%" y="-10%" width="120%" height="120%"> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.01" numOctaves="2" seed="9" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
   </svg>
 
-  <!-- Crisp Chat -->
+  <!-- LIGHTBOX for videos -->
+  <dialog id="lightbox" style="padding:0;border:none;background:transparent">
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,.75);display:grid;place-items:center">
+      <video id="lightboxVideo" controls autoplay style="width:min(1000px,92vw);max-height:82vh;display:block;border-radius:16px;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 120px rgba(0,0,0,.6)"></video>
+    </div>
+  </dialog>
+
+  <script>
+  // ========= KOL CORE INTERACTIONS (single init) =========
+  (function(){
+    if (window._kolInitRanOnce) return; // guard against duplicate injection
+    window._kolInitRanOnce = true;
+
+    // Burger menu
+    const burger = document.getElementById('burger');
+    const menu = document.getElementById('menu');
+    burger?.addEventListener('click',()=>{
+      const open = menu.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open);
+    });
+
+    // Copy email
+    const copyBtn = document.getElementById('copyEmail');
+    copyBtn?.addEventListener('click', ()=>{
+      const email = copyBtn.dataset.copy;
+      navigator.clipboard.writeText(email||'info@kol.com');
+      copyBtn.querySelector('.btn').textContent = 'Скопировано!';
+      setTimeout(()=>copyBtn.querySelector('.btn').textContent='Копировать',1500);
+    });
+
+    // Video lightbox
+    const dlg = document.getElementById('lightbox');
+    const v = document.getElementById('lightboxVideo');
+    document.querySelectorAll('[data-play]').forEach(btn=>{
+      btn.addEventListener('click',e=>{
+        const video = e.currentTarget.closest('.video').querySelector('video');
+        v.src = video.currentSrc || video.src;
+        dlg.showModal();
+      })
+    });
+    dlg?.addEventListener('click', (e)=>{ if(e.target===dlg) { v.pause(); dlg.close(); }});
+
+    // Maritime animations — motion path ship
+    (function(){
+      const ship = document.querySelector('.ship');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(ship && !reduce){
+        let d = 0; const speed = .0009; // percentage per frame
+        function loop(){ d = (d + speed) % 1; ship.style.offsetDistance = (d*100)+'%'; requestAnimationFrame(loop); }
+        requestAnimationFrame(loop);
+      }
+    })();
+
+    // Foam particles on canvas (subtle, professional)
+    (function(){
+      const cvs = document.getElementById('foamCanvas'); if(!cvs) return; const ctx = cvs.getContext('2d');
+      let w,h,px; const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function resize(){ w = cvs.width = window.innerWidth; h = cvs.height = window.innerHeight; px = Math.round(w*h/45000); }
+      window.addEventListener('resize', resize); resize();
+      const dots = new Array(px).fill(0).map(()=>({x:Math.random()*w, y:h*0.65+Math.random()*h*0.3, a:.2+Math.random()*.4, s:.4+Math.random()*1.2}));
+      function draw(){ ctx.clearRect(0,0,w,h); ctx.globalCompositeOperation='lighter';
+        for(const p of dots){ ctx.globalAlpha=p.a; ctx.fillStyle='#cfe7ff'; ctx.beginPath(); ctx.arc(p.x,p.y,1.1,0,6.28); ctx.fill(); p.x+=p.s*0.25; p.y-=0.08; if(p.x>w+10){p.x=-10} if(p.y< h*0.55){p.y=h*0.75+Math.random()*h*0.25} }
+      }
+      function tick(){ draw(); raf = requestAnimationFrame(tick); }
+      let raf; if(!reduce){ tick(); }
+    })();
+
+    // Subtle waterline jitter on eyebrow
+    (function(){ const el = document.querySelector('.waterline'); if(!el) return; let t=0; function j(){ t+=.015; el.style.transform = `translateY(${Math.sin(t)*1.2}px)`; requestAnimationFrame(j);} requestAnimationFrame(j); })();
+
+    // WOW interactions for REORG
+    (function(){
+      // Tilt effect
+      const tilts = document.querySelectorAll('.fx-tilt');
+      window.addEventListener('mousemove', (e)=>{
+        tilts.forEach(el=>{
+          const r = el.getBoundingClientRect();
+          const cx = r.left + r.width/2; const cy = r.top + r.height/2;
+          const dx = (e.clientX - cx) / r.width; const dy = (e.clientY - cy) / r.height;
+          el.style.transform = `rotateX(${(-dy*6).toFixed(2)}deg) rotateY(${(dx*8).toFixed(2)}deg)`;
+        })
+      });
+      // Parallax for stickers (declare ONCE)
+      const depthEls = document.querySelectorAll('.fx-parallax');
+      window.addEventListener('pointermove', (e)=>{
+        const {innerWidth:w, innerHeight:h} = window; const x=(e.clientX-w/2)/w; const y=(e.clientY-h/2)/h;
+        depthEls.forEach(el=>{const d=parseFloat(el.dataset.depth||8); el.style.transform = `translate(${x*d*10}px, ${y*d*10}px) rotate(${d*.6}deg)`;})
+      });
+      // Shock highlight on primary CTA (first view)
+      const shock = document.querySelector('.fx-shock');
+      setTimeout(()=>shock?.classList.add('in'), 600);
+      // Stagger reveal inside REORG
+      const reorg = document.getElementById('reorg');
+      const items = reorg?.querySelectorAll('.r-step');
+      if(items){
+        const obs = new IntersectionObserver((ents)=>{
+          ents.forEach((en)=>{
+            if(en.isIntersecting){ items.forEach((it,i)=>setTimeout(()=>it.classList.add('show'), i*120)); obs.disconnect(); }
+          })
+        },{threshold:.25});
+        obs.observe(reorg);
+      }
+    })();
+
+    // Intersection fade-in (optional)
+    (function(){
+      const observer = new IntersectionObserver((entries)=>{
+        entries.forEach(el=>{ if(el.isIntersecting){ el.target.classList.add('show') } })
+      },{threshold:.08});
+      document.querySelectorAll('section .card, section .head').forEach(el=>{ el.classList.add('pre'); observer.observe(el) });
+      const style = document.createElement('style');
+      style.textContent = `.pre{transform:translateY(12px);opacity:0;transition:.5s ease} .show{transform:none;opacity:1}`;
+      document.head.appendChild(style);
+    })();
+  })();
+  </script>
+
+  <!-- Diagnostics / Test cases -->
+  <script>
+    // Test 1: depthEls is NOT a global (prevents duplicate global const)
+    console.assert(!('depthEls' in window), 'Test1 failed: depthEls should not be a global');
+    // Test 2: initializer ran once
+    console.assert(window._kolInitRanOnce === true, 'Test2 failed: init guard did not set flag');
+    // Test 3: ship element + motion path style present
+    (function(){
+      const ship = document.querySelector('.ship');
+      console.assert(!!ship, 'Test3 failed: ship SVG missing');
+      if (ship) {
+        const hasOffsetPath = ship.style.offsetPath || ship.style['offsetPath'];
+        console.assert(hasOffsetPath !== undefined, 'Test3 note: offset-path style not set');
+      }
+    })();
+  </script>
+  <script>
+    (function(){
+    const story = document.querySelector('.kol-route-story');
+    if(!story) return;
+    const svg = story.querySelector('.krs-svg');
+    const route = story.querySelector('#krs-route-path');
+    const ship = story.querySelector('#krs-ship');
+    const cards = [...story.querySelectorAll('.krs-card')];
+
+    // Draw route on first view
+    const once = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{ if(en.isIntersecting){
+        const len = route.getTotalLength();
+        route.style.transition = 'stroke-dashoffset 1.8s ease';
+        route.style.strokeDashoffset = '0';
+        animateShip(len);
+        once.disconnect();
+      }});
+    },{threshold:.35});
+    once.observe(svg);
+
+    // Sticky scrollytelling: highlight segments based on active card
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{
+        const el = en.target;
+        if(en.isIntersecting){
+          cards.forEach(c=>c.classList.remove('is-active'));
+          el.classList.add('is-active');
+          const from = parseFloat(el.dataset.from || '0');
+          const to = parseFloat(el.dataset.to || '1');
+          highlight(from, to);
+        }
+      });
+    },{rootMargin:'-40% 0% -50% 0%',threshold:.6});
+    cards.forEach(c=>io.observe(c));
+
+    function highlight(start, end){
+      const len = route.getTotalLength();
+      const a = Math.max(0, Math.min(1, start)) * len;
+      const b = Math.max(0, Math.min(1, end)) * len;
+      route.style.strokeDasharray = `${a} ${b-a} ${len-b}`;
+      route.style.strokeDashoffset = `${-a}`;
+    }
+
+    function animateShip(len){
+      let t = 0; const speed = 0.0032;
+      const total = len || 1000;
+      function frame(){
+        t = (t + speed) % 1;
+        const d = t * total;
+        const pt = route.getPointAtLength(d);
+        ship.setAttribute('transform', `translate(${pt.x},${pt.y})`);
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+  })();
+
+  </script>
+  <!-- Crisp (kept) -->
   <script type="text/javascript">
-    window.$crisp = []; window.CRISP_WEBSITE_ID = "0146419c-dc34-4831-97ad-2647694df4c1";
+    window.$crisp=[]; window.CRISP_WEBSITE_ID="0146419c-dc34-4831-97ad-2647694df4c1";
     (function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
   </script>
 
-  <!-- Ваш основной JS -->
-  <script src="script.js"></script>
 </body>
 </html>

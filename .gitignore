@@ -21,7 +21,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 bun.lockb
-
+.env
+assets/aviva/videos
 # Билды/кеши разных сборщиков (оставь нужное, лишнее можно удалить)
 dist/
 build/
