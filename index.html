@@ -41,21 +41,73 @@
     button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
     .container{width:min(1180px,92vw);margin:0 auto}
     /* HEADER */
+    /* 1) Базовая защита от переполнения навигации */
     .nav{
-      position:fixed;
-      inset:18px 18px auto;
-      z-index:60;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      padding:12px 18px;
+      position: fixed;
+      inset: 18px 18px auto;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 18px;
+
+      /* НОВОЕ: не шире вьюпорта с учётом inset */
+      max-width: calc(100vw - 36px);
+
       border-radius:16px;
       background:var(--glass);
       backdrop-filter:saturate(160%) blur(16px);
       border:1px solid rgba(255,255,255,.08);
       box-shadow:0 10px 40px rgba(0,0,0,.25),0 0 0 1px rgba(255,255,255,.03) inset;
     }
+
+    /* 2) Детям позволяем сжиматься во флексе */
+    .nav > *{ min-width: 0; }
+
+    /* 3) Кнопкам и ссылкам — перенос строк, если текст длинный */
+    .nav .btn,
+    .nav a{ white-space: normal; }
+
+    /* 4) Выпадающее меню: не выходить за экран */
+    @media (max-width:1024px){
+      .menu.open{
+        display:flex;
+        position:absolute;
+        top:calc(100% + 12px);
+        right:0;
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+        padding:16px;
+        min-width:240px;
+
+        /* НОВОЕ: ограничение ширины относительно окна + inset самой .nav */
+        width: min(420px, calc(100vw - 36px));
+        max-width: calc(100vw - 36px);
+
+        border-radius:14px;
+        background:var(--glass);
+        border:1px solid rgba(255,255,255,.1);
+        box-shadow:0 22px 70px rgba(0,0,0,.35);
+        backdrop-filter:blur(18px);
+      }
+
+      /* На очень узких — растягиваемся от края до края .nav */
+      @media (max-width:560px){
+        .menu.open{ left:0; right:0; min-width:auto; width: auto; }
+      }
+    }
+
+    /* 5) Мобильные отступы у .nav уже заданы — добавим ширину-стоппер в тех брейкпоинтах */
+    @media (max-width:768px){ .nav{ max-width: calc(100vw - 24px); } }
+    @media (max-width:640px){ .nav{ max-width: calc(100vw - 24px); } }
+    @media (max-width:560px){ .nav{ max-width: calc(100vw - 20px); } }
+    @media (max-width:420px){ .nav{ max-width: calc(100vw - 16px); } }
+
+    /* 6) На всякий случай отрубим горизонтальный скролл, пока правим вёрстку */
+    html, body{ overflow-x: hidden; box-sizing: border-box; }
+    *, *::before, *::after{ box-sizing: inherit; }
     .brand{display:flex;gap:10px;align-items:center;font-weight:700}
     .brand img{height:28px;width:auto;filter:drop-shadow(0 2px 12px rgba(74,163,255,.35))}
     .brand span{display:flex;flex-direction:column;line-height:1}
@@ -133,33 +185,158 @@
     .exp-title .year{font-family:"Oswald",system-ui,sans-serif;font-size:86px;line-height:.9;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.7)}
     .exp-copy p{opacity:.8;line-height:1.7}
     /* KOL ROUTE STORY */
+    /* ====== ROUTE STORY (адаптивная версия) ====== */
     .kol-route-story{
-      width:min(1180px,92vw);
-      margin:0 auto;
-      display:grid;
-      grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);
-      gap:clamp(28px,5vw,52px);
-      align-items:start;
-      padding:clamp(100px,14vw,160px) 0;
+      /* контейнер секции */
+      width: min(1180px, 92vw);
+      margin: 0 auto;
+      position: relative;
+      isolation: isolate;                          /* свой стек слоёв */
+
+      /* раскладка */
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      align-items: start;
+      gap: clamp(24px, 4vw, 48px);
+      padding: clamp(80px, 12vw, 140px) 0;
     }
-    .krs-visual{position:sticky;top:120px;height:min(70vh,640px);border-right:1px solid rgba(255,255,255,.08);padding-right:clamp(12px,2vw,32px);overflow:hidden}
-    .krs-svg{width:100%;height:100%;display:block;object-fit:contain}
-    .krs-narrative{padding:0 clamp(12px,2vw,30px)}
-    .krs-title{font-family:'Oswald',sans-serif;font-size:clamp(36px,5vw,64px);line-height:1.05;margin:0 0 8px;color:var(--white)}
-    .krs-title span{background:linear-gradient(90deg,#7ae1ff,#6fb7ff);-webkit-background-clip:text;background-clip:text;color:transparent}
-    .krs-lead{opacity:.92;line-height:1.75;max-width:66ch;margin:0 auto 10px;font-size:20px}
-    .krs-chips{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px}
-    .chip{padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);font-size:12px;color:#d5ebff;display:inline-flex;gap:8px;align-items:center}
-    .krs-btn{display:inline-block;padding:12px 18px;border-radius:12px;background:#e8f6ff;color:#04213d;text-decoration:none;font-weight:700;border:1px solid rgba(255,255,255,.22)}
-    .krs-btn:hover{filter:brightness(1.03)}
-    .krs-cards{display:grid;gap:24px;margin-top:10vh}
-    .krs-card{padding:20px;border-radius:16px;background:linear-gradient(180deg,rgba(10,22,40,.82),rgba(10,22,40,.66));border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(4px);box-shadow:0 10px 40px rgba(0,0,0,.35)}
-    .krs-card h3{margin:0 0 6px;font-size:18px}
-    .krs-card p{margin:0;opacity:.9}
-    .krs-card.is-active{outline:2px solid rgba(122,225,255,.55)}
-    .pulse{animation:krs-pulse 2.8s ease-out infinite}
-    .pulse:nth-child(2){animation-delay:.4s}
-    @keyframes krs-pulse{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.9)}}
+
+    /* Визуал слева */
+    .krs-visual{
+      position: sticky;
+      top: 120px;
+      height: min(70vh, 640px);
+      border-right: 1px solid rgba(255,255,255,.08);
+      padding-right: clamp(12px, 2vw, 32px);
+      overflow: hidden;
+      max-width: 100%;
+      min-width: 0;                                /* не выпихивать сетку */
+      z-index: 1;                                  /* ниже текста */
+    }
+
+    /* SVG внутри визуала */
+    .krs-svg{
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      max-width: 100%;
+    }
+
+    /* Правая колонка — narrative */
+    .krs-narrative{
+      display: flex;
+      flex-direction: column;
+      gap: clamp(14px, 2.4vw, 20px);
+      padding: 0 clamp(12px, 2vw, 30px);
+      min-width: 0;                                /* критично для grid */
+      max-width: 100%;
+      position: relative;
+      z-index: 2;                                  /* поверх визуала */
+      overflow-wrap: anywhere;
+    }
+
+    /* Типографика */
+    .krs-title{
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(28px, 5vw, 64px);
+      line-height: 1.05;
+      margin: 0 0 8px;
+      color: var(--white);
+      text-wrap: balance;
+    }
+    .krs-lead{
+      opacity: .92;
+      line-height: 1.7;
+      max-width: 66ch;
+      margin: 0 auto 10px;
+      font-size: clamp(16px, 2.2vw, 20px);
+      text-wrap: pretty;
+    }
+
+    /* Чипсы + CTA */
+    .krs-chips{ display:flex; flex-wrap:wrap; gap:10px; margin:8px 0 14px; }
+    .chip{
+      padding:6px 12px; border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.13);
+      font-size:12px; color:#d5ebff;
+      display:inline-flex; gap:8px; align-items:center;
+    }
+    .krs-btn{
+      display:inline-block;
+      align-self:flex-start;
+      padding:12px 18px; border-radius:12px;
+      background:#e8f6ff; color:#04213d; text-decoration:none; font-weight:700;
+      border:1px solid rgba(255,255,255,.22);
+    }
+    .krs-btn:hover{ filter: brightness(1.03); }
+
+    /* Карточки маршрута */
+    .krs-cards{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-top: 8vh;
+    }
+    .krs-card{
+      padding: 20px;
+      border-radius: 16px;
+      background: linear-gradient(180deg,rgba(10,22,40,.82),rgba(10,22,40,.66));
+      border: 1px solid rgba(255,255,255,.08);
+      backdrop-filter: blur(4px);
+      box-shadow: 0 10px 40px rgba(0,0,0,.35);
+    }
+    .krs-card h3{ margin:0 0 6px; font-size:18px; }
+    .krs-card p{ margin:0; opacity:.9; }
+    .krs-card.is-active{ outline:2px solid rgba(122,225,255,.55); }
+
+    /* ====== BREAKPOINTS ====== */
+
+    /* <= 1024px: одна колонка, отключаем sticky и задаём устойчивую высоту визуала */
+    @media (max-width:1024px){
+      .kol-route-story{ grid-template-columns: 1fr; }
+      .krs-visual{
+        position: relative;
+        top: auto;
+        height: auto;
+        border-right: none;
+        padding-right: 0;
+        margin: 0 auto 20px;
+        overflow: visible;
+      }
+      .krs-svg{
+        height: auto;               /* 100% от auto = 0, поэтому меняем */
+        aspect-ratio: 16 / 9;       /* стабильное соотношение для мобилы */
+      }
+      .krs-narrative{ padding: 0 4px; }
+      .krs-btn{ width:100%; text-align:center; }   /* CTA на всю ширину */
+    }
+
+    /* <= 768px: компактнее текст и отступы */
+    @media (max-width:768px){
+      .krs-title{ font-size: clamp(24px, 7.5vw, 40px); }
+      .krs-lead { font-size: clamp(15px, 2.8vw, 18px); line-height: 1.65; }
+      .krs-cards{ gap: 18px; margin-top: 24px; }
+      .krs-card{ padding: 16px; }
+      .krs-card h3{ font-size: 16px; }
+    }
+
+    /* <= 640px: чипсы в 2 колонки сеткой */
+    @media (max-width:640px){
+      .krs-chips{
+        display:grid;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap:10px;
+      }
+      .chip{ justify-content:center; }
+    }
+
+    /* Низкие экраны: убираем sticky, чтобы не наслаивалось */
+    @media (max-height:720px){
+      .krs-visual{ position: relative; top:auto; height:auto; }
+    }
+
     /* SERVICES */
     .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
     .service{padding:18px}
@@ -354,8 +531,9 @@
       .ts-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .contact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .reorg .grid{grid-template-columns:1fr}
-      .kol-route-story{grid-template-columns:1fr;padding:clamp(80px,12vw,140px) 0}
+      .kol-route-story{margin-top: 200px; grid-template-columns:1fr;padding:clamp(80px,12vw,140px) 0}
       .krs-visual{position:relative;top:auto;height:auto;border-right:none;padding-right:0;margin:0 auto 48px;max-width:640px}
+      .krs-visual svg{display: none;}
       .krs-narrative{padding:0}
       .krs-cards{margin-top:40px}
     }
@@ -425,11 +603,197 @@
       .ship{animation:none}
       .marquee .row{animation-duration:0s}
     }
+    @media (prefers-reduced-transparency: reduce){
+      .nav, .krs-card, .porthole { backdrop-filter: none; }
+    }
+
+    /* Hover fallbacks on touch */
+    @media (hover:none){
+      .menu a:hover,
+      .btn:hover,
+      .video:hover .overlay,
+      .filmstrip .frame:hover {
+        transform: none; box-shadow: none; opacity: 1;
+      }
+    }
+
+    /* Fix fixed header under notches */
+    .nav{ top: calc(12px + var(--safe-top)); }
+
+    /* HERO sizing for small screens & safe areas */
+    .hero{
+      min-height: calc(100svh - var(--safe-top) - 56px);
+      padding-top: clamp(88px, 14svh, 120px);
+    }
+
+    /* Ocean visual: keep, but shrink on tiny screens */
+    @media (max-width:560px){
+      .ocean{ height: 28vh; min-height: 200px; }
+      .waves{ height: 160px; }
+    }
+
+    /* Filmstrip: momentum scrolling & snap polish */
+    .filmstrip{ -webkit-overflow-scrolling: touch; scroll-padding-left: 12px; }
+    .filmstrip .frame{ scroll-snap-align: center; }
+
+    /* Video hero controls ergonomics */
+    .hero-video { border-radius: 16px; }
+    .hero-btn{ width: 48px; height: 48px; }
+    .hero-play{ width: 68px; height: 68px; font-size: 28px; }
+    @media (max-width:640px){
+      .hero-sound, .hero-full{ width: 44px; height: 44px; font-size: 18px; }
+    }
+    @media (max-width:420px){
+      .hero-play{ width: 60px; height: 60px; font-size: 24px; }
+    }
+
+    /* Reduce glow/ring visual intensity on mobile */
+    @media (max-width:768px){
+      .ringed{ box-shadow: 0 0 0 6px var(--ring); }
+      .card::after{ opacity: .25; filter: blur(14px); }
+    }
+
+    /* Typography clamps for narrow widths */
+    @media (max-width:560px){
+      .lede h1{ font-size: clamp(28px, 9vw, 40px); }
+      section h2{ font-size: clamp(22px, 7vw, 34px); }
+      .krs-title{ font-size: clamp(24px, 8vw, 36px); }
+      .exp-title .year{ font-size: clamp(48px, 16vw, 62px); }
+    }
+
+    /* Grid stacks & gaps tightened */
+    @media (max-width:880px){
+      .hero-grid,
+      .experience,
+      .grid-vid,
+      .ts-grid,
+      .services-grid,
+      .contact-grid {
+        gap: 14px; /* slightly tighter */
+      }
+    }
+    @media (max-width:560px){
+      .grid{ gap: 10px; }
+      .adv-grid{ gap: 10px; }
+    }
+
+    /* Sticky storytelling: avoid sticky on short devices */
+    @media (max-height:720px){
+      .krs-visual{ position:relative; top:auto; height:auto; }
+    }
+
+    /* Cards breathing room */
+    .krs-card{ padding: 16px; }
+    @media (max-width:420px){
+      .krs-card{ padding: 14px; }
+    }
+
+    /* CTA block: full-width on tiny phones */
+    @media (max-width:560px){
+      .lede .cta{ width: 100%; }
+      .lede .cta .btn{ flex: 1 1 auto; }
+    }
+
+    /* Partners marquee: slow down on mobile for legibility */
+    @media (max-width:640px){
+      .marquee .row{ animation-duration: 38s; }
+      .marquee img{ height: 30px; }
+    }
+
+    /* Footer spacing & center alignment on tiny sizes */
+    @media (max-width:560px){
+      footer{ padding: 36px 0; }
+    }
+
+    /* Rope & tags: shrink & wrap nicer */
+    @media (max-width:480px){
+      .r-tags{ gap: 8px; }
+      .r-tag{ padding: 6px 10px; font-size: 11px; }
+    }
+
+    /* Ship & ocean visuals: avoid overlapping hero text on very small screens */
+    @media (max-width:420px){
+      .ship{ width: 72px; bottom: 30vh; opacity:.8; }
+    }
+
+    /* Safe-area padding for bottom fixed elements (if any) */
+    @supports (padding: max(0px)){
+      .filmstrip{ padding-bottom: max(16px, var(--safe-bottom)); }
+    }
+
+    /* Landscape phones: increase horizontal paddings & compact heights */
+    @media (max-height:480px) and (orientation:landscape){
+      .hero{ min-height: auto; padding: 72px 0 64px; }
+      .hero-video{ aspect-ratio: 16/9; }
+    }
+
+    /* ===== Micro-breakpoint: 360px & below ===== */
+    @media (max-width:360px){
+      .nav{ inset: 8px 8px auto; padding: 8px 10px; border-radius: 12px; }
+      .btn{ padding: 8px 10px; font-size: 14px; }
+      .chip{ font-size: 10.5px; }
+      .filmstrip .frame{ flex-basis: 180px; height: 300px; }
+    }
+
+    /* ===== Strengthen existing breakpoints you already have ===== */
+    @media (max-width:768px){
+      /* Make sticky route visual non-sticky (you already kill sticky under 1024px, this is a safety) */
+      .krs-visual{ position: relative; top:auto; height:auto; border-right: none; padding-right: 0; }
+    }
+
+    /* Reduce sonar pulse strength on mobile */
+    @media (max-width:640px){
+      .sonar .ring{ border-width: 1px; opacity: .38; }
+    }
+
+    /* Accessibility: respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .hero-play:hover{ transform: translate(-50%, -50%); }
+      .marquee .row{ animation-duration: 0s; }
+    }
+
+    /* ===== Utility: clamp containers near edges on tiny phones ===== */
+    @media (max-width:420px){
+      .container{ width: min(100%, 92vw); }
+    }
+    /* <= 1360px: отключаем sticky и фиксируем высоту SVG */
+
+
+/* Оставляем в @media (max-width:1024px) только то, чего нет выше */
+@media (max-width:1024px){
+  .burger{display:block}
+  .menu{display:none}
+  .menu.open{
+    display:flex;
+    position:absolute;
+    top:calc(100% + 12px);
+    right:0;
+    flex-direction:column;
+    align-items:stretch;
+    gap:10px;
+    padding:16px;
+    /* ширину/max-width, border/background уже заданы выше — не дублируем */
+  }
+  .menu.open .btn, .menu.open a{ width:100%; justify-content:center; }
+  @media (max-width:1280px) and (min-width:1025px){
+  .exp-media .polaroid{
+    right: -8px;
+    bottom: -8px;
+    width: min(48%, 280px);
+  }
+}
+  @media (max-height:560px){
+  .hero-video{ aspect-ratio: 16/9; }
+  .hero-btn{ width:42px; height:42px; }
+  .hero-play{ width:56px; height:56px; font-size:24px; }
+}
+
+}
 </style>
 </head>
 <body>
   <!-- NAV -->
-  <nav class="nav container" aria-label="Главная навигация">
+  <nav class="nav" aria-label="Главная навигация">
     <a href="#home" class="brand">
       <img src="assets/logo.png" alt="KOL" />
       <span><span style="display:block;line-height:1">Korea Orient Line</span><small>Море возможностей</small></span>
@@ -491,7 +855,7 @@
         <p>От корейских портов до двери клиента: быстро, надёжно, прозрачно. Фото‑видео отчёты, связь на каждом этапе.</p>
         <div class="cta">
           <a href="https://wa.me/821073099001" target="_blank" rel="noopener" class="btn primary">Быстрая консультация</a>
-          <a href="https://t.me/notredame_on_flame" target="_blank" rel="noopener" class="btn ghost">Букировка</a>
+          <a href="https://wa.me/821056698985" target="_blank" rel="noopener" class="btn ghost">Букировка</a>
         </div>
       </div>
       <aside class="kpis">
@@ -897,7 +1261,7 @@
       <div class="contact-grid">
         <a class="chip card" href="tel:+821073099001"><div><strong>+82 10 7309 9001</strong><div class="muted">Позвонить</div></div><span class="btn ghost">Звонок</span></a>
         <a class="chip card" href="https://wa.me/821073099001" target="_blank" rel="noopener"><div><strong>WhatsApp</strong><div class="muted">Ответ быстро</div></div><span class="btn ghost">Открыть</span></a>
-        <a class="chip card" href="https://t.me/notredame_on_flame" target="_blank" rel="noopener"><div><strong>Telegram</strong><div class="muted">Онлайн</div></div><span class="btn ghost">Открыть</span></a>
+        <a class="chip card" href="https://wa.me/821056698985" target="_blank" rel="noopener"><div><strong>Telegram</strong><div class="muted">Онлайн</div></div><span class="btn ghost">Открыть</span></a>
         <button class="chip card" id="copyEmail" data-copy="info@kol.com" type="button"><div><strong>info@kol.com</strong><div class="muted">Скопировать email</div></div><span class="btn ghost">Копировать</span></button>
       </div>
       <p class="copy-note">Офис: Владивосток, ул. Станюковича, 13, офис 42</p>
@@ -1060,69 +1424,131 @@
     })();
   </script>
   <script>
-    (function(){
+  (function(){
     const story = document.querySelector('.kol-route-story');
-    if(!story) return;
-    const svg = story.querySelector('.krs-svg');
+    if (!story) return;
+
+    const svg   = story.querySelector('.krs-svg');
     const route = story.querySelector('#krs-route-path');
-    const ship = story.querySelector('#krs-ship');
+    const ship  = story.querySelector('#krs-ship');
     const cards = [...story.querySelectorAll('.krs-card')];
 
-    // Draw route on first view
-    const once = new IntersectionObserver((entries)=>{
-      entries.forEach(en=>{ if(en.isIntersecting){
-        const len = route.getTotalLength();
-        route.style.transition = 'stroke-dashoffset 1.8s ease';
-        route.style.strokeDashoffset = '0';
-        animateShip(len);
-        once.disconnect();
-      }});
-    },{threshold:.35});
-    once.observe(svg);
+    if (!svg || !route) return;
 
-    // Sticky scrollytelling: highlight segments based on active card
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(en=>{
-        const el = en.target;
-        if(en.isIntersecting){
-          cards.forEach(c=>c.classList.remove('is-active'));
-          el.classList.add('is-active');
-          const from = parseFloat(el.dataset.from || '0');
-          const to = parseFloat(el.dataset.to || '1');
-          highlight(from, to);
-        }
-      });
-    },{rootMargin:'-40% 0% -50% 0%',threshold:.6});
-    cards.forEach(c=>io.observe(c));
+    const isMobile = window.matchMedia('(max-width:1024px)').matches;
+    const reduce   = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function highlight(start, end){
-      const len = route.getTotalLength();
-      const a = Math.max(0, Math.min(1, start)) * len;
-      const b = Math.max(0, Math.min(1, end)) * len;
-      route.style.strokeDasharray = `${a} ${b-a} ${len-b}`;
-      route.style.strokeDashoffset = `${-a}`;
+    let len = 0, rafId = null, running = false;
+
+    function computeLen(){
+      try { len = route.getTotalLength() || 1000; }
+      catch(e){ len = 1000; }
     }
 
-    function animateShip(len){
-      let t = 0; const speed = 0.0032;
-      const total = len || 1000;
-      function frame(){
+    function startAnim(){
+      if (running || !ship || reduce) return;
+      running = true;
+      let t = 0;
+      const speed = 0.0032;
+
+      const frame = () => {
+        if (!running) return;
         t = (t + speed) % 1;
-        const d = t * total;
+        const d  = t * len;
         const pt = route.getPointAtLength(d);
         ship.setAttribute('transform', `translate(${pt.x},${pt.y})`);
-        requestAnimationFrame(frame);
-      }
-      requestAnimationFrame(frame);
+        rafId = requestAnimationFrame(frame);
+      };
+      rafId = requestAnimationFrame(frame);
     }
-  })();
 
+    function stopAnim(){
+      running = false;
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+
+    // Мобильный режим: статичный маршрут без scrollytelling
+    function enableMobile(){
+      computeLen();
+      route.style.transition = 'none';
+      route.style.strokeDasharray = 'none';
+      route.style.strokeDashoffset = '0';
+      stopAnim();
+    }
+
+    // Десктоп: рисуем линию, подсветка карточек и пауза анимации вне вьюпорта
+    function enableDesktop(){
+      computeLen();
+
+      // Первый показ — анимируем прорисовку и запускаем кораблик
+      const once = new IntersectionObserver((entries)=>{
+        entries.forEach(en=>{
+          if (en.isIntersecting){
+            route.style.transition = 'stroke-dashoffset 1.8s ease';
+            route.style.strokeDashoffset = '0';
+            startAnim();
+            once.disconnect();
+          }
+        });
+      }, { threshold: .35 });
+      once.observe(svg);
+
+      // Подсветка активной части маршрута
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(en=>{
+          if (!en.isIntersecting) return;
+          const el = en.target;
+          cards.forEach(c=>c.classList.remove('is-active'));
+          el.classList.add('is-active');
+
+          const from = Math.max(0, Math.min(1, parseFloat(el.dataset.from || '0')));
+          const to   = Math.max(0, Math.min(1, parseFloat(el.dataset.to   || '1')));
+          computeLen();
+          route.style.strokeDasharray = `${from*len} ${(to-from)*len} ${(1-to)*len}`;
+          route.style.strokeDashoffset = `${-from*len}`;
+        });
+      }, { rootMargin: '-40% 0% -50% 0%', threshold: .6 });
+      cards.forEach(c=>io.observe(c));
+
+      // Старт/стоп анимации по видимости всей секции
+      const vis = new IntersectionObserver((entries)=>{
+        entries.forEach(en=>{
+          if (en.isIntersecting) startAnim();
+          else stopAnim();
+        });
+      }, { threshold: .15 });
+      vis.observe(story);
+
+      // Пересчёт длины при ресайзе/смене ориентации
+      new ResizeObserver(()=>computeLen()).observe(svg);
+      window.addEventListener('orientationchange', computeLen);
+    }
+
+    if (isMobile || reduce) enableMobile();
+    else enableDesktop();
+  })();
   </script>
   <!-- Crisp (kept) -->
   <script type="text/javascript">
     window.$crisp=[]; window.CRISP_WEBSITE_ID="0146419c-dc34-4831-97ad-2647694df4c1";
     (function(){var d=document,s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
   </script>
+  <script>
+(function(){
+  const mq = window.matchMedia('(min-width:1025px)');
+  const burger = document.getElementById('burger');
+  const menu = document.getElementById('menu');
 
+  function closeMenu(){
+    menu?.classList.remove('open');
+    burger?.setAttribute('aria-expanded', 'false');
+  }
+  mq.addEventListener?.('change', e => { if (e.matches) closeMenu(); });
+
+  // Закрывать по клику на ссылку
+  menu?.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+})();
+</script>
 </body>
 </html>
