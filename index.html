@@ -268,161 +268,161 @@
     </div>
   </section>
   <script>
-  (async function () {
-    try {
-      const res = await fetch('/assets/aviva/videos.json', { cache: 'no-store' });
-      let list = await res.json();
-      list = Array.isArray(list) ? list.filter(v => v && v.url) : [];
-      if (!list.length) return;
+    (async function () {
+      try {
+        // 👇 НОВОЕ: базовый URL для бэкенда
+        const API_BASE = location.hostname.includes('onrender.com')
+          ? ''  // если страница открыта с Render — путь относительный
+          : 'https://lexio-backend-pmot.onrender.com'; // если с github.io — ходим на Render
 
-      let heroIndex = 0;
-      const heroEl = document.getElementById('aviva-hero');
-      const stripEl = document.getElementById('aviva-strip');
+        // 👇 БЫЛО: fetch('/assets/aviva/videos.json', ...)
+        const res = await fetch(`${API_BASE}/assets/aviva/videos.json`, { cache: 'no-store' });
+        let list = await res.json();
+        list = Array.isArray(list) ? list.filter(v => v && v.url) : [];
+        if (!list.length) return;
 
-      // fullscreen helpers
-      const isFullscreen = () =>
-        document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+        let heroIndex = 0;
+        const heroEl = document.getElementById('aviva-hero');
+        const stripEl = document.getElementById('aviva-strip');
 
-      const enterFS = (el) => {
-        if (el.requestFullscreen) return el.requestFullscreen();
-        if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
-        if (el.msRequestFullscreen) return el.msRequestFullscreen();
-        // iOS Safari: у <video> есть webkitEnterFullscreen (системный фуллскрин)
-        if (el.tagName === 'VIDEO' && el.webkitEnterFullscreen) return el.webkitEnterFullscreen();
-      };
+        // fullscreen helpers (как у тебя было)
+        const isFullscreen = () =>
+          document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
 
-      const exitFS = () => {
-        if (document.exitFullscreen) return document.exitFullscreen();
-        if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
-        if (document.msExitFullscreen) return document.msExitFullscreen();
-      };
-
-      function render() {
-        // --- HERO ---
-        const hero = list[heroIndex];
-        heroEl.innerHTML = `
-          <div class="hero-wrap">
-            <video src="${hero.url}" autoplay muted loop playsinline></video>
-            <button class="hero-btn hero-play" aria-label="Play/Pause"></button>
-            <button class="hero-btn hero-sound" aria-label="Sound"></button>
-            <button class="hero-btn hero-full" aria-label="Fullscreen"></button>
-          </div>
-          <div class="overlay"><h3>${hero.title || 'AVIVA'}</h3></div>
-        `;
-
-        // --- STRIP (все кроме hero) ---
-        const others = list.map((v, i) => ({ v, i })).filter(x => x.i !== heroIndex);
-        stripEl.innerHTML = others.map(x => `
-          <button class="frame" data-idx="${x.i}" aria-label="Открыть видео ${x.v.title || ''}">
-            <video src="${x.v.url}" preload="metadata" muted playsinline></video>
-          </button>
-        `).join('');
-
-        // мини-видео: ховер-автоплей + клик — сделать hero; двойной клик — фуллскрин мини-видео
-        stripEl.querySelectorAll('.frame').forEach(btn => {
-          const vid = btn.querySelector('video');
-          btn.addEventListener('mouseenter', () => vid.play().catch(()=>{}));
-          btn.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
-          btn.addEventListener('click', () => { heroIndex = Number(btn.dataset.idx); render(); });
-          btn.addEventListener('dblclick', (e) => {
-            e.stopPropagation();
-            // на iOS для миниатюр тоже дергаем системный фуллскрин
-            enterFS(vid);
-          });
-        });
-        
-
-        let lastScrollY = 0;
-
-        const isFS = () => document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
         const enterFS = (el) => {
-          lastScrollY = window.scrollY;                 // 1) запомнили позицию
           if (el.requestFullscreen) return el.requestFullscreen();
           if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
           if (el.msRequestFullscreen) return el.msRequestFullscreen();
-          if (el.tagName === 'VIDEO' && el.webkitEnterFullscreen) return el.webkitEnterFullscreen(); // iOS
+          if (el.tagName === 'VIDEO' && el.webkitEnterFullscreen) return el.webkitEnterFullscreen();
         };
+
         const exitFS = () => {
           if (document.exitFullscreen) return document.exitFullscreen();
           if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
           if (document.msExitFullscreen) return document.msExitFullscreen();
         };
 
-        // ...внутри render() после навешивания обработчиков:
-        document.addEventListener('fullscreenchange', () => {
-          if (!isFS()) {
-            // 2) когда вышли — вернулись туда, где были
-            window.scrollTo({ top: lastScrollY, left: 0, behavior: 'auto' });
-            // и снимаем фокус с видео, чтобы браузер не докручивал заново
-            heroEl.querySelector('video')?.blur();
-          }
-        });
-        document.addEventListener('webkitfullscreenchange', () => {
-          if (!isFS()) {
-            window.scrollTo({ top: lastScrollY, left: 0, behavior: 'auto' });
-            heroEl.querySelector('video')?.blur();
-          }
-        });
+        function render() {
+          // --- HERO ---
+          const hero = list[heroIndex];
+          heroEl.innerHTML = `
+            <div class="hero-wrap">
+              <!-- 👇 БЫЛО: src="${hero.url}" -->
+              <video src="${API_BASE}${hero.url}" autoplay muted loop playsinline></video>
+              <button class="hero-btn hero-play" aria-label="Play/Pause"></button>
+              <button class="hero-btn hero-sound" aria-label="Sound"></button>
+              <button class="hero-btn hero-full" aria-label="Fullscreen"></button>
+            </div>
+            <div class="overlay"><h3>${hero.title || 'AVIVA'}</h3></div>
+          `;
 
-        // --- HERO controls ---
-        const video = heroEl.querySelector('video');
-        const btnPlay = heroEl.querySelector('.hero-play');
-        const btnSound = heroEl.querySelector('.hero-sound');
-        const btnFull = heroEl.querySelector('.hero-full');
+          // --- STRIP (все кроме hero) ---
+          const others = list.map((v, i) => ({ v, i })).filter(x => x.i !== heroIndex);
+          stripEl.innerHTML = others.map(x => `
+            <button class="frame" data-idx="${x.i}" aria-label="Открыть видео ${x.v.title || ''}">
+              <!-- 👇 БЫЛО: src="${x.v.url}" -->
+              <video src="${API_BASE}${x.v.url}" preload="metadata" muted playsinline></video>
+            </button>
+          `).join('');
 
-        const syncPlayBtn = () => btnPlay.classList.toggle('is-playing', !video.paused);
-        const syncSoundBtn = () => btnSound.classList.toggle('on', !video.muted);
-        const syncFullBtn = () => btnFull.classList.toggle('on', Boolean(isFullscreen()));
+          // мини-видео
+          stripEl.querySelectorAll('.frame').forEach(btn => {
+            const vid = btn.querySelector('video');
+            btn.addEventListener('mouseenter', () => vid.play().catch(()=>{}));
+            btn.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
+            btn.addEventListener('click', () => { heroIndex = Number(btn.dataset.idx); render(); });
+            btn.addEventListener('dblclick', (e) => {
+              e.stopPropagation();
+              enterFS(vid);
+            });
+          });
 
-        // play/pause
-        btnPlay.addEventListener('click', e => {
-          e.stopPropagation();
-          if (video.paused) video.play().catch(()=>{}); else video.pause();
-          syncPlayBtn();
-        });
+          let lastScrollY = 0;
 
-        // mute/unmute
-        btnSound.addEventListener('click', e => {
-          e.stopPropagation();
-          video.muted = !video.muted;
-          syncSoundBtn();
-          if (!video.muted && video.paused) video.play().catch(()=>{});
-        });
+          const isFS = () =>
+            document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+          const enterFS2 = (el) => {
+            lastScrollY = window.scrollY;
+            if (el.requestFullscreen) return el.requestFullscreen();
+            if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
+            if (el.msRequestFullscreen) return el.msRequestFullscreen();
+            if (el.tagName === 'VIDEO' && el.webkitEnterFullscreen) return el.webkitEnterFullscreen();
+          };
+          const exitFS2 = () => {
+            if (document.exitFullscreen) return document.exitFullscreen();
+            if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+            if (document.msExitFullscreen) return document.msExitFullscreen();
+          };
 
-        // fullscreen toggle по кнопке
-        btnFull.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (isFullscreen()) exitFS(); else enterFS(video);
-        });
+          document.addEventListener('fullscreenchange', () => {
+            if (!isFS()) {
+              window.scrollTo({ top: lastScrollY, left: 0, behavior: 'auto' });
+              heroEl.querySelector('video')?.blur();
+            }
+          });
+          document.addEventListener('webkitfullscreenchange', () => {
+            if (!isFS()) {
+              window.scrollTo({ top: lastScrollY, left: 0, behavior: 'auto' });
+              heroEl.querySelector('video')?.blur();
+            }
+          });
 
-        // двойной клик по самому hero-видео — тоже фуллскрин
-        video.addEventListener('dblclick', (e) => {
-          e.stopPropagation();
-          if (isFullscreen()) exitFS(); else enterFS(video);
-        });
+          // --- HERO controls ---
+          const video = heroEl.querySelector('video');
+          const btnPlay = heroEl.querySelector('.hero-play');
+          const btnSound = heroEl.querySelector('.hero-sound');
+          const btnFull = heroEl.querySelector('.hero-full');
 
-        // sync states
-        video.addEventListener('play', syncPlayBtn);
-        video.addEventListener('pause', syncPlayBtn);
-        document.addEventListener('fullscreenchange', syncFullBtn);
-        document.addEventListener('webkitfullscreenchange', syncFullBtn);
-        document.addEventListener('msfullscreenchange', syncFullBtn);
-        syncPlayBtn(); syncSoundBtn(); syncFullBtn();
+          const syncPlayBtn = () => btnPlay.classList.toggle('is-playing', !video.paused);
+          const syncSoundBtn = () => btnSound.classList.toggle('on', !video.muted);
+          const syncFullBtn = () => btnFull.classList.toggle('on', Boolean(isFullscreen()));
 
-        // опционально: клавиша F — fullscreen toggle
-        heroEl.onkeydown = (e) => {
-          if (e.key.toLowerCase() === 'f') {
-            if (isFullscreen()) exitFS(); else enterFS(video);
-          }
-        };
+          btnPlay.addEventListener('click', e => {
+            e.stopPropagation();
+            if (video.paused) video.play().catch(()=>{}); else video.pause();
+            syncPlayBtn();
+          });
+
+          btnSound.addEventListener('click', e => {
+            e.stopPropagation();
+            video.muted = !video.muted;
+            syncSoundBtn();
+            if (!video.muted && video.paused) video.play().catch(()=>{});
+          });
+
+          btnFull.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isFullscreen()) exitFS2(); else enterFS2(video);
+          });
+
+          video.addEventListener('dblclick', (e) => {
+            e.stopPropagation();
+            if (isFullscreen()) exitFS2(); else enterFS2(video);
+          });
+
+          video.addEventListener('play', syncPlayBtn);
+          video.addEventListener('pause', syncPlayBtn);
+          document.addEventListener('fullscreenchange', syncFullBtn);
+          document.addEventListener('webkitfullscreenchange', syncFullBtn);
+          document.addEventListener('msfullscreenchange', syncFullBtn);
+          syncPlayBtn(); 
+          syncSoundBtn(); 
+          syncFullBtn();
+
+          heroEl.onkeydown = (e) => {
+            if (e.key.toLowerCase() === 'f') {
+              if (isFullscreen()) exitFS2(); else enterFS2(video);
+            }
+          };
+        }
+
+        render();
+      } catch (e) {
+        console.error('AVIVA section error:', e);
       }
-
-      render();
-    } catch (e) {
-      console.error('AVIVA section error:', e);
-    }
-  })();
+    })();
   </script>
+
   <!-- TESTIMONIALS -->
   <section id="testimonials">
     <div class="container">
