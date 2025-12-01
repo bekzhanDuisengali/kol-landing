@@ -271,9 +271,7 @@
     (async function () {
       try {
         // 👇 НОВОЕ: базовый URL для бэкенда
-        const API_BASE = location.hostname.includes('onrender.com')
-          ? ''  // если страница открыта с Render — путь относительный
-          : 'https://lexio-backend-pmot.onrender.com'; // если с github.io — ходим на Render
+        const API_BASE = 'https://lexio-backend-pmot.onrender.com';
 
         // 👇 БЫЛО: fetch('/assets/aviva/videos.json', ...)
         const res = await fetch(`${API_BASE}/assets/aviva/videos.json`, { cache: 'no-store' });
